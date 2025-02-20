@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard.jsx'
 import Sites from './pages/Sites.jsx'
 import Machines from './pages/Machines.jsx'
 import Notificaties from './pages/Notificaties.jsx'
+import Login from './pages/Login.jsx'
 
 const router = createBrowserRouter([
   {
@@ -35,8 +36,12 @@ const router = createBrowserRouter([
         element: <Machines />,
       },
       {
-        path:'/notificaties',
+        path: '/notificaties',
         element: <Notificaties />,
+      },
+      {
+        path: '/login',
+        element: <Login />
       },
       {
         path: '*', element: <NotFound />
