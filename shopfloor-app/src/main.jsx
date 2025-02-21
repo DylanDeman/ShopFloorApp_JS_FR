@@ -11,6 +11,8 @@ import Machines from './pages/Machines.jsx'
 import Notificaties from './pages/Notificaties.jsx'
 import Login from './pages/Login.jsx'
 
+import { AuthProvider } from './contexts/Auth.context'
+
 const router = createBrowserRouter([
   {
     element: <Layout />,
@@ -40,11 +42,11 @@ const router = createBrowserRouter([
         element: <Notificaties />,
       },
       {
-        path: '/login',
-        element: <Login />
+        path: '*', element: <NotFound />
       },
       {
-        path: '*', element: <NotFound />
+        path: '/login',
+        element: <Login />
       },
     ]
   }
@@ -52,6 +54,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
 );
