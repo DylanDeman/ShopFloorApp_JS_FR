@@ -12,6 +12,8 @@ import Notificaties from './pages/Notificaties.jsx'
 import Login from './pages/Login.jsx'
 
 import { AuthProvider } from './contexts/Auth.context'
+import PrivateRoute from './components/PrivateRoute.jsx'
+import Logout from './pages/Logout.jsx'
 
 const router = createBrowserRouter([
   {
@@ -19,37 +21,77 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Navigate replace to='/home' />,
+        element: <PrivateRoute />,
+        children: [
+          {
+            index: true,
+            element: <Navigate replace to='/home' />,
+          },
+        ],
       },
       {
         path: '/home',
-        element: <App />,
+        element: <PrivateRoute />,
+        children: [
+          {
+            index: true,
+            element: <App />,
+          },
+        ],
       },
       {
         path: '/dashboard',
-        element: <Dashboard />,
+        element: <PrivateRoute />,
+        children: [
+          {
+            index: true,
+            element: <Dashboard />,
+          },
+        ],
       },
       {
         path: '/sites',
-        element: <Sites />,
+        element: <PrivateRoute />,
+        children: [
+          {
+            index: true,
+            element: <Sites />,
+          },
+        ],
       },
       {
         path: '/machines',
-        element: <Machines />,
+        element: <PrivateRoute />,
+        children: [
+          {
+            index: true,
+            element: <Machines />,
+          },
+        ],
       },
       {
         path: '/notificaties',
-        element: <Notificaties />,
+        element: <PrivateRoute />,
+        children: [
+          {
+            index: true,
+            element: <Notificaties />,
+          },
+        ],
+      },
+     
+      {
+        path: '/logout', element: <Logout />
       },
       {
         path: '*', element: <NotFound />
       },
-      {
-        path: '/login',
-        element: <Login />
-      },
     ]
-  }
+  },
+  {
+    path: '/login',
+    element: <Login />
+  },
 ]);
 
 createRoot(document.getElementById('root')).render(
