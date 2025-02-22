@@ -4,6 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import LabelInputLogin from '../components/LabelInputLogin.jsx';
 import { useAuth } from '../contexts/auth';
 import Error from '../components/Error';
+import Loader from '../components/Loader.jsx';
 
 const Login = () => {
   const { search } = useLocation();
@@ -62,13 +63,14 @@ const Login = () => {
                 validationRules={{ required: 'Wachtwoord is verplicht' }}
               />
               </div>
+              <Error error={error}/>
               <p className="text-sm text-red-500 cursor-pointer">Wachtwoord vergeten?</p>
               <button
                 type="submit"
-                className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
+                className="disabled:bg-red-400 enabled:hover:cursor-pointer w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
                 disabled={loading}
               >
-                {loading ? 'Aanmelden...' : 'Aanmelden'}
+                {loading ? <Loader/> : 'Aanmelden'}
               </button>
             </form>
           </FormProvider>
