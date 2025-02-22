@@ -3,8 +3,8 @@ import { isAxiosError } from 'axios';
 export default function Error({ error }) {
   if (isAxiosError(error)) {
     return (
-      <div>
-        <h4>Oops, something went wrong</h4>
+      <div className='text-red-600 alert alert-danger' data-cy='axios_error_message'>
+        <h4 className='alert-heading'>Oops, something went wrong</h4>
         <p>
           {error?.response?.data?.message || error.message}
           {error?.response?.data?.details && (
@@ -21,8 +21,8 @@ export default function Error({ error }) {
 
   if (error) {
     return (
-      <div>
-        <h4>An unexpected error occured</h4>
+      <div className='text-red-600 alert alert-danger'>
+        <h4 className='alert-heading'>An unexpected error occured</h4>
         {error.message || JSON.stringify(error)}
       </div>
     );

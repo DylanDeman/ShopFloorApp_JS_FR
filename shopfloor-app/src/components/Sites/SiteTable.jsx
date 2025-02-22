@@ -11,22 +11,19 @@ const SiteTable = ({ sites }) => {
 
   return (
     <div className="overflow-x-auto">
-      <table className="border-collapse border border-gray-300 bg-white shadow-md rounded-lg ml-50">
+      <table className="border-separate border-spacing-0 rounded-md border border-gray-300 w-full">
         <thead>
           <tr className="bg-gray-100 text-gray-700 uppercase text-sm font-semibold">
-            <th className="border border-gray-300 px-4 py-2">Nr.</th>
-            <th className="border border-gray-300 px-4 py-2">Naam</th>
-            <th className="border border-gray-300 px-4 py-2">Locatie</th>
-            <th className="border border-gray-300 px-4 py-2">Omschrijving</th>
-            <th className="border border-gray-300 px-4 py-2">Gezondheidsniveau</th>
-            <th className="border border-gray-300 px-4 py-2">Onderhoudsniveau</th>
-            <th className="border border-gray-300 px-4 py-2">Status</th>
+            <th className="border border-gray-300 px-4 md:py-2">Nr.</th>
+            <th className="border border-gray-300 px-4 md:py-2">Naam</th>
+            <th className="border border-gray-300 px-4 md:py-2">Verantwoordelijke</th>
+            <th className="border border-gray-300 px-4 md:py-2">Aantal machines</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           {sites.map((site) => (
-            <Site key={site.nr} {...site} />
+            <Site key={site.id} {...site} />
           ))}
         </tbody>
       </table>

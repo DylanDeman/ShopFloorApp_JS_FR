@@ -1,9 +1,17 @@
 import SiteTable from "../components/Sites/SiteTable";
 import mocksites from '../api/mocksites.json'
 import { useState } from "react";
-//TODO Sites ophalen uit backend ipv uit mock
+import useSWR from "swr";
+import { getAll } from "../api";
 
 const Sites = () => {
+
+  const {
+    data: sites = [],
+    loading,
+    error,
+  } = useSWR('sites', getAll);
+
   const [status, setStatus] = useState('');
   const [locatie, setLocatie] = useState('');
   const [onderhoudsNiveau, setOnderhoudsNiveau] = useState(0);
@@ -24,11 +32,11 @@ const Sites = () => {
     return filtered;
   };
 
-  const filteredSites = filter(mocksites);
+  const filteredSites = filter(sites);
 
   return (
-    <div className="flex justify-between p-6">
-      <div className="w-1/4 bg-white p-4 rounded-lg shadow-md space-y-4">
+    <div className="flex-col md:flex-row flex justify-between p-6">
+      <div className="w-full md:w-1/4 bg-white p-4 rounded-lg shadow-md md:space-y-4">
         <h2 className="text-xl font-semibold text-gray-800">Filters</h2>
         <div>
           <label>
@@ -45,7 +53,7 @@ const Sites = () => {
           <label className="block text-gray-700">Locatie</label>
           <select
             onChange={(e) => setLocatie(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg p-2"
+            className="w-full border border-gray-300 rounded-lg md:p-2"
           >
             <option value="">Alle locaties</option>
             {locaties.map((locatie, index) => (
@@ -68,7 +76,7 @@ const Sites = () => {
           <span className="text-gray-700">{onderhoudsNiveau}%</span>
         </div>
       </div>
-      <div className="w-3/4 ml-6">
+      <div className="w-full md:w-3/4 md:ml-6">
         <SiteTable sites={filteredSites} />
       </div>
     </div>
