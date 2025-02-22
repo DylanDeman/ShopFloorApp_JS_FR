@@ -5,7 +5,7 @@
     "locatie": "Gent",
     "omschrijving": "Lorem",
     "gezondheidsniveau": "hoog",
-    "onderhoudsniveau": "56%",
+    "onderhoudsniveau": "56",
     "status": "Actief"
   },
   {
@@ -14,7 +14,7 @@
     "locatie": "Brussel",
     "omschrijving": "Verbinding met de belangrijkste stations",
     "gezondheidsniveau": "medium",
-    "onderhoudsniveau": "72%",
+    "onderhoudsniveau": "72",
     "status": "Inactief"
   },
   {
@@ -23,7 +23,7 @@
     "locatie": "Antwerpen",
     "omschrijving": "Knooppunt voor internationale verbindingen",
     "gezondheidsniveau": "laag",
-    "onderhoudsniveau": "45%",
+    "onderhoudsniveau": "45",
     "status": "Actief"
   },
   {
@@ -32,7 +32,7 @@
     "locatie": "Leuven",
     "omschrijving": "Stadspark nabij het centrum",
     "gezondheidsniveau": "hoog",
-    "onderhoudsniveau": "60%",
+    "onderhoudsniveau": "60",
     "status": "Onder constructie"
   },
   {
@@ -41,7 +41,7 @@
     "locatie": "Gent",
     "omschrijving": "Verbindingspunt tussen de stad en het platteland",
     "gezondheidsniveau": "medium",
-    "onderhoudsniveau": "68%",
+    "onderhoudsniveau": "68",
     "status": "Actief"
   },
   {
@@ -50,7 +50,7 @@
     "locatie": "Brugge",
     "omschrijving": "Pittoresk uitzicht langs de waterkant",
     "gezondheidsniveau": "hoog",
-    "onderhoudsniveau": "53%",
+    "onderhoudsniveau": "53",
     "status": "Inactief"
   },
   {
@@ -59,7 +59,7 @@
     "locatie": "Kortrijk",
     "omschrijving": "Uitgestrekte weiden met landbouwgebied",
     "gezondheidsniveau": "laag",
-    "onderhoudsniveau": "30%",
+    "onderhoudsniveau": "30",
     "status": "Actief"
   },
   {
@@ -68,7 +68,7 @@
     "locatie": "Liège",
     "omschrijving": "Langs de rivier gelegen terrein",
     "gezondheidsniveau": "medium",
-    "onderhoudsniveau": "65%",
+    "onderhoudsniveau": "65",
     "status": "Onder constructie"
   },
   {
@@ -77,7 +77,7 @@
     "locatie": "Antwerpen",
     "omschrijving": "Hoog gelegen terrein met zandafgravingen",
     "gezondheidsniveau": "hoog",
-    "onderhoudsniveau": "80%",
+    "onderhoudsniveau": "80",
     "status": "Actief"
   },
   {
@@ -86,7 +86,7 @@
     "locatie": "Brussel",
     "omschrijving": "Hoofdplein van de stad met veel toeristische attracties",
     "gezondheidsniveau": "medium",
-    "onderhoudsniveau": "50%",
+    "onderhoudsniveau": "50",
     "status": "Inactief"
   },
   {
@@ -95,7 +95,7 @@
     "locatie": "Ghent",
     "omschrijving": "Park rondom een middeleeuws kasteel",
     "gezondheidsniveau": "laag",
-    "onderhoudsniveau": "75%",
+    "onderhoudsniveau": "75",
     "status": "Actief"
   },
   {
@@ -104,7 +104,7 @@
     "locatie": "Leuven",
     "omschrijving": "Plein bij een historisch kasteel",
     "gezondheidsniveau": "hoog",
-    "onderhoudsniveau": "60%",
+    "onderhoudsniveau": "60",
     "status": "Onder constructie"
   },
   {
@@ -113,7 +113,7 @@
     "locatie": "Oostende",
     "omschrijving": "Havengebied met actieve scheepvaart",
     "gezondheidsniveau": "medium",
-    "onderhoudsniveau": "55%",
+    "onderhoudsniveau": "55",
     "status": "Actief"
   },
   {
@@ -122,7 +122,7 @@
     "locatie": "Hasselt",
     "omschrijving": "Fietspad langs de rivier",
     "gezondheidsniveau": "laag",
-    "onderhoudsniveau": "40%",
+    "onderhoudsniveau": "40",
     "status": "Inactief"
   },
   {
@@ -131,7 +131,7 @@
     "locatie": "Charleroi",
     "omschrijving": "Vliegtuigverbindingen naar Europese bestemmingen",
     "gezondheidsniveau": "hoog",
-    "onderhoudsniveau": "90%",
+    "onderhoudsniveau": "90",
     "status": "Actief"
   },
   {
@@ -140,7 +140,7 @@
     "locatie": "Dinant",
     "omschrijving": "Avontuurlijk klimgebied in de bossen",
     "gezondheidsniveau": "medium",
-    "onderhoudsniveau": "67%",
+    "onderhoudsniveau": "67",
     "status": "Onder constructie"
   },
   {
@@ -149,7 +149,7 @@
     "locatie": "Mechelen",
     "omschrijving": "Groot park met openluchtactiviteiten",
     "gezondheidsniveau": "hoog",
-    "onderhoudsniveau": "60%",
+    "onderhoudsniveau": "60",
     "status": "Actief"
   },
   {
@@ -158,7 +158,7 @@
     "locatie": "Aalst",
     "omschrijving": "Punt voor de ontsluiting van de stad",
     "gezondheidsniveau": "laag",
-    "onderhoudsniveau": "50%",
+    "onderhoudsniveau": "50",
     "status": "Inactief"
   },
   {
@@ -167,7 +167,7 @@
     "locatie": "Ardennen",
     "omschrijving": "Hooggelegen uitkijkpunt met panoramisch uitzicht",
     "gezondheidsniveau": "medium",
-    "onderhoudsniveau": "80%",
+    "onderhoudsniveau": "80",
     "status": "Actief"
   },
   {
@@ -176,7 +176,7 @@
     "locatie": "Brussel",
     "omschrijving": "Een plek met veel zon en openluchtterrein",
     "gezondheidsniveau": "hoog",
-    "onderhoudsniveau": "85%",
+    "onderhoudsniveau": "85",
     "status": "Onder constructie"
   }
 ]

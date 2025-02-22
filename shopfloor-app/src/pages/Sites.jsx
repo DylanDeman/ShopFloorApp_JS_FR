@@ -1,16 +1,78 @@
 import SiteTable from "../components/Sites/SiteTable";
-import AsyncData from "../components/AsyncData";
-import filteredSites from '../api/mocksites.json'
+import mocksites from '../api/mocksites.json'
+import { useState } from "react";
+//TODO Sites ophalen uit backend ipv uit mock
+
 const Sites = () => {
+  const [status, setStatus] = useState('');
+  const [locatie, setLocatie] = useState('');
+  const [onderhoudsNiveau, setOnderhoudsNiveau] = useState(0);
+
+  const locaties = [...new Set(mocksites.map((site) => site.locatie))];
+
+  const filter = (sites) => {
+    let filtered = sites;
+    if (status) {
+      filtered = filtered.filter((site) => site.status === status);
+    }
+    if (locatie) {
+      filtered = filtered.filter((site) => site.locatie === locatie)
+    }
+    if (onderhoudsNiveau > 0) {
+      filtered = filtered.filter((site) => site.onderhoudsniveau >= onderhoudsNiveau)
+    }
+    return filtered;
+  };
+
+  const filteredSites = filter(mocksites);
+
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-gray-800 my-4 ml-50">Sites</h1>
-      <div>
-        <AsyncData>
-          <SiteTable sites={filteredSites} />
-        </AsyncData>
+    <div className="flex justify-between p-6">
+      <div className="w-1/4 bg-white p-4 rounded-lg shadow-md space-y-4">
+        <h2 className="text-xl font-semibold text-gray-800">Filters</h2>
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              checked={status === 'Inactief'}
+              onChange={() => setStatus(status === 'Inactief' ? '' : 'Inactief')}
+              className="mr-2"
+            />
+            Inactief
+          </label>
+        </div>
+        <div>
+          <label className="block text-gray-700">Locatie</label>
+          <select
+            onChange={(e) => setLocatie(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg p-2"
+          >
+            <option value="">Alle locaties</option>
+            {locaties.map((locatie, index) => (
+              <option key={index} value={locatie}>
+                {locatie}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block text-gray-700">Onderhoudsniveau:</label>
+          <input
+            min="0"
+            max="100"
+            value={onderhoudsNiveau}
+            onChange={(e) => setOnderhoudsNiveau(Number(e.target.value))}
+            type="range"
+            className="w-full"
+          />
+          <span className="text-gray-700">{onderhoudsNiveau}%</span>
+        </div>
+      </div>
+      <div className="w-3/4 ml-6">
+        <SiteTable sites={filteredSites} />
       </div>
     </div>
   );
-}
+};
+
 export default Sites;
