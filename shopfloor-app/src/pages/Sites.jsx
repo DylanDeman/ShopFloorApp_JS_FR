@@ -15,7 +15,7 @@ const Sites = () => {
   const [locatie, setLocatie] = useState('');
   const [onderhoudsNiveau, setOnderhoudsNiveau] = useState(0);
 
-  const locaties = [...new Set(mocksites.map((site) => site.locatie))];
+  const locaties = [...new Set(sites.map((site) => site.locatie))];
 
   const filter = (sites) => {
     let filtered = sites;
