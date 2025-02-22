@@ -1,5 +1,4 @@
 import SiteTable from "../components/Sites/SiteTable";
-import mocksites from '../api/mocksites.json'
 import { useState } from "react";
 import useSWR from "swr";
 import { getAll } from "../api";
