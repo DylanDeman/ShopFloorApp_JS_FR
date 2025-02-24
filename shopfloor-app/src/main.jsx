@@ -6,7 +6,7 @@ import App from './App.jsx'
 import NotFound from './pages/NotFound.jsx'
 import Layout from './pages/Layout.jsx'
 import Dashboard from './pages/Dashboard.jsx'
-import Sites from './pages/Sites.jsx'
+import Sites from './pages/sites/SitesList.jsx'
 import Machines from './pages/Machines.jsx'
 import Notificaties from './pages/Notificaties.jsx'
 import Login from './pages/Login.jsx'
@@ -79,7 +79,6 @@ const router = createBrowserRouter([
           },
         ],
       },
-     
       {
         path: '/logout', element: <Logout />
       },

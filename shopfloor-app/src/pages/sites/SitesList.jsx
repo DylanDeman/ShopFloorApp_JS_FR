@@ -1,7 +1,7 @@
-import SiteTable from "../components/Sites/SiteTable";
+import SiteTable from "../../components/sites/SiteTable";
 import { useState } from "react";
 import useSWR from "swr";
-import { getAll } from "../api";
+import { getAll } from "../../api";
 
 const Sites = () => {
 
