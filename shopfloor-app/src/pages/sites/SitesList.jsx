@@ -44,6 +44,7 @@ const Sites = () => {
               checked={status === 'Inactief'}
               onChange={() => setStatus(status === 'Inactief' ? '' : 'Inactief')}
               className="mr-2"
+              data-cy="sites_filter_inactief"
             />
             Inactief
           </label>
@@ -54,7 +55,7 @@ const Sites = () => {
             onChange={(e) => setLocatie(e.target.value)}
             className="w-full border border-gray-300 rounded-lg md:p-2"
           >
-            <option value="">Alle locaties</option>
+            <option data-cy='sites_filter_optie_alleLocaties' value="">Alle locaties</option>
             {locaties.map((locatie, index) => (
               <option key={index} value={locatie}>
                 {locatie}
@@ -67,6 +68,7 @@ const Sites = () => {
           <input
             min="0"
             max="100"
+            data-cy="sites_filter_onderhoudsniveau"
             value={onderhoudsNiveau}
             onChange={(e) => setOnderhoudsNiveau(Number(e.target.value))}
             type="range"

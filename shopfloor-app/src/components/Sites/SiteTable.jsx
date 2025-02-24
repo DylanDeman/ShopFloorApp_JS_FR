@@ -23,7 +23,7 @@ const SiteTable = ({ sites }) => {
         </thead>
         <tbody>
           {sites.map((site) => (
-            <Site key={site.id} {...site} />
+            <Site  key={site.id} {...site} />
           ))}
         </tbody>
       </table>

@@ -25,6 +25,7 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('login', (email, password) => {
+  cy.visit('http://localhost:5173');
   cy.get('[data-cy=loginEmail]').clear();
   if (email) cy.get('[data-cy=loginEmail]').type(email);
 
@@ -32,4 +33,5 @@ Cypress.Commands.add('login', (email, password) => {
   if (password) cy.get('[data-cy=loginWachtwoord]').type(password);
 
   cy.get('[data-cy=loginSubmitButton]').click();
+  cy.get('body').click(0, 0);
 });
