@@ -52,6 +52,7 @@ const Login = () => {
                 type="email"
                 placeholder="Example@delaware.com"
                 validationRules={{ required: 'Email is verplicht' }}
+                data-cy="loginEmail"
               />
               </div>
               <div>
@@ -61,6 +62,7 @@ const Login = () => {
                 type="password"
                 placeholder="●●●●●●●●"
                 validationRules={{ required: 'Wachtwoord is verplicht' }}
+                data-cy="loginWachtwoord"
               />
               </div>
               <Error error={error}/>
@@ -69,6 +71,7 @@ const Login = () => {
                 type="submit"
                 className="disabled:bg-red-400 enabled:hover:cursor-pointer w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
                 disabled={loading}
+                data-cy="loginSubmitButton"
               >
                 {loading ? <Loader/> : 'Aanmelden'}
               </button>
