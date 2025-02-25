@@ -21,7 +21,7 @@ const Navbar = () => {
         </Link>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-6">
         <div className="text-right">
           <p className="text-black font-semibold">John Doe</p>
           <p className="text-red-500 text-sm">Manager</p>
@@ -33,6 +33,13 @@ const Navbar = () => {
             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">2</span>
           </Link>
         </div>
+
+        <Link 
+          to="/login" 
+          className="ml-4 px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-300"
+        >
+          Log in
+        </Link>
       </div>
     </nav>
   );
