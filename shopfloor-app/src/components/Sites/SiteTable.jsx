@@ -1,4 +1,4 @@
-import SiteTableRow from "./SiteTableRow";
+import TableRow from './../genericComponents/TableRow';
 
 const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow }) => {
   if (sites.length === 0) {
@@ -22,14 +22,15 @@ const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow }) => {
               onClick={onSort}
             >
               Aantal machines
-              {sorteerVolgorde === "asc" ? " 🔼" : sorteerVolgorde === "desc" ? " 🔽" : ""}
+              {sorteerVolgorde === 'asc' ? ' 🔼' : sorteerVolgorde === 'desc' ? ' 🔽' : ''}
             </th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           {sites.map((site) => (
-            <SiteTableRow key={site.id} {...site} onShow={onShow}/>
+            <TableRow key={site.id} data={site} columns={['id', 'naam', 'verantwoordelijke', 'aantalMachines']} 
+              onShow={onShow} />
           ))}
         </tbody>
       </table>

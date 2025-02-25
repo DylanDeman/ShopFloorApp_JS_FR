@@ -1,4 +1,4 @@
-import MachineTableRow from "./MachineTableRow";
+import TableRow from './../genericComponents/TableRow';
 
 const MachineTable = ({ machines, onSort, sorteerVolgorde }) => {
   if (machines.length === 0) {
@@ -21,7 +21,7 @@ const MachineTable = ({ machines, onSort, sorteerVolgorde }) => {
               onClick={onSort}
             >
               Status
-              {sorteerVolgorde === "asc" ? " 🔼" : sorteerVolgorde === "desc" ? " 🔽" : ""}
+              {sorteerVolgorde === 'asc' ? ' 🔼' : sorteerVolgorde === 'desc' ? ' 🔽' : ''}
             </th>
             <th className="border border-gray-300 px-4 md:py-2">ProductieStatus</th>
             <th></th>
@@ -29,7 +29,7 @@ const MachineTable = ({ machines, onSort, sorteerVolgorde }) => {
         </thead>
         <tbody>
           {machines.map((machine) => (
-            <MachineTableRow key={machine.id} {...machine} />
+            <TableRow key={machine.id} data={machine} columns={['id', 'locatie', 'status', 'productieStatus']} />
           ))}
         </tbody>
       </table>

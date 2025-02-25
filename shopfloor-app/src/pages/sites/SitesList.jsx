@@ -1,9 +1,9 @@
-import SiteTable from "../../components/Sites/SiteTable";
-import { useState } from "react";
-import useSWR from "swr";
-import { getAll } from "../../api";
+import SiteTable from '../../components/sites/SiteTable';
+import { useState } from 'react';
+import useSWR from 'swr';
+import { getAll } from '../../api';
 import AsyncData from '../../components/AsyncData';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 const SiteList = () => {
   const {
@@ -15,17 +15,17 @@ const SiteList = () => {
   const navigate = useNavigate();
 
   const [sorteerVolgorde, setSorteerVolgorde] = useState(null);
-  const [zoekterm, setZoekterm] = useState("");
+  const [zoekterm, setZoekterm] = useState('');
 
   const sorteerSites = (sites) => {
     if (!sorteerVolgorde) return sites;
     return [...sites].sort((a, b) =>
-      sorteerVolgorde === "asc" ? a.aantalMachines - b.aantalMachines : b.aantalMachines - a.aantalMachines
+      sorteerVolgorde === 'asc' ? a.aantalMachines - b.aantalMachines : b.aantalMachines - a.aantalMachines,
     );
   };
 
   const handleSort = () => {
-    setSorteerVolgorde((prev) => (prev === "asc" ? "desc" : "asc"));
+    setSorteerVolgorde((prev) => (prev === 'asc' ? 'desc' : 'asc'));
   };
 
   const handleSearch = (e) => {
@@ -38,7 +38,7 @@ const SiteList = () => {
 
   const filteredSites = sites.filter((site) =>
     site.naam.toLowerCase().includes(zoekterm.toLowerCase()) ||
-    site.verantwoordelijke.toLowerCase().includes(zoekterm.toLowerCase())
+    site.verantwoordelijke.toLowerCase().includes(zoekterm.toLowerCase()),
   );
 
   const gesorteerdeSites = sorteerSites(filteredSites);
@@ -56,7 +56,12 @@ const SiteList = () => {
           />
         </div>
         <AsyncData error={error} loading={loading}>
-          <SiteTable sites={gesorteerdeSites} onSort={handleSort} sorteerVolgorde={sorteerVolgorde} onShow={handleShow} />
+          <SiteTable 
+            sites={gesorteerdeSites} 
+            sorteerVolgorde={sorteerVolgorde} 
+            onSort={handleSort} 
+            onShow={handleShow} 
+          />
         </AsyncData>
       </div>
     </div>

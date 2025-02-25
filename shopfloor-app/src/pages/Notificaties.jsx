@@ -4,5 +4,5 @@ const Notificaties = () => {
       <h1>Notificaties Pagina</h1>
     </div>
   );
-}
+};
 export default Notificaties;

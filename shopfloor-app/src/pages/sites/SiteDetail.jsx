@@ -1,13 +1,13 @@
-import MachineTable from "../../components/Machines/MachineTable";
-import { useState } from "react";
-import useSWR from "swr";
-import { getById } from "../../api";
+import MachineTable from '../../components/machines/MachineTable';
+import { useState } from 'react';
+import useSWR from 'swr';
+import { getById } from '../../api';
 import AsyncData from '../../components/AsyncData';
 import { useParams } from 'react-router-dom';
 
 const SiteDetail = () => {
-    const { id } = useParams();
-    const idAsNumber = Number(id);
+  const { id } = useParams();
+  const idAsNumber = Number(id);
     
   const {
     data: site = [],
@@ -16,20 +16,20 @@ const SiteDetail = () => {
   } = useSWR(id ? `sites/${idAsNumber}` : null, getById);
 
   const machines = site.machines || [];
-  console.log(machines)
+  console.log(machines);
 
   const [sorteerVolgorde, setSorteerVolgorde] = useState(null);
-  const [zoekterm, setZoekterm] = useState("");
+  const [zoekterm, setZoekterm] = useState('');
 
   const sorteerMachines = (machines) => {
     if (!sorteerVolgorde) return machines;
     return [...machines].sort((a, b) =>
-      sorteerVolgorde === "asc" ? a.status.localeCompare(b.status) : b.status.localeCompare(a.status)
+      sorteerVolgorde === 'asc' ? a.status.localeCompare(b.status) : b.status.localeCompare(a.status),
     );
   };
 
   const handleSort = () => {
-    setSorteerVolgorde((prev) => (prev === "asc" ? "desc" : "asc"));
+    setSorteerVolgorde((prev) => (prev === 'asc' ? 'desc' : 'asc'));
   };
 
   const handleSearch = (e) => {
@@ -39,7 +39,7 @@ const SiteDetail = () => {
   const filteredMachines = machines.filter((machine) =>
     machine.locatie.toLowerCase().includes(zoekterm.toLowerCase()) ||
     machine.status.toLowerCase().includes(zoekterm.toLowerCase()) ||
-    machine.productieStatus.toLowerCase().includes(zoekterm.toLowerCase())
+    machine.productieStatus.toLowerCase().includes(zoekterm.toLowerCase()),
   );
 
   const gesorteereMachines = sorteerMachines(filteredMachines);
