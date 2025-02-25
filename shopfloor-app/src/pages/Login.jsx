@@ -31,11 +31,11 @@ const Login = () => {
         navigate(params.get('redirect') || '/', { replace: true });
       }
     },
-    [login, navigate, search]
+    [login, navigate, search],
   );
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/login_achtergrond.svg')" }}>
+    <div className="flex flex-col items-center min-h-screen bg-cover bg-center" style={{ backgroundImage: 'url(\'/login_achtergrond.svg\')' }}>
       <div className="flex flex-col md:flex-row bg-white bg-opacity-90 p-8 rounded-lg shadow-lg w-11/12 max-w-4xl mt-15">
         <div className="w-full md:w-1/2 p-6">
           <h2 className="text-2xl font-bold mb-4">WELKOM!</h2>
@@ -46,22 +46,22 @@ const Login = () => {
           <FormProvider {...methods}>
             <form className="space-y-4" onSubmit={handleSubmit(handleLogin)}>
               <div>
-              <LabelInputLogin
-                label="Email:"
-                name="email"
-                type="email"
-                placeholder="Example@delaware.com"
-                validationRules={{ required: 'Email is verplicht' }}
-              />
+                <LabelInputLogin
+                  label="Email:"
+                  name="email"
+                  type="email"
+                  placeholder="Example@delaware.com"
+                  validationRules={{ required: 'Email is verplicht' }}
+                />
               </div>
               <div>
-              <LabelInputLogin
-                label="Wachtwoord:"
-                name="password"
-                type="password"
-                placeholder="●●●●●●●●"
-                validationRules={{ required: 'Wachtwoord is verplicht' }}
-              />
+                <LabelInputLogin
+                  label="Wachtwoord:"
+                  name="password"
+                  type="password"
+                  placeholder="●●●●●●●●"
+                  validationRules={{ required: 'Wachtwoord is verplicht' }}
+                />
               </div>
               <Error error={error}/>
               <p className="text-sm text-red-500 cursor-pointer">Wachtwoord vergeten?</p>
