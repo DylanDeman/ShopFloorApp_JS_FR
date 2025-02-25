@@ -6,10 +6,11 @@ import App from './App.jsx'
 import NotFound from './pages/NotFound.jsx'
 import Layout from './pages/Layout.jsx'
 import Dashboard from './pages/Dashboard.jsx'
-import Sites from './pages/Sites.jsx'
+import SitesList from './pages/sites/SitesList.jsx'
 import Machines from './pages/Machines.jsx'
 import Notificaties from './pages/Notificaties.jsx'
 import Login from './pages/Login.jsx'
+import SiteDetail from './pages/sites/SiteDetail.jsx'
 
 import { AuthProvider } from './contexts/Auth.context'
 import PrivateRoute from './components/PrivateRoute.jsx'
@@ -55,7 +56,11 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Sites />,
+            element: <SitesList />,
+          },
+          {
+            path: ':id',
+            element: <SiteDetail />,
           },
         ],
       },

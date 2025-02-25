@@ -1,10 +1,10 @@
-import SiteTableRow from "./SiteTableRow";
+import MachineTableRow from "./MachineTableRow";
 
-const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow }) => {
-  if (sites.length === 0) {
+const MachineTable = ({ machines, onSort, sorteerVolgorde }) => {
+  if (machines.length === 0) {
     return (
       <div className="flex justify-center items-center h-32">
-        <h2 className="text-lg font-semibold text-gray-700">Er zijn geen sites beschikbaar.</h2>
+        <h2 className="text-lg font-semibold text-gray-700">Er zijn geen machines beschikbaar.</h2>
       </div>
     );
   }
@@ -15,21 +15,21 @@ const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow }) => {
         <thead>
           <tr className="bg-gray-100 text-gray-700 uppercase text-sm font-semibold">
             <th className="border border-gray-300 px-4 md:py-2">Nr.</th>
-            <th className="border border-gray-300 px-4 md:py-2">Naam</th>
-            <th className="border border-gray-300 px-4 md:py-2">Verantwoordelijke</th>
+            <th className="border border-gray-300 px-4 md:py-2">Locatie</th>
             <th 
               className="border border-gray-300 px-4 md:py-2 cursor-pointer"
               onClick={onSort}
             >
-              Aantal machines
+              Status
               {sorteerVolgorde === "asc" ? " 🔼" : sorteerVolgorde === "desc" ? " 🔽" : ""}
             </th>
+            <th className="border border-gray-300 px-4 md:py-2">ProductieStatus</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          {sites.map((site) => (
-            <SiteTableRow key={site.id} {...site} onShow={onShow}/>
+          {machines.map((machine) => (
+            <MachineTableRow key={machine.id} {...machine} />
           ))}
         </tbody>
       </table>
@@ -37,4 +37,4 @@ const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow }) => {
   );
 };
 
-export default SiteTable;
+export default MachineTable;

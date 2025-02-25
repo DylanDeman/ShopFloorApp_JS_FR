@@ -1,15 +1,18 @@
-import SiteTable from "../components/Sites/SiteTable";
+import SiteTable from "../../components/Sites/SiteTable";
 import { useState } from "react";
 import useSWR from "swr";
-import { getAll } from "../api";
-import AsyncData from '../components/AsyncData';
+import { getAll } from "../../api";
+import AsyncData from '../../components/AsyncData';
+import { useNavigate } from "react-router-dom";
 
-const Sites = () => {
+const SiteList = () => {
   const {
     data: sites = [],
     loading,
     error,
   } = useSWR('sites', getAll);
+
+  const navigate = useNavigate();
 
   const [sorteerVolgorde, setSorteerVolgorde] = useState(null);
   const [zoekterm, setZoekterm] = useState("");
@@ -27,6 +30,10 @@ const Sites = () => {
 
   const handleSearch = (e) => {
     setZoekterm(e.target.value);
+  };
+
+  const handleShow = (id) => {
+    navigate(`/sites/${id}`);
   };
 
   const filteredSites = sites.filter((site) =>
@@ -49,11 +56,11 @@ const Sites = () => {
           />
         </div>
         <AsyncData error={error} loading={loading}>
-          <SiteTable sites={gesorteerdeSites} onSort={handleSort} sorteerVolgorde={sorteerVolgorde} />
+          <SiteTable sites={gesorteerdeSites} onSort={handleSort} sorteerVolgorde={sorteerVolgorde} onShow={handleShow} />
         </AsyncData>
       </div>
     </div>
   );
 };
 
-export default Sites;
+export default SiteList;
