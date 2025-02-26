@@ -3,6 +3,7 @@ import {
   useState,
   useCallback,
   useMemo,
+  useEffect,
 } from 'react';
 import useSWRMutation from 'swr/mutation';
 import * as api from '../api';
@@ -10,9 +11,42 @@ import useSWR from 'swr';
   
 export const JWT_TOKEN_KEY = 'jwtToken';
 export const AuthContext = createContext();
+
+// Fuctie om te checken of token expired is
+const isTokenExpired = (token) => {
+  if (!token) return true;
+  
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.exp * 1000 < Date.now();
+  } catch (error) {
+    console.error('Error parsing token:', error);
+    return true;
+  }
+};
   
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem(JWT_TOKEN_KEY));
+  const [token, setToken] = useState(() => {
+    const storedToken = localStorage.getItem(JWT_TOKEN_KEY);
+    if (storedToken || isTokenExpired(storedToken)) { // Hier ook nog effectief checken of expired
+      localStorage.removeItem(JWT_TOKEN_KEY);
+      return null;
+    }
+    return storedToken;
+  });
+
+  useEffect(() => {
+    if (!token) return;
+
+    const checkTokenInterval = setInterval(() => {
+      if (isTokenExpired(token)) {
+        localStorage.removeItem(JWT_TOKEN_KEY);
+        setToken(null);
+      }
+    }, 60000); 
+
+    return () => clearInterval(checkTokenInterval);
+  }, [token]);
   
   const {
     data: user, loading: userLoading, error: userError,
@@ -31,9 +65,14 @@ export const AuthProvider = ({ children }) => {
   } = useSWRMutation('users', api.post);
   
   const setSession = useCallback(
-    (token) => {
-      setToken(token);
-      localStorage.setItem(JWT_TOKEN_KEY, token);
+    (newToken) => {
+      if (!newToken || isTokenExpired(newToken)) {
+        setToken(null);
+        localStorage.removeItem(JWT_TOKEN_KEY);
+      } else if (newToken && !isTokenExpired(newToken)) {
+        setToken(newToken);
+        localStorage.setItem(JWT_TOKEN_KEY, newToken);
+      }
     },
     [],
   );
@@ -41,17 +80,13 @@ export const AuthProvider = ({ children }) => {
   const login = useCallback(
     async (email, password) => {
       try {
-  
-        const { token } = await doLogin({
+        const { token: newToken } = await doLogin({
           email,
           password,
         });
   
-        setSession(token);
-  
-        localStorage.setItem(JWT_TOKEN_KEY, token);
-  
-        return true;
+        setSession(newToken);
+        return !isTokenExpired(newToken);
   
       } catch (error) {
         console.error(error);
@@ -64,9 +99,9 @@ export const AuthProvider = ({ children }) => {
   const register = useCallback(
     async (data) => {
       try {
-        const { token } = await doRegister(data);
-        setSession(token);
-        return true;
+        const { token: newToken } = await doRegister(data);
+        setSession(newToken);
+        return !isTokenExpired(newToken);
       } catch (error) {
         console.error(error);
         return false;
@@ -77,22 +112,26 @@ export const AuthProvider = ({ children }) => {
   
   const logout = useCallback(() => {
     setToken(null);
-  
     localStorage.removeItem(JWT_TOKEN_KEY);
   }, []);
+  
+  const isAuthenticated = useMemo(() => 
+    Boolean(token) && !isTokenExpired(token),
+  [token],
+  );
   
   const value = useMemo(
     () => ({
       user,
       error: loginError || userError || registerError,
       loading: loginLoading || userLoading || registerLoading,
-      isAuthed: Boolean(token),
+      isAuthed: isAuthenticated,
       ready: !userLoading,
       login,
       logout,
       register,
     }),
-    [token, user, loginError, loginLoading, userError, userLoading, registerError,
+    [isAuthenticated, user, loginError, loginLoading, userError, userLoading, registerError,
       registerLoading, login, logout, register],
   );
   

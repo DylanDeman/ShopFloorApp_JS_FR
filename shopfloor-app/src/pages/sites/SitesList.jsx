@@ -45,7 +45,7 @@ const SiteList = () => {
 
   return (
     <div className="flex-col md:flex-row flex justify-between p-6">
-      <div className="w-full md:w-3/4 md:ml-6">
+      <div className="w-full  lg:w-4/4 md:ml-6 overflow-x-scroll">
         <div className="mb-4">
           <input
             type="text"

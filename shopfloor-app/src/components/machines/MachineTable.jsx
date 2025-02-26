@@ -29,7 +29,11 @@ const MachineTable = ({ machines, onSort, sorteerVolgorde }) => {
         </thead>
         <tbody>
           {machines.map((machine) => (
-            <TableRow key={machine.id} data={machine} columns={['id', 'locatie', 'status', 'productieStatus']} />
+            <TableRow 
+              key={machine.id} 
+              data={machine} 
+              columns={['id', 'locatie', 'status', 'productieStatus']} 
+            />
           ))}
         </tbody>
       </table>

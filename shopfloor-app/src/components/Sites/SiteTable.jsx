@@ -29,8 +29,12 @@ const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow }) => {
         </thead>
         <tbody>
           {sites.map((site) => (
-            <TableRow key={site.id} data={site} columns={['id', 'naam', 'verantwoordelijke', 'aantalMachines']} 
-              onShow={onShow} />
+            <TableRow 
+              key={site.id} 
+              data={site} 
+              columns={['id', 'naam', 'verantwoordelijke', 'aantalMachines']} 
+              onShow={onShow} 
+            />
           ))}
         </tbody>
       </table>
