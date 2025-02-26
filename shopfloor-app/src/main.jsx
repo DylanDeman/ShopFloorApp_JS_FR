@@ -1,20 +1,19 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
-import './index.css'
-import App from './App.jsx'
-import NotFound from './pages/NotFound.jsx'
-import Layout from './pages/Layout.jsx'
-import Dashboard from './pages/Dashboard.jsx'
-import SitesList from './pages/sites/SitesList.jsx'
-import Machines from './pages/Machines.jsx'
-import Notificaties from './pages/Notificaties.jsx'
-import Login from './pages/Login.jsx'
-import SiteDetail from './pages/sites/SiteDetail.jsx'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import './index.css';
+import NotFound from './pages/NotFound.jsx';
+import Layout from './pages/Layout.jsx';
+import Dashboard from './pages/Dashboard.jsx';
+import SitesList from './pages/sites/SitesList.jsx';
+import Machines from './pages/Machines.jsx';
+import Notificaties from './pages/Notificaties.jsx';
+import Login from './pages/Login.jsx';
+import SiteDetail from './pages/sites/SiteDetail.jsx';
 
-import { AuthProvider } from './contexts/Auth.context'
-import PrivateRoute from './components/PrivateRoute.jsx'
-import Logout from './pages/Logout.jsx'
+import { AuthProvider } from './contexts/Auth.context';
+import PrivateRoute from './components/PrivateRoute.jsx';
+import Logout from './pages/Logout.jsx';
 
 const router = createBrowserRouter([
   {
@@ -26,20 +25,11 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Navigate replace to='/home' />,
+            element: <Navigate replace to='/dashboard' />,
           },
         ],
       },
-      {
-        path: '/home',
-        element: <PrivateRoute />,
-        children: [
-          {
-            index: true,
-            element: <App />,
-          },
-        ],
-      },
+      
       {
         path: '/dashboard',
         element: <PrivateRoute />,
@@ -85,16 +75,16 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: '/logout', element: <Logout />
+        path: '/logout', element: <Logout />,
       },
       {
-        path: '*', element: <NotFound />
+        path: '*', element: <NotFound />,
       },
-    ]
+    ],
   },
   {
     path: '/login',
-    element: <Login />
+    element: <Login />,
   },
 ]);
 

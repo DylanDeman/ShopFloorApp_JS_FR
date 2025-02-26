@@ -17,11 +17,7 @@ const Login = () => {
       password: 'UUBE4UcWvSZNaIw',
     },
   });
-  const { handleSubmit, reset, register } = methods;
-
-  const handleCancel = useCallback(() => {
-    reset();
-  }, [reset]);
+  const { handleSubmit} = methods;
 
   const handleLogin = useCallback(
     async ({ email, password }) => {
@@ -67,7 +63,9 @@ const Login = () => {
               <p className="text-sm text-red-500 cursor-pointer">Wachtwoord vergeten?</p>
               <button
                 type="submit"
-                className="disabled:bg-red-400 enabled:hover:cursor-pointer w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
+                className="disabled:bg-red-400 enabled:hover:cursor-pointer 
+                  w-full bg-red-500 text-white py-2 rounded 
+                  hover:bg-red-600 transition"
                 disabled={loading}
               >
                 {loading ? <Loader/> : 'Aanmelden'}
