@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/auth';
 export default function PrivateRoute() {
   const { ready, isAuthed } = useAuth();
   const { pathname } = useLocation();
-
+  
   if (!ready) {
     return (
       <div className='container'>
@@ -20,10 +20,11 @@ export default function PrivateRoute() {
       </div>
     );
   }
-
-  if (isAuthed) {
-    return <Outlet />;
+  
+  console.log(isAuthed);
+  if (!isAuthed) {
+    return <Navigate replace to={`/login?redirect=${pathname}`} />;
   }
 
-  return <Navigate replace to={`/login?redirect=${pathname}`} />;
+  return <Outlet />;
 }
