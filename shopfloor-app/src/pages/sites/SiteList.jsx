@@ -44,6 +44,7 @@ export default function SiteList({sites, loading, error}){
             value={zoekterm}
             onChange={handleSearch}
             className="border border-gray-300 rounded-md px-4 py-2 w-full"
+            data-cy='sites_search'
           />
         </div>
         <AsyncData error={error} loading={loading}>
