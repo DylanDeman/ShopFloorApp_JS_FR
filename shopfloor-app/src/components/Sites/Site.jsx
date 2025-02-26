@@ -1,6 +1,6 @@
 const Site = ({ id, naam, verantwoordelijke, aantalMachines}) => {
   return (
-    <tr  className="border border-gray-300 hover:bg-gray-50" data-cy='site'>
+    <tr className="border border-gray-300 hover:bg-gray-50" data-cy="site">
       <td data-cy='site_id' className="border border-gray-300 px-4 md:py-2 text-center">{id}</td>
       <td data-cy='site_naam' className="border border-gray-300 px-4 md:py-2">{naam}</td>
       <td data-cy='site_verantwoordelijke' className="border border-gray-300 px-4 md:py-2">{verantwoordelijke}</td>
