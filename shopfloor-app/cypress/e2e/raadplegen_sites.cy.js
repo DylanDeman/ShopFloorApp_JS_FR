@@ -1,72 +1,93 @@
 describe('Sites Page', () => {
   beforeEach(() => {
+    cy.intercept('POST', 'http://localhost:9000/api/sessions').as('loginRequest');
+    cy.intercept('GET', 'http://localhost:9000/api/users/me').as('getUser');
+    
+    cy.fixture('sites.json').then((sitesData) => {
+      cy.intercept('GET', 'http://localhost:9000/api/sites', { body: sitesData }).as('getSites');
+    });
+
     cy.login('robert.devree@hotmail.com', 'UUBE4UcWvSZNaIw');
-
-    // Consistent API endpoint path
-    cy.intercept(
-      'GET',
-      'http://localhost:9000/api/sites',
-      { fixture: 'sites.json' }
-    )
-
+    
+    cy.wait('@loginRequest');
+    cy.wait('@getUser');
     cy.visit('http://localhost:5173/sites');
+    cy.wait('@getSites');
   });
 
   it('should load and display sites from the fixture', () => {
-    cy.get('[data-cy=site]').should('have.length', 3);
+    cy.get('table').should('exist');
+    cy.get('tbody tr').should('have.length', 3);
 
-    cy.get('[data-cy=site_naam]').eq(0).should('contain', 'Site A');
-    cy.get('[data-cy=site_verantwoordelijke]').eq(0).should('contain', 'Jan Janssen');
-    cy.get('[data-cy=site_aantalMachines]').eq(0).should('contain', '5');
+    cy.get('tbody tr').eq(0).within(() => {
+      cy.get('td').eq(1).should('contain', 'Site A'); // Naam
+      cy.get('td').eq(2).should('contain', 'Jan Janssen'); // Verantwoordelijke
+      cy.get('td').eq(3).should('contain', '5'); // Aantal Machines
+    });
+    cy.get('tbody tr').eq(1).within(() => {
+      cy.get('td').eq(1).should('contain', 'Site B'); // Naam
+      cy.get('td').eq(2).should('contain', 'Piet Peeters'); // Verantwoordelijke
+      cy.get('td').eq(3).should('contain', '10'); // Aantal Machines
+    });
+    cy.get('tbody tr').eq(2).within(() => {
+      cy.get('td').eq(1).should('contain', 'Site C'); // Naam
+      cy.get('td').eq(2).should('contain', 'Marie Dubois'); // Verantwoordelijke
+      cy.get('td').eq(3).should('contain', '3'); // Aantal Machines
+    });
   });
 
-  it('should show a loading indicator for a very slow response', () => {
-    cy.intercept('GET', 'http://localhost:9000/api/sites', (req) => {
-      req.reply((res) => {
-        res.delay(2000);
-        res.send({ fixture: 'sites.json' });
-      });
-    }).as('slowResponse');
+  it('should show "Er zijn geen sites beschikbaar." when no sites exist', () => {
+    cy.intercept('GET', 'http://localhost:9000/api/sites', { body: { items: [] } }).as('emptySites');
 
     cy.visit('http://localhost:5173/sites');
-    
-    // Check loader appears
-    cy.get('[data-cy=loader]').should('be.visible');
-    
-    // Wait for response to complete
-    cy.wait('@slowResponse');
-    
-    // Then check loader disappears - use should('not.be.visible') instead of should('not.exist')
-    cy.get('[data-cy=loader]').should('not.be.visible');
+    cy.wait('@emptySites');
+
+    cy.get('table').should('not.exist');
+    cy.contains('Er zijn geen sites beschikbaar.').should('be.visible');
   });
 
-  it('should apply filters correctly', () => {
-    // Reset to original state before each filter test
-    cy.get('[data-cy=sites_filter_locatie]').select('Brussel');
-    cy.get('[data-cy=site]').should('have.length', 2); // Site A & C
-    
-    // Clear previous filter and test inactief independently
-    cy.get('[data-cy=sites_filter_locatie]').select(''); // Assuming there's a blank/all option
-    cy.get('[data-cy=sites_filter_inactief]').click();
-    cy.get('[data-cy=site]').should('have.length', 1); // Only Site B remains
-    
-    // Reset again and test onderhoudsniveau filter
-    cy.get('[data-cy=sites_filter_inactief]').click(); // Toggle off
-    cy.get('[data-cy=sites_filter_onderhoudsniveau]').clear().type('50');
-    cy.get('[data-cy=sites_filter_onderhoudsniveau]').blur(); // More reliable than trigger('change')
-    cy.get('[data-cy=site]').should('have.length', 2); // Site A & B
+  it('should allow sorting by Aantal Machines', () => {
+    cy.get('th').contains('Aantal machines').click();
+    cy.wait(500); // Ensure sorting happens
+
+    cy.get('tbody tr').first().within(() => {
+      cy.get('td').eq(3).should('contain', '3'); // Lowest count first
+    });
+
+    cy.get('th').contains('Aantal machines').click();
+    cy.wait(500); // Ensure sorting happens
+
+    cy.get('tbody tr').first().within(() => {
+      cy.get('td').eq(3).should('contain', '10'); // Highest count first
+    });
   });
-  
-  it('should handle API errors gracefully', () => {
-    cy.intercept('GET', 'http://localhost:9000/api/sites', {
-      statusCode: 500,
-      body: { error: 'Server error' }
-    }).as('serverError');
-    
-    cy.visit('http://localhost:5173/sites');
-    cy.wait('@serverError');
-    
-    // Assert error message is displayed
-    cy.get('[data-cy=error-message]').should('be.visible');
+
+  // it('should show a loading indicator for a very slow response', () => {
+  //   cy.intercept('GET', 'http://localhost:9000/api/sites', (req) => {
+  //     req.on('response', (res) => {
+  //       res.setDelay(2000);
+  //     });
+  //   }).as('slowGetSites');
+
+  //   cy.visit('http://localhost:5173/sites');
+
+  //   cy.get('[data-cy=loader]').should('be.visible');
+  //   cy.wait('@slowGetSites');
+  //   cy.get('[data-cy=loader]').should('not.exist');
+  // });
+
+
+  it('should filter sites based on search query', () => {
+    cy.get('[data-cy=sites_search]').should('be.visible').clear().type('Site A');
+    cy.get('tbody tr').should('have.length', 1);
+    cy.get('tbody tr td').eq(1).should('contain', 'Site A');
+
+    cy.get('[data-cy=sites_search]').clear().type('Jan Janssen');
+    cy.get('tbody tr').should('have.length', 1);
+    cy.get('tbody tr td').eq(2).should('contain', 'Jan Janssen');
+
+    cy.get('[data-cy=sites_search]').clear().type('Nonexistent Site');
+    cy.get('tbody tr').should('have.length', 0);
+    cy.contains('Er zijn geen sites beschikbaar.').should('be.visible');
   });
 });

@@ -26,6 +26,10 @@
 
 Cypress.Commands.add('login', (email, password) => {
   cy.visit('http://localhost:5173');
+
+  // Intercept the correct login request
+  cy.intercept('POST', 'http://localhost:9000/api/sessions').as('loginRequest');
+
   cy.get('[data-cy=loginEmail]').clear();
   if (email) cy.get('[data-cy=loginEmail]').type(email);
 
@@ -33,5 +37,20 @@ Cypress.Commands.add('login', (email, password) => {
   if (password) cy.get('[data-cy=loginWachtwoord]').type(password);
 
   cy.get('[data-cy=loginSubmitButton]').click();
-  cy.get('body').click(0, 0);
+
+  // Wait for the correct login request to complete
+  cy.wait('@loginRequest').then((interception) => {
+    expect(interception.response.statusCode).to.eq(200);
+
+    // Store auth token if needed
+    const token = interception.response.body.token;
+    if (token) {
+      cy.setCookie('auth_token', token);
+      localStorage.setItem('auth_token', token);
+    }
+  });
+
+  // Ensure the user is redirected after login
+  cy.url().should('not.include', '/login');
 });
+
