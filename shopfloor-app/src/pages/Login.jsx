@@ -42,22 +42,24 @@ const Login = () => {
           <FormProvider {...methods}>
             <form className="space-y-4" onSubmit={handleSubmit(handleLogin)}>
               <div>
-                <LabelInputLogin
-                  label="Email:"
-                  name="email"
-                  type="email"
-                  placeholder="Example@delaware.com"
-                  validationRules={{ required: 'Email is verplicht' }}
-                />
+              <LabelInputLogin
+                label="Email:"
+                name="email"
+                type="email"
+                placeholder="Example@delaware.com"
+                validationRules={{ required: 'Email is verplicht' }}
+                data-cy="loginEmail"
+              />
               </div>
               <div>
-                <LabelInputLogin
-                  label="Wachtwoord:"
-                  name="password"
-                  type="password"
-                  placeholder="●●●●●●●●"
-                  validationRules={{ required: 'Wachtwoord is verplicht' }}
-                />
+              <LabelInputLogin
+                label="Wachtwoord:"
+                name="password"
+                type="password"
+                placeholder="●●●●●●●●"
+                validationRules={{ required: 'Wachtwoord is verplicht' }}
+                data-cy="loginWachtwoord"
+              />
               </div>
               <Error error={error}/>
               <p className="text-sm text-red-500 cursor-pointer">Wachtwoord vergeten?</p>
@@ -67,6 +69,7 @@ const Login = () => {
                   w-full bg-red-500 text-white py-2 rounded 
                   hover:bg-red-600 transition"
                 disabled={loading}
+                data-cy="loginSubmitButton"
               >
                 {loading ? <Loader/> : 'Aanmelden'}
               </button>
