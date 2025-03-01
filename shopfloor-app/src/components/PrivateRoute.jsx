@@ -20,8 +20,7 @@ export default function PrivateRoute() {
       </div>
     );
   }
-  
-  console.log(isAuthed);
+
   if (!isAuthed) {
     return <Navigate replace to={`/login?redirect=${pathname}`} />;
   }
