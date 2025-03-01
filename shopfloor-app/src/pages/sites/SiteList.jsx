@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AsyncData from '../../components/AsyncData';
 export default function SiteList({sites, loading, error}){
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
   const [sorteerVolgorde, setSorteerVolgorde] = useState(null);
   const [zoekterm, setZoekterm] = useState('');

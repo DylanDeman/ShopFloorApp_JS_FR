@@ -67,7 +67,7 @@ export default function SitesList({sites}){
             <span className="text-gray-700">{onderhoudsNiveau}%</span>
           </div>
         </div>
-        <div className="w-full md:w-3/4 md:ml-6">
+        <div className="w-full max-sm:w-full md:w-3/4 md:ml-6">
           <SiteTable sites={filteredSites} />
         </div>
       </div>

@@ -11,7 +11,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-gray-100 shadow-md flex items-center justify-between p-4 z-50">
+    <nav className="fixed top-0 left-0 w-full bg-gray-100 shadow-md max-sm:flex-col max-sm:items-center flex items-center justify-between p-4 z-50">
       <div className="flex items-center gap-6">
         <div className="md:px-10 md:pr-20">
           <Link to="/dashboard">

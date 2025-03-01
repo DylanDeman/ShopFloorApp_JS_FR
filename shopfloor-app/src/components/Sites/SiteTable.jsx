@@ -10,7 +10,7 @@ const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow }) => {
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="md:overflow-x-auto">
       <table className="border-separate border-spacing-0 rounded-md border border-gray-300 w-full">
         <thead>
           <tr className="bg-gray-100 text-gray-700 uppercase text-sm font-semibold">

@@ -17,7 +17,7 @@ const Sites = () => {
 
   const sites = data?.items || [];
   const pagination = data;
-
+  
   return (
       <AsyncData loading={loading} error={error}>
         <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} data={pagination} loading={loading} error={error}/>
