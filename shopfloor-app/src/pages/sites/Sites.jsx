@@ -6,10 +6,9 @@ import SiteList from './SiteList';
 import { Pagination } from '../../components/genericComponents/Pagination';
 
 const Sites = () => {
-  const [currentPage, setCurrentPage] = useState(1); // Tracks the current page
-  const limit = 10; // Number of items per page (can be dynamic)
-
-  // Fetch data using SWR, passing page and limit as query parameters
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 10;
+  
   const { data, loading, error } = useSWR(
     `sites?page=${currentPage}&limit=${limit}`, 
     getAll
