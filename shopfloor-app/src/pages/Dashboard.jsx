@@ -1,14 +1,14 @@
-import TileList from "../components/KPI Tegels/TileList";
+import TileList from '../components/KPI Tiles/TileList';
 
 const Dashboard = () => {
   const tiles = [
     {
-      title: "KPI 1",
-      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      title: 'KPI 1',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     },
     {
-      title: "KPI 2",
-      content: "Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
+      title: 'KPI 2',
+      content: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
     },
   ];
 
