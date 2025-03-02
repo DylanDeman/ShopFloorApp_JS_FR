@@ -6,16 +6,16 @@ import SiteList from './SiteList';
 import { Pagination } from '../../components/genericComponents/Pagination';
 
 const Sites = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const limit = 10;
-  
-  const { data, loading, error } = useSWR(
+  const [currentPage, setCurrentPage] = useState(1); // Tracks the current page
+  const limit = 10; 
+
+  const { data: paginatedData, loading, error } = useSWR(
     `sites?page=${currentPage}&limit=${limit}`, 
     getAll
   );
 
-  const sites = data?.items || [];
-  const pagination = data;
+  const sites = paginatedData?.items || [];
+  const pagination = paginatedData;
   
   return (
       <AsyncData loading={loading} error={error}>
