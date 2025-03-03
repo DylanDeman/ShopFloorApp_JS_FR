@@ -16,7 +16,6 @@ const SiteDetail = () => {
   } = useSWR(id ? `sites/${idAsNumber}` : null, getById);
 
   const machines = site.machines || [];
-  console.log(machines);
 
   const [sorteerVolgorde, setSorteerVolgorde] = useState(null);
   const [zoekterm, setZoekterm] = useState('');

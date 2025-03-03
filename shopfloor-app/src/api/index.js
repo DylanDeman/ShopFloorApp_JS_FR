@@ -18,7 +18,7 @@ axios.interceptors.request.use((config) => {
 
 export async function getAll(url) {
   const { data } = await axios.get(url); 
-  return data.items;
+  return data;
 }
 
 export async function getById(url) {

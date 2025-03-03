@@ -35,7 +35,7 @@ export default function SiteList({sites, loading, error}){
   const gesorteerdeSites = sorteerSites(filteredSites);
 
   return (
-    <div className="flex-col md:flex-row flex justify-between p-6">
+    <div className="flex-col md:flex-row flex justify-between md:p-6">
       <div className="w-full  lg:w-4/4 md:ml-6 overflow-x-scroll">
         <div className="mb-4">
           <input
