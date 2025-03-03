@@ -1,21 +1,27 @@
+import Dropdown from '../components/genericComponents/Dropdown';
 import TileList from '../components/KPI Tiles/TileList';
+import useSWR from 'swr';
+import { getAll } from '../api';
+import AsyncData from '../components/AsyncData';
 
 const Dashboard = () => {
-  const tiles = [
-    {
-      title: 'KPI 1',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    },
-    {
-      title: 'KPI 2',
-      content: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
-    },
-  ];
+
+  const {
+    data: tiles = [],
+    loading,
+    error,
+  } = useSWR('kpi', getAll);
 
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6">Dashboard Pagina</h1>
-      <TileList tiles={tiles} />
+      <Dropdown
+        label={'+ Voeg een nieuwe KPI toe'}
+        options={['optie 1', 'optie 2', 'optie 3']}
+      />
+      <AsyncData loading={loading} error={error}>
+        <TileList tiles={tiles} />
+      </AsyncData>
     </div>
   );
 };

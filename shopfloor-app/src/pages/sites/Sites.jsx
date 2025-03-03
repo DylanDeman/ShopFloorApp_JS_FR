@@ -14,7 +14,7 @@ const Sites = () => {
     <AsyncData loading={loading} error={error}>
       <SiteList sites={sites} loading={loading} error={error} />
     </AsyncData>
-  )
+  );
 };
 
 export default Sites;
