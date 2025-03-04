@@ -15,8 +15,8 @@ export default function NotificatieList({notificaties}){
                 <span className="p-3">Tijdstip</span>
                 <span className="p-3">Bericht</span>
             </div>
-            {notificaties.items.map((notificatie) => 
-            <Notificatie key={notificatie.id} tijdstip={notificatie.tijdstip} bericht={notificatie.bericht}/>)}
+            {notificaties.items.filter((notificatie) => !notificatie.gelezen).map((notificatie) => 
+            <Notificatie key={notificatie.id} id={notificatie.id} tijdstip={notificatie.tijdstip} bericht={notificatie.bericht}/>)}
         </div>
     );
 }
