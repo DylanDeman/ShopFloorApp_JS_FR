@@ -1,8 +1,17 @@
 import { Link, useLocation } from 'react-router-dom';
-import { FiBell } from 'react-icons/fi';
+import AsyncData from './AsyncData';
+import { getAll } from '../api/index';
+import NotificatieNavbar from './Notificaties/NotificatiesNavbar';
+import useSWR from 'swr';
 
 const Navbar = () => {
   const location = useLocation();
+
+  const {
+    data: notificaties,
+    loading: notificatiesLoading,
+    error: notificatiesError
+  } = useSWR('notificaties', getAll)
 
   const navbarItems = [
     { name: 'Dashboard', path: '/dashboard' },
@@ -39,14 +48,9 @@ const Navbar = () => {
         </div>
         <div className="relative">
           <Link to="/notificaties">
-            <FiBell className="w-6 h-6 text-black hover:text-gray-600" />
-            <span
-              className="absolute -top-1 -right-1 bg-red-500 
-            text-white text-xs font-bold w-5 h-5 
-              flex items-center justify-center rounded-full"
-            >
-              2
-            </span>
+            <AsyncData loading={notificatiesLoading} error={notificatiesError}>
+              <NotificatieNavbar notificaties={notificaties} />
+            </AsyncData>
           </Link>
         </div>
 

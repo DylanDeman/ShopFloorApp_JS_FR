@@ -7,7 +7,7 @@ import Layout from './pages/Layout.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Sites from './pages/sites/Sites';
 import Machines from './pages/Machines.jsx';
-import Notificaties from './pages/Notificaties.jsx';
+import Notificaties from './pages/Notificaties/Notificaties.jsx';
 import Login from './pages/Login.jsx';
 import SiteDetail from './pages/sites/SiteDetail.jsx';
 
