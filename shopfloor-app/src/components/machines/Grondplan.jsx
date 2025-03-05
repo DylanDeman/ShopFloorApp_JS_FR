@@ -8,34 +8,32 @@ const isOverlapping = (machine, machines) => {
     const dx = machine.x - otherMachine.x;
     const dy = machine.y - otherMachine.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
-    return distance < 100; // Prevent machines from being closer than 100px
+    return distance < 150; // Prevent machines from being closer than 150px
   });
 };
 
 const Grondplan = ({ machines }) => {
   const [randomizedMachines, setRandomizedMachines] = useState([]); // State for the machine positions
   const [selectedMachine, setSelectedMachine] = useState(null); // State for the selected machine
-  const [searchTerm, setSearchTerm] = useState(""); // State for the search term
 
-  // Randomly place the machines while ensuring they don't overlap and fit realistically
   useEffect(() => {
-    if (machines && machines.length > 0 && randomizedMachines.length === 0) {
+    if (machines && machines.length > 0) {
       const randomMachines = [];
 
-      // Define grid constraints for placement
+      // Define the factory floor space
       const gridWidth = 800;
       const gridHeight = 500;
-      const gridSpacing = 100; // Distance between machines
 
+      // Iterate through each machine and place them randomly within the constraints
       machines.forEach((machine) => {
         let newMachine = { ...machine };
         let validPosition = false;
 
-        // Try generating a random position with constraints
+        // Try generating a random position with more flexibility, still preventing overlap
         while (!validPosition) {
-          // Use a grid-like pattern for placement
-          const x = Math.floor(Math.random() * (gridWidth / gridSpacing)) * gridSpacing;
-          const y = Math.floor(Math.random() * (gridHeight / gridSpacing)) * gridSpacing;
+          // Random x and y within the factory floor space
+          const x = Math.random() * (gridWidth - 100); // Leaving space from the edge
+          const y = Math.random() * (gridHeight - 100); // Leaving space from the edge
 
           newMachine.x = x;
           newMachine.y = y;
@@ -51,46 +49,18 @@ const Grondplan = ({ machines }) => {
 
       setRandomizedMachines(randomMachines);
     }
-  }, [machines, randomizedMachines.length]); // Ensure it runs only once
+  }, [machines]); // Only re-run when machines change
 
   // Helper function to determine icon color based on status
   const getIconColor = (status) => {
     if (status === "DRAAIT") return "green"; // Running
-    if (status === "Offline") return "red"; // Offline
-    return "yellow"; // Maintenance or other statuses
+    return "red"; // Maintenance or other statuses
   };
-
-  // Filter machines based on the search term
-  const filteredMachines = randomizedMachines.filter((machine) => {
-    const status = machine.status || "";
-    const productieStatus = machine.productieStatus || "";
-
-    return (
-      status.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      productieStatus.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
 
   return (
     <div style={{ textAlign: "center", position: "relative" }}>
       {/* Increased size for the title */}
       <h2 style={{ fontSize: "36px" }}>Site Grondplan</h2>
-
-      {/* Search input */}
-      <input
-        type="text"
-        placeholder="Search machines..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        style={{
-          marginBottom: "20px",
-          padding: "8px",
-          fontSize: "16px",
-          width: "250px",
-          borderRadius: "4px",
-        }}
-      />
-
       <div
         style={{
           display: "flex",
@@ -101,18 +71,18 @@ const Grondplan = ({ machines }) => {
       >
         <Stage width={800} height={500}>
           <Layer>
-            {filteredMachines.map((machine) => (
+            {randomizedMachines.map((machine) => (
               <Group
                 key={machine.id}
                 x={machine.x}
                 y={machine.y}
                 onClick={() => setSelectedMachine(machine)} // Set the clicked machine
               >
-                {/* Machine Status Text */}
+                {/* Machine Name Text */}
                 <Text
                   x={0}
                   y={55} // Ensure the text is below the machine icon
-                  text={`Status: ${machine.status}`} // Display only the status
+                  text={machine.name}
                   fontSize={12}
                   fill="black"
                   width={70} // Ensure the text fits within the bounds
@@ -125,7 +95,7 @@ const Grondplan = ({ machines }) => {
 
         {/* Render Machine Icons on top of the Konva Stage */}
         <div style={{ position: "absolute", top: 0, left: 0 }}>
-          {filteredMachines.map((machine) => (
+          {randomizedMachines.map((machine) => (
             <div
               key={machine.id}
               style={{
@@ -146,7 +116,7 @@ const Grondplan = ({ machines }) => {
 
       {selectedMachine && (
         <div style={{ marginTop: 20, padding: 10, border: "1px solid gray" }}>
-          <h3>Machine Details</h3>
+          <h3>{selectedMachine.name}</h3>
           <p><strong>ID:</strong> {selectedMachine.id}</p>
           <p><strong>Locatie:</strong> {selectedMachine.locatie}</p>
           <p><strong>Status:</strong> {selectedMachine.status}</p>
