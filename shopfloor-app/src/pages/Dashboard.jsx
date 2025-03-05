@@ -7,10 +7,12 @@ import AsyncData from '../components/AsyncData';
 const Dashboard = () => {
 
   const {
-    data: tiles = [],
+    data: dashboards = [],
     loading,
     error,
-  } = useSWR('kpi', getAll);
+  } = useSWR('dashboards', getAll);
+
+  console.log(dashboards);
 
   return (
     <div className="p-6">
@@ -20,7 +22,7 @@ const Dashboard = () => {
         options={['optie 1', 'optie 2', 'optie 3']}
       />
       <AsyncData loading={loading} error={error}>
-        <TileList tiles={tiles} />
+        <TileList tiles={dashboards} />
       </AsyncData>
     </div>
   );
