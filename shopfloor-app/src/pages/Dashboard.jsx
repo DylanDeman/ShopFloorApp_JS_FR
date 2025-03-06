@@ -61,9 +61,9 @@ const Dashboard = () => {
 
   const selectedKpiIds = new Set(dashboards.map((d) => d.kpi_id));
 
-  const selectedTiles = kpis.filter((kpi) => selectedKpiIds.has(kpi.id));
+  const selectedTiles = Array.isArray(kpis.items) ? kpis.items.filter((kpi) => selectedKpiIds.has(kpi.id)) : [];
 
-  const availableKpis = kpis.filter((kpi) => !selectedKpiIds.has(kpi.id));
+  const availableKpis = Array.isArray(kpis.items) ? kpis.items.filter((kpi) => !selectedKpiIds.has(kpi.id)) : [];
 
   return (
     <div className="p-6">
