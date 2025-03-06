@@ -39,7 +39,6 @@ export const deleteById = async (url, { arg: id }) => {
 
 export const post = async (url, { arg }) => {
   const { data } = await axios.post(url, arg);
-
   return data;
 };
 

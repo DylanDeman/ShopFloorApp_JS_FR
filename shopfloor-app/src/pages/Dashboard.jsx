@@ -1,7 +1,7 @@
 import Dropdown from '../components/genericComponents/Dropdown';
 import TileList from '../components/KPI Tiles/TileList';
 import useSWR from 'swr';
-import { getAll, save, getDashboardByUserID, deleteById } from '../api';
+import { getAll, getDashboardByUserID, deleteById, post } from '../api';
 import AsyncData from '../components/AsyncData';
 import useSWRMutation from 'swr/mutation';
 import { useAuth } from '../contexts/auth';
@@ -28,14 +28,21 @@ const Dashboard = () => {
 
   const { trigger: addKPIToDashboard, error: addKPIError } = useSWRMutation(
     'dashboard',
-    (url, { arg }) => save(url, { arg }),
+    (url, { arg }) => post(url, { arg: { gebruiker_id: arg.user_id, kpi_id: arg.kpi_id } }),
   );
 
-  const addKPI = (kpi_id) => {
-    addKPIToDashboard({ id: 1, kpi_id });
-    if (addKPIError) {
+  const addKPI = async (kpi_id) => {
+    if (!user_id) return;
+
+    try {
+      console.log(`User_id: ${user_id}`);
+      console.log(`KPI_id: ${kpi_id}`);
+
+      await addKPIToDashboard({ user_id, kpi_id });
+      window.location.reload();
+    } catch (error) {
+      console.error(`Error trying to add KPI to dashboard: ${error}`);
       console.error(addKPIError);
-      console.error(deleteError);
     }
   };
 
@@ -48,6 +55,7 @@ const Dashboard = () => {
       window.location.reload();
     } catch (error) {
       console.error(error);
+      console.error(deleteError);
     }
   };
 
