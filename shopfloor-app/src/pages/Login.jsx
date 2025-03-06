@@ -14,10 +14,10 @@ const Login = () => {
   const methods = useForm({
     defaultValues: {
       email: 'robert.devree@hotmail.com', // Voorbeeld bestaat niet echt! TODO weghalen
-      password: 'UUBE4UcWvSZNaIw',
+      password: '123456789',
     },
   });
-  const { handleSubmit} = methods;
+  const { handleSubmit } = methods;
 
   const handleLogin = useCallback(
     async ({ email, password }) => {
@@ -31,8 +31,10 @@ const Login = () => {
   );
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-cover bg-center" style={{ backgroundImage: 'url(\'/login_achtergrond.svg\')' }}>
-      <div className="flex flex-col md:flex-row bg-white bg-opacity-90 p-8 rounded-lg shadow-lg w-11/12 max-w-4xl mt-15">
+    <div className="flex flex-col items-center min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: 'url(\'/login_achtergrond.svg\')' }}>
+      <div className="flex flex-col md:flex-row bg-white bg-opacity-90
+       p-8 rounded-lg shadow-lg w-11/12 max-w-4xl mt-15">
         <div className="w-full md:w-1/2 p-6">
           <h2 className="text-2xl font-bold mb-4">WELKOM!</h2>
           <p className="text-gray-600 text-sm mb-4">
@@ -42,26 +44,26 @@ const Login = () => {
           <FormProvider {...methods}>
             <form className="space-y-4" onSubmit={handleSubmit(handleLogin)}>
               <div>
-              <LabelInputLogin
-                label="Email:"
-                name="email"
-                type="email"
-                placeholder="Example@delaware.com"
-                validationRules={{ required: 'Email is verplicht' }}
-                data-cy="loginEmail"
-              />
+                <LabelInputLogin
+                  label="Email:"
+                  name="email"
+                  type="email"
+                  placeholder="Example@delaware.com"
+                  validationRules={{ required: 'Email is verplicht' }}
+                  data-cy="loginEmail"
+                />
               </div>
               <div>
-              <LabelInputLogin
-                label="Wachtwoord:"
-                name="password"
-                type="password"
-                placeholder="●●●●●●●●"
-                validationRules={{ required: 'Wachtwoord is verplicht' }}
-                data-cy="loginWachtwoord"
-              />
+                <LabelInputLogin
+                  label="Wachtwoord:"
+                  name="password"
+                  type="password"
+                  placeholder="●●●●●●●●"
+                  validationRules={{ required: 'Wachtwoord is verplicht' }}
+                  data-cy="loginWachtwoord"
+                />
               </div>
-              <Error error={error}/>
+              <Error error={error} />
               <p className="text-sm text-red-500 cursor-pointer">Wachtwoord vergeten?</p>
               <button
                 type="submit"
@@ -71,7 +73,7 @@ const Login = () => {
                 disabled={loading}
                 data-cy="loginSubmitButton"
               >
-                {loading ? <Loader/> : 'Aanmelden'}
+                {loading ? <Loader /> : 'Aanmelden'}
               </button>
             </form>
           </FormProvider>
