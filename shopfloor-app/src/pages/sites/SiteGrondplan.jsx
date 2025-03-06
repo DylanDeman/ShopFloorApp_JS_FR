@@ -1,9 +1,9 @@
-import MachineTable from '../../components/machines/MachineTable';
 import { useState } from 'react';
 import useSWR from 'swr';
 import { getById } from '../../api';
 import AsyncData from '../../components/AsyncData';
 import { useParams } from 'react-router-dom';
+import Grondplan from '../../components/machines/Grondplan';
 
 const SiteDetail = () => {
   const { id } = useParams();
@@ -56,8 +56,7 @@ const SiteDetail = () => {
           />
         </div>
         <AsyncData error={siteError} loading={siteLoading}>
-          <MachineTable machines={gesorteerdeMachines} onSort={handleSort} sorteerVolgorde={sorteerVolgorde} />
-
+          <Grondplan  machines={gesorteerdeMachines} onSort={handleSort} sorteerVolgorde={sorteerVolgorde}/>
         </AsyncData>
       </div>
     </div>

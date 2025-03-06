@@ -1,6 +1,6 @@
 import TableRow from './../genericComponents/TableRow';
 
-const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow }) => {
+const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow, onShowGrondplan }) => {
   if (sites.length === 0) {
     return (
       <div className="flex justify-center items-center h-32">
@@ -34,6 +34,7 @@ const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow }) => {
               data={site} 
               columns={['id', 'naam', 'verantwoordelijke', 'aantalMachines']} 
               onShow={onShow} 
+              onShowGrondplan={onShowGrondplan}
             />
           ))}
         </tbody>

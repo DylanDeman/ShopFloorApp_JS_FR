@@ -11,17 +11,17 @@ const Sites = () => {
 
   const { data: paginatedData, loading, error } = useSWR(
     `sites?page=${currentPage}&limit=${limit}`, 
-    getAll
+    getAll,
   );
 
   const sites = paginatedData?.items || [];
   const pagination = paginatedData;
   
   return (
-      <AsyncData loading={loading} error={error}>
-        <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} data={pagination} loading={loading} error={error}/>
-        <SiteList sites={sites} loading={loading} error={error} />
-      </AsyncData>
+    <AsyncData loading={loading} error={error}>
+      <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} data={pagination} loading={loading} error={error}/>
+      <SiteList sites={sites} loading={loading} error={error} />
+    </AsyncData>
   );
 };
 

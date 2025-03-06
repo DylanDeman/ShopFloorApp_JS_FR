@@ -1,160 +1,44 @@
-import React, { useState, useEffect } from "react";
-import { Stage, Layer, Text, Group } from "react-konva";
-import { MdFactory } from "react-icons/md"; // Importing MdFactory from react-icons/md
+import TableRow from './../genericComponents/TableRow';
 
-// Helper function to check if two machines overlap
-const isOverlapping = (machine, machines) => {
-  return machines.some((otherMachine) => {
-    const dx = machine.x - otherMachine.x;
-    const dy = machine.y - otherMachine.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    return distance < 100; // Prevent machines from being closer than 100px
-  });
-};
-
-const Grondplan = ({ machines }) => {
-  const [randomizedMachines, setRandomizedMachines] = useState([]); // State for the machine positions
-  const [selectedMachine, setSelectedMachine] = useState(null); // State for the selected machine
-  const [searchTerm, setSearchTerm] = useState(""); // State for the search term
-
-  // Randomly place the machines while ensuring they don't overlap and fit realistically
-  useEffect(() => {
-    if (machines && machines.length > 0 && randomizedMachines.length === 0) {
-      const randomMachines = [];
-
-      // Define grid constraints for placement
-      const gridWidth = 800;
-      const gridHeight = 500;
-      const gridSpacing = 100; // Distance between machines
-
-      machines.forEach((machine) => {
-        let newMachine = { ...machine };
-        let validPosition = false;
-
-        // Try generating a random position with constraints
-        while (!validPosition) {
-          // Use a grid-like pattern for placement
-          const x = Math.floor(Math.random() * (gridWidth / gridSpacing)) * gridSpacing;
-          const y = Math.floor(Math.random() * (gridHeight / gridSpacing)) * gridSpacing;
-
-          newMachine.x = x;
-          newMachine.y = y;
-
-          // Check if the machine overlaps with others
-          if (!isOverlapping(newMachine, randomMachines)) {
-            validPosition = true;
-          }
-        }
-
-        randomMachines.push(newMachine);
-      });
-
-      setRandomizedMachines(randomMachines);
-    }
-  }, [machines, randomizedMachines.length]); // Ensure it runs only once
-
-  // Helper function to determine icon color based on status
-  const getIconColor = (status) => {
-    if (status === "DRAAIT") return "green"; // Running
-    if (status === "Offline") return "red"; // Offline
-    return "yellow"; // Maintenance or other statuses
-  };
-
-  // Filter machines based on the search term
-  const filteredMachines = randomizedMachines.filter((machine) => {
-    const status = machine.status || "";
-    const productieStatus = machine.productieStatus || "";
-
+const MachineTable = ({ machines, onSort, sorteerVolgorde }) => {
+  if (machines.length === 0) {
     return (
-      status.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      productieStatus.toLowerCase().includes(searchTerm.toLowerCase())
+      <div className="flex justify-center items-center h-32">
+        <h2 className="text-lg font-semibold text-gray-700">Er zijn geen machines beschikbaar.</h2>
+      </div>
     );
-  });
+  }
 
   return (
-    <div style={{ textAlign: "center", position: "relative" }}>
-      {/* Increased size for the title */}
-      <h2 style={{ fontSize: "36px" }}>Site Grondplan</h2>
-
-      {/* Search input */}
-      <input
-        type="text"
-        placeholder="Search machines..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        style={{
-          marginBottom: "20px",
-          padding: "8px",
-          fontSize: "16px",
-          width: "250px",
-          borderRadius: "4px",
-        }}
-      />
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          border: "1px solid black",
-          position: "relative", // Required for absolute positioning of icons
-        }}
-      >
-        <Stage width={800} height={500}>
-          <Layer>
-            {filteredMachines.map((machine) => (
-              <Group
-                key={machine.id}
-                x={machine.x}
-                y={machine.y}
-                onClick={() => setSelectedMachine(machine)} // Set the clicked machine
-              >
-                {/* Machine Status Text */}
-                <Text
-                  x={0}
-                  y={55} // Ensure the text is below the machine icon
-                  text={`Status: ${machine.status}`} // Display only the status
-                  fontSize={12}
-                  fill="black"
-                  width={70} // Ensure the text fits within the bounds
-                  align="center"
-                />
-              </Group>
-            ))}
-          </Layer>
-        </Stage>
-
-        {/* Render Machine Icons on top of the Konva Stage */}
-        <div style={{ position: "absolute", top: 0, left: 0 }}>
-          {filteredMachines.map((machine) => (
-            <div
-              key={machine.id}
-              style={{
-                position: "absolute",
-                top: machine.y, // Position of the machine icon
-                left: machine.x, // Position of the machine icon
-                zIndex: 1, // Ensure the icon is above the canvas
-                cursor: "pointer", // Make the icon clickable
-              }}
-              onClick={() => setSelectedMachine(machine)} // Icon click handler
+    <div className="overflow-x-auto">
+      <table className="border-separate border-spacing-0 rounded-md border border-gray-300 w-full">
+        <thead>
+          <tr className="bg-gray-100 text-gray-700 uppercase text-sm font-semibold">
+            <th className="border border-gray-300 px-4 md:py-2">Nr.</th>
+            <th className="border border-gray-300 px-4 md:py-2">Locatie</th>
+            <th 
+              className="border border-gray-300 px-4 md:py-2 cursor-pointer"
+              onClick={onSort}
             >
-              {/* Increase the size of the MdFactory icon */}
-              <MdFactory size={70} color={getIconColor(machine.status)} />
-            </div>
+              Status
+              {sorteerVolgorde === 'asc' ? ' 🔼' : sorteerVolgorde === 'desc' ? ' 🔽' : ''}
+            </th>
+            <th className="border border-gray-300 px-4 md:py-2">ProductieStatus</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {machines.map((machine) => (
+            <TableRow 
+              key={machine.id} 
+              data={machine} 
+              columns={['id', 'locatie', 'status', 'productieStatus']} 
+            />
           ))}
-        </div>
-      </div>
-
-      {selectedMachine && (
-        <div style={{ marginTop: 20, padding: 10, border: "1px solid gray" }}>
-          <h3>Machine Details</h3>
-          <p><strong>ID:</strong> {selectedMachine.id}</p>
-          <p><strong>Locatie:</strong> {selectedMachine.locatie}</p>
-          <p><strong>Status:</strong> {selectedMachine.status}</p>
-          <p><strong>Productie Status:</strong> {selectedMachine.productieStatus}</p>
-        </div>
-      )}
+        </tbody>
+      </table>
     </div>
   );
 };
 
-export default Grondplan;
+export default MachineTable;

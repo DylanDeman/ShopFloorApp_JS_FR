@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Stage, Layer, Text, Group } from "react-konva";
-import { MdFactory } from "react-icons/md"; // Importing MdFactory from react-icons/md
+import  { useState, useEffect } from 'react';
+import { Stage, Layer, Text, Group } from 'react-konva';
+import { MdFactory } from 'react-icons/md'; // Importing MdFactory from react-icons/md
 
 // Helper function to check if two machines overlap
 const isOverlapping = (machine, machines) => {
@@ -53,20 +53,20 @@ const Grondplan = ({ machines }) => {
 
   // Helper function to determine icon color based on status
   const getIconColor = (status) => {
-    if (status === "DRAAIT") return "green"; // Running
-    return "red"; // Maintenance or other statuses
+    if (status === 'DRAAIT') return 'green'; // Running
+    return 'red'; // Maintenance or other statuses
   };
 
   return (
-    <div style={{ textAlign: "center", position: "relative" }}>
+    <div style={{ textAlign: 'center', position: 'relative' }}>
       {/* Increased size for the title */}
-      <h2 style={{ fontSize: "36px" }}>Site Grondplan</h2>
+      <h2 style={{ fontSize: '36px' }}>Site Grondplan</h2>
       <div
         style={{
-          display: "flex",
-          justifyContent: "center",
-          border: "1px solid black",
-          position: "relative", // Required for absolute positioning of icons
+          display: 'flex',
+          justifyContent: 'center',
+          border: '1px solid black',
+          position: 'relative', // Required for absolute positioning of icons
         }}
       >
         <Stage width={800} height={500}>
@@ -94,16 +94,16 @@ const Grondplan = ({ machines }) => {
         </Stage>
 
         {/* Render Machine Icons on top of the Konva Stage */}
-        <div style={{ position: "absolute", top: 0, left: 0 }}>
+        <div style={{ position: 'absolute', top: 0, left: 0 }}>
           {randomizedMachines.map((machine) => (
             <div
               key={machine.id}
               style={{
-                position: "absolute",
+                position: 'absolute',
                 top: machine.y, // Position of the machine icon
                 left: machine.x, // Position of the machine icon
                 zIndex: 1, // Ensure the icon is above the canvas
-                cursor: "pointer", // Make the icon clickable
+                cursor: 'pointer', // Make the icon clickable
               }}
               onClick={() => setSelectedMachine(machine)} // Icon click handler
             >
@@ -115,7 +115,7 @@ const Grondplan = ({ machines }) => {
       </div>
 
       {selectedMachine && (
-        <div style={{ marginTop: 20, padding: 10, border: "1px solid gray" }}>
+        <div style={{ marginTop: 20, padding: 10, border: '1px solid gray' }}>
           <h3>{selectedMachine.name}</h3>
           <p><strong>ID:</strong> {selectedMachine.id}</p>
           <p><strong>Locatie:</strong> {selectedMachine.locatie}</p>
