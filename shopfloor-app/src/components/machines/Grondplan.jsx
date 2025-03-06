@@ -1,126 +1,115 @@
-import  { useState, useEffect } from 'react';
-import { Stage, Layer, Text, Group } from 'react-konva';
-import { MdFactory } from 'react-icons/md'; // Importing MdFactory from react-icons/md
+import { useState, useEffect } from 'react';
+import { Stage, Layer, Group } from 'react-konva';
+import { MdFactory } from 'react-icons/md';
 
-// Helper function to check if two machines overlap
+const factoryZones = [
+  { xMin: 320, xMax: 750, yMin: 130, yMax: 370 }, 
+  { xMin: 550, xMax: 880, yMin: 280, yMax: 470 },  
+];
+
+const isInsideFactory = (x, y) => {
+  return factoryZones.some((zone) => 
+    x >= zone.xMin && x <= zone.xMax && y >= zone.yMin && y <= zone.yMax,
+  );
+};
+
+// Prevent overlap
 const isOverlapping = (machine, machines) => {
   return machines.some((otherMachine) => {
     const dx = machine.x - otherMachine.x;
     const dy = machine.y - otherMachine.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
-    return distance < 150; // Prevent machines from being closer than 150px
+    return distance < 120; 
   });
 };
 
 const Grondplan = ({ machines }) => {
-  const [randomizedMachines, setRandomizedMachines] = useState([]); // State for the machine positions
-  const [selectedMachine, setSelectedMachine] = useState(null); // State for the selected machine
+  const [randomizedMachines, setRandomizedMachines] = useState([]);
+  const [selectedMachine, setSelectedMachine] = useState(null);
 
   useEffect(() => {
     if (machines && machines.length > 0) {
-      const randomMachines = [];
+      const placedMachines = [];
 
-      // Define the factory floor space
-      const gridWidth = 800;
-      const gridHeight = 500;
-
-      // Iterate through each machine and place them randomly within the constraints
       machines.forEach((machine) => {
         let newMachine = { ...machine };
         let validPosition = false;
+        let attempts = 0;
 
-        // Try generating a random position with more flexibility, still preventing overlap
-        while (!validPosition) {
-          // Random x and y within the factory floor space
-          const x = Math.random() * (gridWidth - 100); // Leaving space from the edge
-          const y = Math.random() * (gridHeight - 100); // Leaving space from the edge
+        while (!validPosition && attempts < 1000) {
+          const zone = factoryZones[Math.floor(Math.random() * factoryZones.length)];
+          const x = Math.random() * (zone.xMax - zone.xMin - 120) + zone.xMin + 60;
+          const y = Math.random() * (zone.yMax - zone.yMin - 120) + zone.yMin + 60;
 
-          newMachine.x = x;
-          newMachine.y = y;
-
-          // Check if the machine overlaps with others
-          if (!isOverlapping(newMachine, randomMachines)) {
+          if (isInsideFactory(x, y) && !isOverlapping({ x, y }, placedMachines)) {
+            newMachine.x = x;
+            newMachine.y = y;
             validPosition = true;
           }
+          attempts++;
         }
 
-        randomMachines.push(newMachine);
+        if (validPosition) {
+          placedMachines.push(newMachine);
+        }
       });
 
-      setRandomizedMachines(randomMachines);
+      setRandomizedMachines(placedMachines);
     }
-  }, [machines]); // Only re-run when machines change
+  }, [machines]);
 
-  // Helper function to determine icon color based on status
-  const getIconColor = (status) => {
-    if (status === 'DRAAIT') return 'green'; // Running
-    return 'red'; // Maintenance or other statuses
-  };
+  const getIconColor = (status) => (status === 'DRAAIT' ? 'green' : 'red');
 
   return (
-    <div style={{ textAlign: 'center', position: 'relative' }}>
-      {/* Increased size for the title */}
-      <h2 style={{ fontSize: '36px' }}>Site Grondplan</h2>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          border: '1px solid black',
-          position: 'relative', // Required for absolute positioning of icons
-        }}
-      >
-        <Stage width={800} height={500}>
+    <div className="text-center relative p-6 bg-white">
+      <h2 className="text-3xl font-bold mb-4">Site Grondplan</h2>
+
+      <div className="flex justify-center border border-black rounded-lg relative overflow-hidden p-4 bg-gray-400">
+        <div className="absolute top-[250px] left-[500px] w-[400px] h-[250px] bg-gray-700 
+        border-4 border-gray-600 z-10 rounded-lg"></div>
+        <div className="absolute top-10 left-1/4 w-[600px] h-[300px] bg-gray-700 border-4 
+        border-gray-600 z-20 rounded-lg"></div>
+
+        <Stage width={800} height={500} className="rounded-lg">
           <Layer>
             {randomizedMachines.map((machine) => (
-              <Group
-                key={machine.id}
-                x={machine.x}
-                y={machine.y}
-                onClick={() => setSelectedMachine(machine)} // Set the clicked machine
-              >
-                {/* Machine Name Text */}
-                <Text
-                  x={0}
-                  y={55} // Ensure the text is below the machine icon
-                  text={machine.name}
-                  fontSize={12}
-                  fill="black"
-                  width={70} // Ensure the text fits within the bounds
-                  align="center"
-                />
-              </Group>
+              <Group key={machine.id} x={machine.x} y={machine.y}></Group>
             ))}
           </Layer>
         </Stage>
 
-        {/* Render Machine Icons on top of the Konva Stage */}
-        <div style={{ position: 'absolute', top: 0, left: 0 }}>
+        <div className="absolute top-0 left-0 w-[800px] h-[500px] z-30">
           {randomizedMachines.map((machine) => (
             <div
               key={machine.id}
+              className="absolute cursor-pointer text-center"
               style={{
-                position: 'absolute',
-                top: machine.y, // Position of the machine icon
-                left: machine.x, // Position of the machine icon
-                zIndex: 1, // Ensure the icon is above the canvas
-                cursor: 'pointer', // Make the icon clickable
+                top: machine.y - 35, 
+                left: machine.x - 35, 
               }}
-              onClick={() => setSelectedMachine(machine)} // Icon click handler
+              onClick={() => setSelectedMachine(machine)}
             >
-              {/* Increase the size of the MdFactory icon */}
-              <MdFactory size={70} color={getIconColor(machine.status)} />
+              <MdFactory className="rounded-lg" size={70} color={getIconColor(machine.status)} />
+              <div className="text-xs mt-1 w-[70px] text-center 
+              font-semibold  p-1 rounded-md text-white">{machine.locatie}</div> 
             </div>
           ))}
         </div>
       </div>
 
       {selectedMachine && (
-        <div style={{ marginTop: 20, padding: 10, border: '1px solid gray' }}>
-          <h3>{selectedMachine.name}</h3>
+        <div className="mt-4 p-6 border border-gray-400 rounded-lg shadow-lg bg-gray-100">
+          <h3 className="text-lg font-bold mb-2">{selectedMachine.name}</h3>
           <p><strong>ID:</strong> {selectedMachine.id}</p>
           <p><strong>Locatie:</strong> {selectedMachine.locatie}</p>
           <p><strong>Status:</strong> {selectedMachine.status}</p>
           <p><strong>Productie Status:</strong> {selectedMachine.productieStatus}</p>
+          <button 
+            className="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-700 transition"
+            onClick={() => setSelectedMachine(null)}
+          >
+            Sluiten
+          </button>
         </div>
       )}
     </div>
