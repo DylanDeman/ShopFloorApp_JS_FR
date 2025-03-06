@@ -4,9 +4,13 @@ import { getKPIWaardenByKPIid } from '../../api';
 import useSWR from 'swr';
 import AsyncData from '../AsyncData';
 
-const Tile = ({ id, title, content }) => {
+const Tile = ({ id, title, content, onDelete }) => {
 
   const { data: kpiWaarden = [], loading, error } = useSWR(id, getKPIWaardenByKPIid);
+
+  const handleDelete = () => {
+    onDelete(id);
+  };
 
   const formattedData = kpiWaarden.map((item) => ({
     name: new Date(item.datum).toLocaleDateString(),
@@ -19,6 +23,7 @@ const Tile = ({ id, title, content }) => {
         <h2 className="text-xl font-semibold">{title}</h2>
         <button
           className="text-red-500 hover:text-red-700 p-2 rounded-full focus:outline-none"
+          onClick={handleDelete}
         >
           <FaTrash size={20} />
         </button>
