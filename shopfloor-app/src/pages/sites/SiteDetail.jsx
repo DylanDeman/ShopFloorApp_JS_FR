@@ -41,7 +41,7 @@ const SiteDetail = () => {
     machine.productieStatus.toLowerCase().includes(zoekterm.toLowerCase()),
   );
 
-  const gesorteereMachines = sorteerMachines(filteredMachines);
+  const gesorteerdeMachines = sorteerMachines(filteredMachines);
 
   return (
     <div className="flex-col md:flex-row flex justify-between p-6">
@@ -56,7 +56,8 @@ const SiteDetail = () => {
           />
         </div>
         <AsyncData error={siteError} loading={siteLoading}>
-          <MachineTable machines={gesorteereMachines} onSort={handleSort} sorteerVolgorde={sorteerVolgorde} />
+          <MachineTable machines={gesorteerdeMachines} onSort={handleSort} sorteerVolgorde={sorteerVolgorde} />
+
         </AsyncData>
       </div>
     </div>
