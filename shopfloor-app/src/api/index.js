@@ -15,7 +15,6 @@ axios.interceptors.request.use((config) => {
   return config;
 });
 
-
 export async function getAll(url) {
   const { data } = await axios.get(url); 
   return data;
@@ -40,6 +39,15 @@ export const deleteById = async (url, { arg: id }) => {
 
 export const post = async (url, { arg }) => {
   const { data } = await axios.post(url, arg);
-
   return data;
+};
+
+export const getKPIWaardenByKPIid = async (id) => {
+  const { data } = await axios.get(`kpi/${id}/kpiwaarden`);  
+  return data.items;
+};
+
+export const getDashboardByUserID = async (user_id) => {
+  const {data } = await axios.get(`users/${user_id}/dashboard`);  
+  return data.items;
 };
