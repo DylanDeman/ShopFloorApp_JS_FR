@@ -8,10 +8,9 @@ const Tile = ({ id, title, content }) => {
 
   const { data: kpiWaarden = [], loading, error } = useSWR(id, getKPIWaardenByKPIid);
 
-  // Format the data for the chart
   const formattedData = kpiWaarden.map((item) => ({
-    name: new Date(item.datum).toLocaleDateString(), // Convert datum to a readable string for XAxis
-    value: item.waarde, // Use the 'waarde' for the Y-axis
+    name: new Date(item.datum).toLocaleDateString(),
+    value: item.waarde,
   }));
 
   return (

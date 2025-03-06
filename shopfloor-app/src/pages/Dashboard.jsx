@@ -1,17 +1,29 @@
 import Dropdown from '../components/genericComponents/Dropdown';
 import TileList from '../components/KPI Tiles/TileList';
 import useSWR from 'swr';
-import { getAll, save } from '../api';
+import { getAll, save, getDashboardByUserID } from '../api';
 import AsyncData from '../components/AsyncData';
 import useSWRMutation from 'swr/mutation';
+import { useAuth } from '../contexts/auth';
 
 const Dashboard = () => {
 
+  const { user } = useAuth();
+  const user_id = user ? user.id : null;
+
   const {
-    data: dashboards = [],
+    data: dashboard = [],
     loading,
     error,
-  } = useSWR('dashboard', getAll);
+  } = useSWR(user_id, getDashboardByUserID);
+
+  const filterTiles = () => {
+    const kpi_ids = dashboard.map((d) => d.kpi_id);
+
+    const tiles = kpis.filter((kpi) => kpi_ids.includes(kpi.id));
+
+    return tiles;
+  };
 
   const {
     data: kpis = [],
@@ -31,8 +43,6 @@ const Dashboard = () => {
     }
   };
 
-  console.log(kpis);
-
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6">Dashboard Pagina</h1>
@@ -44,7 +54,7 @@ const Dashboard = () => {
         />
       </AsyncData>
       <AsyncData loading={loading} error={error}>
-        <TileList tiles={dashboards} />
+        <TileList tiles={filterTiles()} />
       </AsyncData>
     </div>
   );
