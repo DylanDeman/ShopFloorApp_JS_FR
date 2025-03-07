@@ -8,6 +8,11 @@ import { IoMdAddCircleOutline } from 'react-icons/io';
 const Sites = () => {
   const { data: allSitesData, loading, error } = useSWR('sites', getAll);
   
+  const handleAddSite = () => {
+    window.alert('Nieuwe site toevoegen');
+    // TODO navigeren naar ander scherm!!!
+  };
+  
   return (
     <AsyncData loading={loading} error={error}>
       <div className="flex justify-between items-center">
@@ -15,7 +20,12 @@ const Sites = () => {
           Overzicht sites 
         </h1>
         
-        <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2">
+        <button 
+          className="bg-red-500 hover:cursor-pointer hover:bg-red-700 
+          text-white font-bold py-2 px-4 
+          rounded flex items-center gap-2"
+          onClick={() => handleAddSite()}
+        >
           <IoMdAddCircleOutline />
           Site toevoegen
         </button>
