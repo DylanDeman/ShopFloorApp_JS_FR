@@ -58,7 +58,7 @@ export default function SiteList({ loading: parentLoading, error: parentError })
 
   const gesorteerdeSites = sorteerSites(filteredSites);
   
-  // Use either parent loading/error or this component's loading/error
+  // Gebruik ofwel de loading/error van de parent of van dit component
   const isLoading = parentLoading || loading;
   const hasError = parentError || error;
 
@@ -74,7 +74,7 @@ export default function SiteList({ loading: parentLoading, error: parentError })
             placeholder="Zoeken naar site, verantwoordelijke, ..."
           />
           
-          {/* Page size selector - hidden on small screens */}
+          {/* Page size selector - niet zichtbaar op small screens */}
           <div className="hidden md:flex items-center mt-3 md:mt-0">
             <label htmlFor="page-size" className="mr-2 text-gray-700">
               Aantal sites per pagina:
