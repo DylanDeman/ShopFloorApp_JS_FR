@@ -10,7 +10,7 @@ const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow, onShowGrondplan }) 
   }
 
   return (
-    <div className="md:overflow-x-auto">
+    <div className="md:overflow-x-auto overflow-x-auto">
       <table className="border-separate border-spacing-0 rounded-md border border-gray-300 w-full">
         <thead>
           <tr className="bg-gray-100 text-gray-700 uppercase text-sm font-semibold">
@@ -29,12 +29,13 @@ const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow, onShowGrondplan }) 
         </thead>
         <tbody>
           {sites.map((site) => (
-            <TableRow 
+            <TableRow
               key={site.id} 
               data={site} 
               columns={['id', 'naam', 'verantwoordelijke', 'aantalMachines']} 
               onShow={onShow} 
               onShowGrondplan={onShowGrondplan}
+              editable={true}
             />
           ))}
         </tbody>

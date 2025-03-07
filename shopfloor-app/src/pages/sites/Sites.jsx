@@ -1,26 +1,37 @@
-import React, { useState } from 'react';
 import useSWR from 'swr';
 import { getAll } from '../../api';
 import AsyncData from '../../components/AsyncData';
 import SiteList from './SiteList';
-import { Pagination } from '../../components/genericComponents/Pagination';
+import Information from '../../components/Information';
+import { IoMdAddCircleOutline } from 'react-icons/io';
 
 const Sites = () => {
-  const [currentPage, setCurrentPage] = useState(1); // Tracks the current page
-  const limit = 10; 
-
-  const { data: paginatedData, loading, error } = useSWR(
-    `sites?page=${currentPage}&limit=${limit}`, 
-    getAll,
-  );
-
-  const sites = paginatedData?.items || [];
-  const pagination = paginatedData;
+  const { data: allSitesData, loading, error } = useSWR('sites', getAll);
   
   return (
     <AsyncData loading={loading} error={error}>
-      <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} data={pagination} loading={loading} error={error}/>
-      <SiteList sites={sites} loading={loading} error={error} />
+      <div className="flex justify-between items-center">
+        <h1 className="text-4xl font-semibold mb-6 mt-10"> 
+          Overzicht sites 
+        </h1>
+        
+        <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2">
+          <IoMdAddCircleOutline />
+          Site toevoegen
+        </button>
+      </div>
+
+      <Information 
+        info="Hieronder vindt u een overzicht van alle sites. 
+        Klik op een site om een site te raadplegen en 
+        zijn machines te bekijken."
+      />
+      
+      <SiteList
+        allSitesData={allSitesData}
+        loading={loading} 
+        error={error} 
+      />
     </AsyncData>
   );
 };
