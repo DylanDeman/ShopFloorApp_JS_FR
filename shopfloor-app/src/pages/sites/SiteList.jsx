@@ -51,6 +51,12 @@ export default function SiteList({ loading: parentLoading, error: parentError })
     setCurrentPage(1); 
   };
 
+  const handleEditSite = (id) => {
+    window.alert('Site bewerken met id ' + id);
+    // TODO: navigeren naar edit scherm!!!
+    //navigate(`/sites/${id}/edit`);
+  };
+
   const filteredSites = sites.filter((site) =>
     site.naam.toLowerCase().includes(zoekterm.toLowerCase()) ||
     site.verantwoordelijke.toLowerCase().includes(zoekterm.toLowerCase()),
@@ -101,6 +107,7 @@ export default function SiteList({ loading: parentLoading, error: parentError })
             onSort={handleSort}
             onShow={handleShow}
             onShowGrondplan={handleShowGrondplan}
+            onEdit={handleEditSite}
           />
           
           <div className="mt-6">

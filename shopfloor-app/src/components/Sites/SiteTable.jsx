@@ -1,6 +1,6 @@
 import TableRow from './../genericComponents/TableRow';
 
-const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow, onShowGrondplan }) => {
+const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow, onShowGrondplan, onEdit }) => {
   if (sites.length === 0) {
     return (
       <div className="flex justify-center items-center h-32">
@@ -14,6 +14,7 @@ const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow, onShowGrondplan }) 
       <table className="border-separate border-spacing-0 rounded-md border border-gray-300 w-full">
         <thead>
           <tr className="bg-gray-100 text-gray-700 uppercase text-sm font-semibold">
+            <th className="border border-gray-300 px-4 md:py-2"></th>
             <th className="border border-gray-300 px-4 md:py-2">Nr.</th>
             <th className="border border-gray-300 px-4 md:py-2">Naam</th>
             <th className="border border-gray-300 px-4 md:py-2">Verantwoordelijke</th>
@@ -35,7 +36,7 @@ const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow, onShowGrondplan }) 
               columns={['id', 'naam', 'verantwoordelijke', 'aantalMachines']} 
               onShow={onShow} 
               onShowGrondplan={onShowGrondplan}
-              editable={true}
+              onEdit={onEdit}
             />
           ))}
         </tbody>
