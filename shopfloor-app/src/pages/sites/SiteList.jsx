@@ -11,6 +11,12 @@ export default function SiteList({ loading: parentLoading, error: parentError })
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  
+  // state bijhouden van sortering voor deze twee kolommen
+  const [sorteerVolgorde, setSorteerVolgorde] = useState(null);
+  const [sorteerVolgordeId, setSorteerVolgordeId] = useState(null);
+  
+  const [zoekterm, setZoekterm] = useState('');
 
   const { data: paginatedData, loading, error } = useSWR(
     `sites?page=${currentPage}&limit=${limit}`, 
@@ -20,18 +26,36 @@ export default function SiteList({ loading: parentLoading, error: parentError })
   const sites = paginatedData?.items || [];
   const pagination = paginatedData;
 
-  const [sorteerVolgorde, setSorteerVolgorde] = useState(null);
-  const [zoekterm, setZoekterm] = useState('');
-
+  // Sorteer functie (voor id en aantalMachines!)
   const sorteerSites = (sites) => {
-    if (!sorteerVolgorde) return sites;
-    return [...sites].sort((a, b) =>
-      sorteerVolgorde === 'asc' ? a.aantalMachines - b.aantalMachines : b.aantalMachines - a.aantalMachines,
-    );
+    let sortedSites = [...sites]; // deep copy maken van sites
+    
+    if (sorteerVolgorde) {
+      sortedSites = sortedSites.sort((a, b) =>
+        sorteerVolgorde === 'asc' 
+          ? a.aantalMachines - b.aantalMachines 
+          : b.aantalMachines - a.aantalMachines,
+      );
+    }
+    
+    if (sorteerVolgordeId) {
+      sortedSites = sortedSites.sort((a, b) =>
+        sorteerVolgordeId === 'asc' 
+          ? a.id - b.id 
+          : b.id - a.id,
+      );
+    }
+    return sortedSites;
   };
 
-  const handleSort = () => {
+  const handleSortMachines = () => {
+    setSorteerVolgordeId(null);
     setSorteerVolgorde((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+  };
+  
+  const handleSortId = () => {
+    setSorteerVolgorde(null);
+    setSorteerVolgordeId((prev) => (prev === 'asc' ? 'desc' : 'asc'));
   };
 
   const handleSearch = (e) => {
@@ -104,7 +128,9 @@ export default function SiteList({ loading: parentLoading, error: parentError })
           <SiteTable
             sites={gesorteerdeSites}
             sorteerVolgorde={sorteerVolgorde}
-            onSort={handleSort}
+            sorteerVolgordeId={sorteerVolgordeId}
+            onSortMachines={handleSortMachines}
+            onSortId={handleSortId}
             onShow={handleShow}
             onShowGrondplan={handleShowGrondplan}
             onEdit={handleEditSite}

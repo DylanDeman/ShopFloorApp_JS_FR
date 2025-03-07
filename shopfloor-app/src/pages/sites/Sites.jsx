@@ -1,20 +1,15 @@
-import useSWR from 'swr';
-import { getAll } from '../../api';
-import AsyncData from '../../components/AsyncData';
 import SiteList from './SiteList';
 import Information from '../../components/Information';
 import { IoMdAddCircleOutline } from 'react-icons/io';
 
 const Sites = () => {
-  const { data: allSitesData, loading, error } = useSWR('sites', getAll);
-  
   const handleAddSite = () => {
     window.alert('Nieuwe site toevoegen');
     // TODO navigeren naar ander scherm!!!
   };
   
   return (
-    <AsyncData loading={loading} error={error}>
+    <>
       <div className="flex justify-between items-center">
         <h1 className="text-4xl font-semibold mb-6 mt-10"> 
           Overzicht sites 
@@ -37,12 +32,9 @@ const Sites = () => {
         zijn machines te bekijken."
       />
       
-      <SiteList
-        allSitesData={allSitesData}
-        loading={loading} 
-        error={error} 
-      />
-    </AsyncData>
+      {/* Lijst met alle sites*/}
+      <SiteList/>
+    </>
   );
 };
 
