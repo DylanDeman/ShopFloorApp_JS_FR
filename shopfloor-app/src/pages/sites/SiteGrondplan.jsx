@@ -17,11 +17,11 @@ const SiteGrondPlan = () => {
   const machines = site.machines || [];
 
   return (
-    <div className="flex-col md:flex-row flex justify-between p-6">
-      <div className="w-full md:ml-6">
+    <div className="flex-col md:flex-row flex justify-between p-6" data-cy="site-grondplan-container">
+      <div className="w-full md:ml-6" data-cy="site-grondplan-content">
         
-        <AsyncData error={siteError} loading={siteLoading}>
-          <Grondplan  machines={machines}/>
+        <AsyncData error={siteError} loading={siteLoading} data-cy="async-data">
+          <Grondplan machines={machines} data-cy="grondplan-component" />
         </AsyncData>
       </div>
     </div>

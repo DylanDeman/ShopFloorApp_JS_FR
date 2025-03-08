@@ -3,7 +3,8 @@ import { isAxiosError } from 'axios';
 export default function Error({ error }) {
   if (isAxiosError(error)) {
     return (
-      <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+      <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4"
+        data-cy="error-message">
         <h4 className="font-bold text-lg">Oops, something went wrong</h4>
         <p className="mt-1">
           {error?.response?.data?.message || error.message}

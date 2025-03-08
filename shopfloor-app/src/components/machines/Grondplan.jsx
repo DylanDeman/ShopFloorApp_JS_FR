@@ -13,7 +13,6 @@ const isInsideFactory = (x, y) => {
   );
 };
 
-// Prevent overlap
 const isOverlapping = (machine, machines) => {
   return machines.some((otherMachine) => {
     const dx = machine.x - otherMachine.x;
@@ -61,10 +60,11 @@ const Grondplan = ({ machines }) => {
   const getIconColor = (status) => (status === 'DRAAIT' ? 'green' : 'red');
 
   return (
-    <div className="text-center relative p-6 bg-white">
+    <div className="text-center relative p-6 bg-white" data-cy="grondplan">
       <h2 className="text-3xl font-bold mb-4">Site Grondplan</h2>
 
-      <div className="flex justify-center border border-black rounded-lg relative overflow-hidden p-4 bg-gray-400">
+      <div className="flex justify-center border border-black rounded-lg relative overflow-hidden p-4 bg-gray-400"
+        data-cy="map">
         <div className="absolute top-[250px] left-[500px] w-[400px] h-[250px] bg-gray-700 
         border-4 border-gray-600 z-10 rounded-lg"></div>
         <div className="absolute top-10 left-1/4 w-[600px] h-[300px] bg-gray-700 border-4 
@@ -73,7 +73,7 @@ const Grondplan = ({ machines }) => {
         <Stage width={800} height={500} className="rounded-lg">
           <Layer>
             {randomizedMachines.map((machine) => (
-              <Group key={machine.id} x={machine.x} y={machine.y}></Group>
+              <Group key={machine.id} x={machine.x} y={machine.y} data-cy="machine-marker"></Group>
             ))}
           </Layer>
         </Stage>
@@ -88,6 +88,7 @@ const Grondplan = ({ machines }) => {
                 left: machine.x - 35, 
               }}
               onClick={() => setSelectedMachine(machine)}
+              data-cy="machine-marker"
             >
               <MdFactory className="rounded-lg" size={70} color={getIconColor(machine.status)} />
               <div className="text-xs mt-1 w-[70px] text-center 
@@ -98,7 +99,7 @@ const Grondplan = ({ machines }) => {
       </div>
 
       {selectedMachine && (
-        <div className="mt-4 p-6 border border-gray-400 rounded-lg shadow-lg bg-gray-100">
+        <div className="mt-4 p-6 border border-gray-400 rounded-lg shadow-lg bg-gray-100" data-cy="machine-details">
           <h3 className="text-lg font-bold mb-2">{selectedMachine.name}</h3>
           <p><strong>ID:</strong> {selectedMachine.id}</p>
           <p><strong>Locatie:</strong> {selectedMachine.locatie}</p>
@@ -107,6 +108,7 @@ const Grondplan = ({ machines }) => {
           <button 
             className="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-700 transition"
             onClick={() => setSelectedMachine(null)}
+            data-cy="close-machine-details"
           >
             Sluiten
           </button>

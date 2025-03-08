@@ -4,10 +4,10 @@ describe('Sites Page', () => {
     cy.intercept('GET', 'http://localhost:9000/api/users/me').as('getUser');
     
     cy.fixture('sites.json').then((sitesData) => {
-      cy.intercept('GET', 'http://localhost:9000/api/sites', { body: sitesData }).as('getSites');
+      cy.intercept('GET', 'http://localhost:9000/api/sites?page=1&limit=10', { body: sitesData }).as('getSites');
     });
 
-    cy.login('robert.devree@hotmail.com', 'UUBE4UcWvSZNaIw');
+    cy.login('robert.devree@hotmail.com', '123456789');
     
     cy.wait('@loginRequest');
     cy.wait('@getUser');
@@ -37,7 +37,7 @@ describe('Sites Page', () => {
   });
 
   it('should show "Er zijn geen sites beschikbaar." when no sites exist', () => {
-    cy.intercept('GET', 'http://localhost:9000/api/sites', { body: { items: [] } }).as('emptySites');
+    cy.intercept('GET', 'http://localhost:9000/api/sites?page=1&limit=10', { body: { items: [] } }).as('emptySites');
 
     cy.visit('http://localhost:5173/sites');
     cy.wait('@emptySites');
@@ -75,7 +75,6 @@ describe('Sites Page', () => {
   //   cy.wait('@slowGetSites');
   //   cy.get('[data-cy=loader]').should('not.exist');
   // });
-
 
   it('should filter sites based on search query', () => {
     cy.get('[data-cy=sites_search]').should('be.visible').clear().type('Site A');
