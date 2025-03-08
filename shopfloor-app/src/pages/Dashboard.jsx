@@ -61,20 +61,30 @@ const Dashboard = () => {
   };
 
   const selectedKpiIds = new Set(dashboards.map((d) => d.kpi_id));
+  console.log(`selectedKpiIds: ${selectedKpiIds}`);
 
   const selectedTiles = Array.isArray(kpis.items) ? kpis.items.filter((kpi) => selectedKpiIds.has(kpi.id)) : [];
+  console.log(`selectedTiles: ${selectedTiles}`);
 
   const availableKpis = Array.isArray(kpis.items) ? kpis.items.filter((kpi) => !selectedKpiIds.has(kpi.id)) : [];
+  console.log(`availableKpis: ${availableKpis}`);
+
   const correctRoleKpis = Array.isArray(kpis.items) ? availableKpis.filter((kpi) => kpi.roles.includes(rol)) : [];
+  console.log(`correctRoleKpis: ${correctRoleKpis}`);
 
   return (
     <div className="p-6">
       <AsyncData loading={loadingkpi} error={errorkpi}>
-        <Dropdown
-          label={'+ Voeg een nieuwe KPI toe'}
-          options={correctRoleKpis}
-          onSelect={addKPI}
-        />
+        {correctRoleKpis.length > 0 ? (
+          <Dropdown
+            label={'+ Voeg een nieuwe KPI toe'}
+            options={correctRoleKpis}
+            onSelect={addKPI}
+          />
+        ) : (
+          <>
+          </>
+        )}
       </AsyncData>
       <AsyncData loading={loading} error={error}>
         <TileList tiles={selectedTiles} onDelete={handleDelete} />

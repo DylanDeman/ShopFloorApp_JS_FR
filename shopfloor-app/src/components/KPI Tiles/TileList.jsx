@@ -5,7 +5,7 @@ const TileList = ({ tiles, onDelete }) => {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {tiles.length > 0 ? (
         tiles.map((tile) => (
-          <Tile key={tile.id} id={tile.id} title={tile.onderwerp} onDelete={onDelete} />
+          <Tile key={tile.id} id={tile.id} title={tile.onderwerp} onDelete={onDelete} graphType={tile.grafiek} />
         ))
       ) : (
         <div className="col-span-full text-center text-gray-500 text-lg font-semibold p-4">

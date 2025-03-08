@@ -1,11 +1,20 @@
 import { FaTrash } from 'react-icons/fa';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
 import { getKPIWaardenByKPIid } from '../../api';
 import useSWR from 'swr';
 import AsyncData from '../AsyncData';
 
-const Tile = ({ id, title, content, onDelete }) => {
-
+const Tile = ({ id, title, content, onDelete, graphType }) => {
   const { data: kpiWaarden = [], loading, error } = useSWR(id, getKPIWaardenByKPIid);
 
   const handleDelete = () => {
@@ -16,6 +25,41 @@ const Tile = ({ id, title, content, onDelete }) => {
     name: new Date(item.datum).toLocaleDateString(),
     value: item.waarde,
   }));
+
+  const renderGraph = () => {
+    switch (graphType) {
+      case 'LINE':
+        return (
+          <LineChart data={formattedData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Line type="monotone" dataKey="value" stroke="#6366F1" strokeWidth={2} />
+          </LineChart>
+        );
+      case 'BAR':
+        return (
+          <BarChart data={formattedData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="value" fill="#6366F1" />
+          </BarChart>
+        );
+      case 'NONE':
+        return (
+          <ul className="list-disc list-inside text-gray-700">
+            {formattedData.map((item, index) => (
+              <li key={index}>{`${item.name}: ${item.value}`}</li>
+            ))}
+          </ul>
+        );
+      default:
+        return <p className="text-gray-500">Geen grafiek beschikbaar.</p>;
+    }
+  };
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 m-4 max-w-sm w-full">
@@ -32,13 +76,7 @@ const Tile = ({ id, title, content, onDelete }) => {
       <div className="h-48">
         <AsyncData loading={loading} error={error}>
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={formattedData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="value" stroke="#6366F1" strokeWidth={2} />
-            </LineChart>
+            {renderGraph()}
           </ResponsiveContainer>
         </AsyncData>
       </div>
