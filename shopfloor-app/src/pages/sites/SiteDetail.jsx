@@ -44,7 +44,7 @@ const SiteDetail = () => {
   const gesorteerdeMachines = sorteerMachines(filteredMachines);
 
   return (
-    <div className="flex-col md:flex-row flex justify-between p-6">
+    <div className="flex-col md:flex-row flex justify-between p-6" data-cy="site-details">
       <div className="w-full md:ml-6">
         <div className="mb-4">
           <input
@@ -53,11 +53,15 @@ const SiteDetail = () => {
             value={zoekterm}
             onChange={handleSearch}
             className="border border-gray-300 rounded-md px-4 py-2 w-full"
+            data-cy="filter-input"
           />
         </div>
         <AsyncData error={siteError} loading={siteLoading}>
-          <MachineTable machines={gesorteerdeMachines} onSort={handleSort} sorteerVolgorde={sorteerVolgorde} />
-
+          <MachineTable 
+            machines={gesorteerdeMachines} 
+            onSort={handleSort} 
+            sorteerVolgorde={sorteerVolgorde} 
+          />
         </AsyncData>
       </div>
     </div>
