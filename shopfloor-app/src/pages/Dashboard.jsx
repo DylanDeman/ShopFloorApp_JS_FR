@@ -9,6 +9,7 @@ import { useAuth } from '../contexts/auth';
 const Dashboard = () => {
   const { user } = useAuth();
   const user_id = user ? user.id : null;
+  const rol = user ? user.rol : null;
 
   const {
     data: dashboards = [],
@@ -64,13 +65,14 @@ const Dashboard = () => {
   const selectedTiles = Array.isArray(kpis.items) ? kpis.items.filter((kpi) => selectedKpiIds.has(kpi.id)) : [];
 
   const availableKpis = Array.isArray(kpis.items) ? kpis.items.filter((kpi) => !selectedKpiIds.has(kpi.id)) : [];
+  const correctRoleKpis = Array.isArray(kpis.items) ? availableKpis.filter((kpi) => kpi.roles.includes(rol)) : [];
 
   return (
     <div className="p-6">
       <AsyncData loading={loadingkpi} error={errorkpi}>
         <Dropdown
           label={'+ Voeg een nieuwe KPI toe'}
-          options={availableKpis}
+          options={correctRoleKpis}
           onSelect={addKPI}
         />
       </AsyncData>
