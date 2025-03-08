@@ -1,6 +1,7 @@
 import SiteList from './SiteList';
 import Information from '../../components/Information';
 import { IoMdAddCircleOutline } from 'react-icons/io';
+import { IoInformationCircleOutline } from 'react-icons/io5';
 
 const Sites = () => {
   const handleAddSite = () => {
@@ -28,6 +29,7 @@ const Sites = () => {
       <Information 
         info="Hieronder vindt u een overzicht van alle sites. 
         Klik op een site om de details van de site te bekijken!"
+        icon={IoInformationCircleOutline}
       />
       
       {/* Lijst met alle sites*/}
