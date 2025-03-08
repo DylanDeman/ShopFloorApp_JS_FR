@@ -1,112 +1,82 @@
-import SiteList from './SiteList';
+import MachineList from './../machines/MachinesList';
 import Information from '../../components/Information';
 import { IoInformationCircleOutline } from 'react-icons/io5';
-import { FaPerson } from 'react-icons/fa6';
 import { FaMapMarkedAlt } from 'react-icons/fa';
+import { FaPerson } from 'react-icons/fa6';
+import { useNavigate, useParams } from 'react-router-dom';
+import useSWR from 'swr';
+import { getById } from '../../api/index';
+import AsyncData from '../../components/AsyncData';
+import { FaArrowLeft } from 'react-icons/fa';
 
-const Sites = () => {
-
-  const handleShowGrondplan = () => {
-    window.alert('Grondplan tonen' + '\nTODO nog te implementeren');
-    // TODO navigeren naar ander scherm!!!
-  };
+const SiteDetails = () => {
+  const navigate = useNavigate();
   
-<<<<<<< HEAD
+  const handleShowGrondplan = () => {
+    navigate(`/sites/${id}/grondplan`);
+  };
+
+  const handleOnClickBack = () => {
+    navigate('/sites');
+  };
+
+  const { id } = useParams();
+  const idAsNumber = Number(id);
+    
+  const {
+    data: site = [],
+    error: siteError,
+    isLoading: siteLoading,
+  } = useSWR(id ? `sites/${idAsNumber}` : null, getById);
+  
   return (
     <>
-      <div className="flex justify-between items-center mb-6 mt-10">
-        <h1 className="text-4xl font-semibold"> 
-          PAGINA WIP - Site - [naam van de site]
-        </h1>
-        <button 
-          className="bg-red-500 hover:cursor-pointer hover:bg-red-700 
-          text-white font-bold py-2 px-4 
-          rounded flex items-center gap-2"
-          onClick={() => handleShowGrondplan()}
-        >
-          <FaMapMarkedAlt />
-          Grondplan bekijken
-        </button>
-      </div>
-
-      <Information 
-        info="Hieronder vindt u een overzicht van alle sites. 
-        Klik op een site om een site te raadplegen
-        en zijn machines te bekijken."
-        icon={IoInformationCircleOutline}
-      />
-
-      <Information 
-        info="Verantwoordelijke: [naam van de verantwoordelijke]"
-        icon={FaPerson}
-      />
-      
-      {/* TIJDELIJKE LIJST */}
-      <SiteList/>
-    </>
-  );
-
-  const gesorteerdeMachines = sorteerMachines(filteredMachines);
-
-  return (
-    <div className="flex-col md:flex-row flex justify-between p-6" data-cy="site-details">
-      <div className="w-full md:ml-6">
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Zoek op locatie, status of productie status..."
-            value={zoekterm}
-            onChange={handleSearch}
-            className="border border-gray-300 rounded-md px-4 py-2 w-full"
-            data-cy="filter-input"
-          />
+      <AsyncData error={siteError} loading={siteLoading}>
+        <div className="flex justify-between items-center mb-6 mt-10">
+          <div className="flex items-center gap-4">
+            <button 
+              className="text-gray-700 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100"
+              onClick={handleOnClickBack}
+              aria-label="Go back"
+            >
+              <FaArrowLeft size={24} />
+            </button>
+    
+            <h1 className="text-4xl font-semibold"> 
+              Site | {site.naam}
+            </h1>
+          </div>
+  
+          <button 
+            className="bg-red-500 hover:cursor-pointer hover:bg-red-700 
+              text-white font-bold py-2 px-4 
+              rounded flex items-center gap-2"
+            onClick={() => handleShowGrondplan()}
+          >
+            <FaMapMarkedAlt />
+            Bekijk grondplan
+          </button>
         </div>
-        <AsyncData error={siteError} loading={siteLoading}>
-          <MachineTable 
-            machines={gesorteerdeMachines} 
-            onSort={handleSort} 
-            sorteerVolgorde={sorteerVolgorde} 
-          />
-        </AsyncData>
-=======
-  return (
-    <>
-      <div className="flex justify-between items-center mb-6 mt-10">
-        <h1 className="text-4xl font-semibold"> 
-          PAGINA WIP - Site - [naam van de site]
-        </h1>
-        <button 
-          className="bg-red-500 hover:cursor-pointer hover:bg-red-700 
-          text-white font-bold py-2 px-4 
-          rounded flex items-center gap-2"
-          onClick={() => handleShowGrondplan()}
-        >
-          <FaMapMarkedAlt />
-          Grondplan bekijken
-        </button>
->>>>>>> origin/feature/raadplegen_details_site_update
-      </div>
 
-      <Information 
-        info="Hieronder vindt u een overzicht van alle sites. 
-        Klik op een site om een site te raadplegen
+        <Information 
+          info="Hieronder vindt u een overzicht van alle sites. 
+        Klik op een site om een site te raadplegen 
         en zijn machines te bekijken."
-        icon={IoInformationCircleOutline}
-      />
+          icon={IoInformationCircleOutline}
+        />
 
-      <Information 
-        info="Verantwoordelijke: [naam van de verantwoordelijke]"
-        icon={FaPerson}
-      />
+        <Information 
+          info={'Verantwoordelijke: ' + site.verantwoordelijke}
+          icon={FaPerson}
+        />
       
-      {/* TIJDELIJKE LIJST */}
-      <SiteList/>
+        {/* Lijst met alle machines*/}
+        <MachineList
+          machinesData={site.machines}
+        />
+      </AsyncData>
     </>
   );
 };
 
-<<<<<<< HEAD
-export default SiteDetail;
-=======
-export default Sites;
->>>>>>> origin/feature/raadplegen_details_site_update
+export default SiteDetails;
