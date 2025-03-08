@@ -1,11 +1,9 @@
-const TableRow = ({ data, columns, onShow, onShowGrondplan, cellProps = () => ({}) }) => {
 import { MdEdit } from 'react-icons/md';
 
-const TableRow = ({ data, columns, onShow, onEdit }) => {
+const TableRow = ({ data, columns, onShow, onEdit, onShowGrondplan, cellProps = () => ({}) }) => {
   return (
     <tr className="border border-gray-300 hover:bg-gray-50" data-cy={`table-row-${data.id}`}>
-    <tr className="border border-gray-300 hover:bg-gray-50">
-      {/* Edit button wordt enkel getoond als onEdit is meegegeven in props */}
+      {/* Edit Button */}
       {onEdit && (
         <td className="border border-gray-300 px-2 py-2 text-center">
           <button
@@ -17,17 +15,20 @@ const TableRow = ({ data, columns, onShow, onEdit }) => {
           </button>
         </td>
       )}
-      
+
+      {/* Data Columns */}
       {columns.map((column, index) => (
-        <td 
-          key={index} 
+        <td
+          key={index}
           className="border border-gray-300 px-4 md:py-2 text-center"
-          data-cy={`table-cell-${column}-${data.id}`} 
+          data-cy={`table-cell-${column}-${data.id}`}
           {...cellProps(column, data)}
         >
           {data[column]}
         </td>
       ))}
+
+      {/* Actions Column */}
       {(onShow || onShowGrondplan) && (
         <td className="border border-gray-300 px-1 py-1 text-center" data-cy={`table-actions-${data.id}`}>
           <div className="inline-flex gap-2">
@@ -49,16 +50,6 @@ const TableRow = ({ data, columns, onShow, onEdit }) => {
                 Grondplan
               </button>
             )}
-      
-      {onShow && (
-        <td className="border border-gray-300 px-1 py-1 text-center">
-          <div 
-            className="inline-flex gap-2"
-            onClick={() => onShow(data.id)}
-          >
-            <span className="font-bold hover:cursor-pointer hover:underline hover:text-red-700 transition-all">
-              Details
-            </span>
           </div>
         </td>
       )}
