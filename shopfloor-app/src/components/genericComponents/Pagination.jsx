@@ -2,16 +2,17 @@ import { FaArrowRightLong } from 'react-icons/fa6';
 import { FaArrowLeftLong } from 'react-icons/fa6';
 
 export function Pagination({currentPage, setCurrentPage, data, loading}){
+  const totalPages = data?.totalPages ?? 1;
 
   const handlePageChange = (newPage) => {
-    if(data && data.totalPages >= newPage && newPage > 0){
+    if(data && totalPages >= newPage && newPage > 0){
       setCurrentPage(newPage);
     }
   };
 
   // Om te bepalen of de vorige en volgende knoppen disabled mogen worden
   const isPreviousDisabled = currentPage === 1 || loading || !data;
-  const isNextDisabled = !data || loading || currentPage >= data.totalPages;
+  const isNextDisabled = !data || loading || currentPage >= totalPages;
 
   return (
     <div className="flex justify-between items-center w-full my-4">
@@ -30,7 +31,7 @@ export function Pagination({currentPage, setCurrentPage, data, loading}){
       </button>
 
       <div className="font-semibold select-none text-center px-4 py-2 rounded-full bg-gray-100">
-        {data ? `Pagina ${currentPage} van ${data.totalPages || 1}` : 'Laden...'}
+        {data ? `Pagina ${currentPage} van ${totalPages}` : 'Laden...'}
       </div>
       
       {/* Volgende button */}

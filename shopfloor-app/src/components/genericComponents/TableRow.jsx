@@ -28,27 +28,21 @@ const TableRow = ({ data, columns, onShow, onEdit, onShowGrondplan, cellProps = 
         </td>
       ))}
 
-      {/* Actions Column */}
       {(onShow || onShowGrondplan) && (
         <td className="border border-gray-300 px-1 py-1 text-center" data-cy={`table-actions-${data.id}`}>
           <div className="inline-flex gap-2">
             {onShow && (
-              <button
-                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition"
-                onClick={() => onShow(data.id)}
-                data-cy={`button-details-${data.id}`}
-              >
-                Details
-              </button>
-            )}
-            {onShowGrondplan && (
-              <button
-                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition"
-                onClick={() => onShowGrondplan(data.id)}
-                data-cy={`button-grondplan-${data.id}`}
-              >
-                Grondplan
-              </button>
+              <td className="border-gray-300 px-1 py-1 text-center">
+                <div
+                  className="inline-flex gap-2"
+                  onClick={() => onShow(data.id)}
+                  data-cy={`button-details-${data.id}`}
+                >
+                  <span className="font-bold hover:cursor-pointer hover:underline hover:text-red-700 transition-all">
+                    Details
+                  </span>
+                </div>
+              </td>
             )}
           </div>
         </td>
