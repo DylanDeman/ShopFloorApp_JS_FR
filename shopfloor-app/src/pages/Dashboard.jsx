@@ -61,16 +61,9 @@ const Dashboard = () => {
   };
 
   const selectedKpiIds = new Set(dashboards.map((d) => d.kpi_id));
-  console.log(`selectedKpiIds: ${selectedKpiIds}`);
-
   const selectedTiles = Array.isArray(kpis.items) ? kpis.items.filter((kpi) => selectedKpiIds.has(kpi.id)) : [];
-  console.log(`selectedTiles: ${selectedTiles}`);
-
   const availableKpis = Array.isArray(kpis.items) ? kpis.items.filter((kpi) => !selectedKpiIds.has(kpi.id)) : [];
-  console.log(`availableKpis: ${availableKpis}`);
-
   const correctRoleKpis = Array.isArray(kpis.items) ? availableKpis.filter((kpi) => kpi.roles.includes(rol)) : [];
-  console.log(`correctRoleKpis: ${correctRoleKpis}`);
 
   return (
     <div className="p-6">
