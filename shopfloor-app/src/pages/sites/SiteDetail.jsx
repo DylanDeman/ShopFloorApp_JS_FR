@@ -1,67 +1,49 @@
-import MachineTable from '../../components/machines/MachineTable';
-import { useState } from 'react';
-import useSWR from 'swr';
-import { getById } from '../../api';
-import AsyncData from '../../components/AsyncData';
-import { useParams } from 'react-router-dom';
+import SiteList from './SiteList';
+import Information from '../../components/Information';
+import { IoInformationCircleOutline } from 'react-icons/io5';
+import { FaPerson } from 'react-icons/fa6';
+import { FaMapMarkedAlt } from 'react-icons/fa';
 
-const SiteDetail = () => {
-  const { id } = useParams();
-  const idAsNumber = Number(id);
-    
-  const {
-    data: site = [],
-    error: siteError,
-    isLoading: siteLoading,
-  } = useSWR(id ? `sites/${idAsNumber}` : null, getById);
+const Sites = () => {
 
-  const machines = site.machines || [];
-
-  const [sorteerVolgorde, setSorteerVolgorde] = useState(null);
-  const [zoekterm, setZoekterm] = useState('');
-
-  const sorteerMachines = (machines) => {
-    if (!sorteerVolgorde) return machines;
-    return [...machines].sort((a, b) =>
-      sorteerVolgorde === 'asc' ? a.status.localeCompare(b.status) : b.status.localeCompare(a.status),
-    );
+  const handleShowGrondplan = () => {
+    window.alert('Grondplan tonen' + '\nTODO nog te implementeren');
+    // TODO navigeren naar ander scherm!!!
   };
-
-  const handleSort = () => {
-    setSorteerVolgorde((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-  };
-
-  const handleSearch = (e) => {
-    setZoekterm(e.target.value);
-  };
-
-  const filteredMachines = machines.filter((machine) =>
-    machine.locatie.toLowerCase().includes(zoekterm.toLowerCase()) ||
-    machine.status.toLowerCase().includes(zoekterm.toLowerCase()) ||
-    machine.productieStatus.toLowerCase().includes(zoekterm.toLowerCase()),
-  );
-
-  const gesorteerdeMachines = sorteerMachines(filteredMachines);
-
+  
   return (
-    <div className="flex-col md:flex-row flex justify-between p-6">
-      <div className="w-full md:ml-6">
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Zoek op locatie, status of productie status..."
-            value={zoekterm}
-            onChange={handleSearch}
-            className="border border-gray-300 rounded-md px-4 py-2 w-full"
-          />
-        </div>
-        <AsyncData error={siteError} loading={siteLoading}>
-          <MachineTable machines={gesorteerdeMachines} onSort={handleSort} sorteerVolgorde={sorteerVolgorde} />
-
-        </AsyncData>
+    <>
+      <div className="flex justify-between items-center mb-6 mt-10">
+        <h1 className="text-4xl font-semibold"> 
+          PAGINA WIP - Site - [naam van de site]
+        </h1>
+        <button 
+          className="bg-red-500 hover:cursor-pointer hover:bg-red-700 
+          text-white font-bold py-2 px-4 
+          rounded flex items-center gap-2"
+          onClick={() => handleShowGrondplan()}
+        >
+          <FaMapMarkedAlt />
+          Grondplan bekijken
+        </button>
       </div>
-    </div>
+
+      <Information 
+        info="Hieronder vindt u een overzicht van alle sites. 
+        Klik op een site om een site te raadplegen
+        en zijn machines te bekijken."
+        icon={IoInformationCircleOutline}
+      />
+
+      <Information 
+        info="Verantwoordelijke: [naam van de verantwoordelijke]"
+        icon={FaPerson}
+      />
+      
+      {/* TIJDELIJKE LIJST */}
+      <SiteList/>
+    </>
   );
 };
 
-export default SiteDetail;
+export default Sites;
