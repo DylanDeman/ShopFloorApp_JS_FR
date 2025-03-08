@@ -35,7 +35,7 @@ const MachineTable = ({ machines, onSort, sortConfig, onShow }) => {
             <th className="border border-gray-300 px-4 md:py-2"></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody data-cy="site-details">
           {machines.map((machine) => (
             <TableRow 
               key={machine.id} 
