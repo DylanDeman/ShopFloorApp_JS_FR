@@ -1,6 +1,6 @@
 import TableRow from './../genericComponents/TableRow';
 
-const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow, onShowGrondplan }) => {
+const SiteTable = ({ sites, onSortMachines, onSortId, sorteerVolgorde, sorteerVolgordeId, onShow, onEdit }) => {
   if (sites.length === 0) {
     return (
       <div className="flex justify-center items-center h-32">
@@ -10,16 +10,23 @@ const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow, onShowGrondplan }) 
   }
 
   return (
-    <div className="md:overflow-x-auto">
+    <div className="md:overflow-x-auto overflow-x-auto">
       <table className="border-separate border-spacing-0 rounded-md border border-gray-300 w-full">
         <thead>
           <tr className="bg-gray-100 text-gray-700 uppercase text-sm font-semibold">
-            <th className="border border-gray-300 px-4 md:py-2">Nr.</th>
-            <th className="border border-gray-300 px-4 md:py-2">Naam</th>
-            <th className="border border-gray-300 px-4 md:py-2">Verantwoordelijke</th>
+            <th className="border border-gray-300 px-4 md:py-2 select-none"></th>
             <th 
-              className="border border-gray-300 px-4 md:py-2 cursor-pointer"
-              onClick={onSort}
+              className="border border-gray-300 px-4 md:py-2 cursor-pointer select-none"
+              onClick={onSortId}
+            >
+              Nr.
+              {sorteerVolgordeId === 'asc' ? ' 🔼' : sorteerVolgordeId === 'desc' ? ' 🔽' : ''}
+            </th>
+            <th className="border border-gray-300 px-4 md:py-2 select-none">Naam</th>
+            <th className="border border-gray-300 px-4 md:py-2 select-none">Verantwoordelijke</th>
+            <th 
+              className="border border-gray-300 px-4 md:py-2 cursor-pointer select-none"
+              onClick={onSortMachines}
             >
               Aantal machines
               {sorteerVolgorde === 'asc' ? ' 🔼' : sorteerVolgorde === 'desc' ? ' 🔽' : ''}
@@ -29,12 +36,12 @@ const SiteTable = ({ sites, onSort, sorteerVolgorde, onShow, onShowGrondplan }) 
         </thead>
         <tbody>
           {sites.map((site) => (
-            <TableRow 
+            <TableRow
               key={site.id} 
               data={site} 
               columns={['id', 'naam', 'verantwoordelijke', 'aantalMachines']} 
               onShow={onShow} 
-              onShowGrondplan={onShowGrondplan}
+              onEdit={onEdit}
             />
           ))}
         </tbody>
