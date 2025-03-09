@@ -5,6 +5,8 @@ import useSWR from 'swr';
 import { getById } from '../../api/index';
 import AsyncData from '../../components/AsyncData';
 import { FaArrowLeft } from 'react-icons/fa';
+import MachineInfoHeader from '../../components/machines/MachineInfoHeader';
+import MaintenanceTable from '../../components/machines/MaintenanceTableMachine';
 
 const MachineDetail = () => {
   const navigate = useNavigate();
@@ -54,84 +56,55 @@ const MachineDetail = () => {
         />
 
         <div className="border p-4 rounded-lg mt-4 w-full">
-          {/* Machine information header - responsive grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-semibold mb-2">Machine informatie</h2>
-              <span className="text-base md:text-lg font-bold">Uptime: </span>
-            </div>
-            <div className="flex flex-col">
-              <h2 className="text-xl md:text-2xl font-semibold mb-2">Status: {machine.status}</h2>
-              <span className="text-xl md:text-2xl font-medium">Productiestatus: {machine.productieStatus}</span>
-            </div>
-          </div>
-
-          {/* Site data grid - adapts from 1 to 4 columns */}
+          {/* Algemene machine informatie */}
+          <MachineInfoHeader machine={machine} />
+        
+          {/* Machine data grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 gap-y-6">
+
+            {/* Site data grid */}
             {siteData.map((site, index) => (
               <div key={index} className="flex flex-col">
                 <span className="text-lg font-medium mb-1">{site.label}</span>
-                <span className="text-lg bg-gray-200 pl-5 pr-3 py-2 rounded">
+                <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
                   {site.value}
                 </span>
               </div>
             ))}
-    
-            {/* Responsive spanning elements */}
-            <div className="flex flex-col col-span-1 sm:col-span-2 mb-2">
-              <span className="text-lg font-medium mb-1">Recente onderhouden</span>
-              {/* Hier komt eent tabel */}
-              <table className="w-full">
-                <thead>
-                  <tr>
-                    <th className="text-left">Datum</th>
-                    <th className="text-left">Naam technieker</th>
-                    <th className="text-left">Dagen geleden</th>
-                    <th className="text-left">{/* Voor bekijk */}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>12/12/2021</td>
-                    <td>Jan Janssens</td>
-                    <td>2</td>
-                    <td>
-                      <button className="text-blue-500 hover:text-blue-700">Bekijk</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-    
+
+            {/* Onderhoudstabel */}
+            <MaintenanceTable />
+
+            {/* Product informatie */}
             <div className="flex flex-col col-span-1 sm:col-span-2 row-span-2 mb-2">
               <span className="text-lg font-medium mb-1">Product informatie</span>
-              <span className="text-lg bg-gray-200 pl-5 pr-3 py-2 max-h-48 md:max-h-64 rounded overflow-y-auto">
-                qsdfqsqsdfqsdfqdsfqdsfffffffffffffffffffffffffffffffffffffffffff
-                qsdfqsqsdfqsdfqdsfqdsfffffffffffffffffffffffffffffffffffffffffff
-                qsdfqsqsdfqsdfqdsfqdsfffffffffffffffffffffffffffffffffffffffffff
-                qsdfqsqsdfqsdfqdsfqdsfffffffffffffffffffffffffffffffffffffffffff
-                qsdfqsqsdfqsdfqdsfqdsfffffffffffffffffffffffffffffffffffffffffff
-                qsdfqsqsdfqsdfqdsfqdsfffffffffffffffffffffffffffffffffffffffffff
-                qsdfqsqsdfqsdfqdsfqdsfffffffffffffffffffffffffffffffffffffffffff
-                qsdfqsqsdfqsdfqdsfqdsfffffffffffffffffffffffffffffffffffffffffff
-                qsdfqsqsdfqsdfqdsfqdsfffffffffffffffffffffffffffffffffffffffffff
-                qsdfqsqsdfqsdfqdsfqdsfffffffffffffffffffffffffffffffffffffffffff
+              <span className="text-lg bg-gray-200 
+                pl-5 pr-3 py-2 max-h-48
+                md:max-h-64 rounded overflow-y-auto">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Pariatur, 
+                blanditiis quae officiis reiciendis enim cupiditate officia impedit minima. 
+                Recusandae expedita magni iusto numquam eos rem odio deleniti voluptas delectus odit.
               </span>
             </div>
     
             <div className="flex flex-col col-span-1 sm:col-span-2 mb-2">
-              <span className="text-lg font-medium mb-1">Recente onderhouden</span>
-              <span className="text-lg bg-gray-200 pl-5 pr-3 py-2 rounded">
-                qsdfqsf
+              <span className="text-lg font-medium mb-1">Volgend geplande onderhoud</span>
+              <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
+                09/02/2025
               </span>
             </div>
           </div>
 
-          <div className="mt-6">
-            <button className="w-full bg-red-500 hover:bg-red-600 font-bold py-3 md:py-4 text-xl md:text-3xl px-4 border border-black rounded ">
+          <div className="mt-14">
+            <button 
+              className="w-full bg-red-500 hover:bg-red-600 
+              font-bold py-3 md:py-4 text-xl md:text-3xl px-4 
+              border border-black rounded ">
               STOP
             </button>
-            <span className="block mt-2 text-sm md:text-base text-center md:text-left">Verantwoordelijke wordt verwittigd</span>
+            <span className="block mt-2 text-sm md:text-base text-center md:text-left">
+              Verantwoordelijke wordt verwittigd
+            </span>
           </div>
         </div>
       </AsyncData>
