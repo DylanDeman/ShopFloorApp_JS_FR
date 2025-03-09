@@ -48,13 +48,29 @@ const Tile = ({ id, title, content, onDelete, graphType }) => {
             <Bar dataKey="value" fill="#6366F1" />
           </BarChart>
         );
-      case 'NONE':
+      case 'SINGLE': {
+        const lastValue = formattedData.length > 0 ?
+          formattedData[formattedData.length - 1].value : 'N/A';
+        return (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-9xl font-bold text-blue-500">{lastValue}</p>
+          </div>
+        );
+      }
+      case 'LIST':
         return (
           <ul className="list-disc list-inside text-gray-700">
-            {formattedData.map((item, index) => (
-              <li key={index}>{`${item.name}: ${item.value}`}</li>
-            ))}
+            {formattedData.length > 0 ?
+              formattedData.map((item, index) => (
+                <li key={index}>{`${item.name}: ${item.value}`}</li>
+              )) : (
+                <p>
+                  Geen data beschikbaar!
+                </p>
+              )
+            }
           </ul>
+
         );
       default:
         return <p className="text-gray-500">Geen grafiek beschikbaar.</p>;
