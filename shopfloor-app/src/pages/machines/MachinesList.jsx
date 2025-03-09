@@ -64,7 +64,6 @@ export default function MachineList({machinesData}) {
   };
 
   const handleShow = (id) => {
-    window.alert('Machine met id ' + id);
     navigate(`/machines/${id}`);
   };
   
