@@ -18,13 +18,12 @@ export default function SiteList({ loading: parentLoading, error: parentError })
   
   const [zoekterm, setZoekterm] = useState('');
 
-  const { data: paginatedData, loading, error } = useSWR(
-    `sites?page=${currentPage}&limit=${limit}`, 
+  const { data, loading, error } = useSWR(
+    'sites', 
     getAll,
   );
 
-  const sites = paginatedData?.items || [];
-  const pagination = paginatedData;
+  const sites = data?.items || [];
 
   // Sorteer functie (voor id en aantalMachines!)
   const sorteerSites = (sites) => {
@@ -46,6 +45,13 @@ export default function SiteList({ loading: parentLoading, error: parentError })
       );
     }
     return sortedSites;
+  };
+
+  const paginateSites = (sorteerdeSites) => {
+    if(!sorteerdeSites){
+      return sorteerdeSites;
+    }
+    return sorteerdeSites.slice((currentPage -1) * limit, limit * currentPage);
   };
 
   const handleSortMachines = () => {
@@ -86,7 +92,9 @@ export default function SiteList({ loading: parentLoading, error: parentError })
     site.verantwoordelijke.toLowerCase().includes(zoekterm.toLowerCase()),
   );
 
-  const gesorteerdeSites = sorteerSites(filteredSites);
+  const sorteerdeSites = sorteerSites(filteredSites);
+
+  const paginatedSites = paginateSites(sorteerdeSites);
   
   // Gebruik ofwel de loading/error van de parent of van dit component
   const isLoading = parentLoading || loading;
@@ -126,7 +134,7 @@ export default function SiteList({ loading: parentLoading, error: parentError })
 
         <AsyncData error={hasError} loading={isLoading}>
           <SiteTable
-            sites={gesorteerdeSites}
+            sites={paginatedSites}
             sorteerVolgorde={sorteerVolgorde}
             sorteerVolgordeId={sorteerVolgordeId}
             onSortMachines={handleSortMachines}
@@ -140,7 +148,8 @@ export default function SiteList({ loading: parentLoading, error: parentError })
             <Pagination 
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
-              data={pagination}
+              data={data}
+              limit={limit}
               loading={loading}
               error={error}
             />
