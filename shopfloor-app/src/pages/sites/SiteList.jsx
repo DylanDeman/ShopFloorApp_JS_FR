@@ -149,9 +149,7 @@ export default function SiteList({ loading: parentLoading, error: parentError })
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
               data={data}
-              limit={limit}
-              loading={loading}
-              error={error}
+              totalPages={filteredSites.length === 0 ? 1 : Math.ceil(filteredSites.length / limit)}
             />
           </div>
         </AsyncData>
