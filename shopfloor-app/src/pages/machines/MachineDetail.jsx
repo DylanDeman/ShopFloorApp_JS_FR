@@ -23,12 +23,13 @@ const MachineDetail = () => {
     error: machineError,
     isLoading: MachineLoading,
   } = useSWR(id ? `machines/${idAsNumber}` : null, getById);
-  
+  console.log(machine);
+
   const siteData = [
-    { label: 'Naam site', value: 'naam site' },
-    { label: 'Verantwoordelijke site', value: 'naam verantwoordelijke' },
-    { label: 'Locatie', value: 'naam locatie' },
-    { label: 'Technieker', value: 'naam technieker' },
+    { label: 'Naam site', value: machine.site_id },
+    { label: 'Verantwoordelijke site', value: machine.verantwoordelijke_site_id },
+    { label: 'Locatie', value: machine.locatie },
+    { label: 'Technieker', value: machine.technieker_gebruiker_id },
   ];
 
   return (
@@ -79,20 +80,26 @@ const MachineDetail = () => {
             <div className="flex flex-col col-span-1 sm:col-span-2 row-span-2 mb-2">
               <span className="text-lg font-medium mb-1">Product informatie</span>
               <span className="text-lg bg-gray-200 
-                pl-5 pr-3 py-2 max-h-48
-                md:max-h-64 rounded overflow-y-auto">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Pariatur, 
-                blanditiis quae officiis reiciendis enim cupiditate officia impedit minima. 
-                Recusandae expedita magni iusto numquam eos rem odio deleniti voluptas delectus odit.
+                pl-5 pr-3 py-2 max-h-48 min-h-48 rounded overflow-y-auto">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
+                Molestiae perferendis accusamus, eius placeat error repudiandae, 
+                totam ipsum accusantium assumenda vitae labore cupiditate et 
+                dolorem, modi quasi soluta optio voluptas animi.
+                Aliquid assumenda eos quis voluptates voluptatum iure ipsam, 
+                quia quod a tempora molestiae nesciunt nobis sapiente esse deserunt 
+                hic magnam quas possimus adipisci, nisi distinctio? Consequuntur itaque placeat esse delectus.
+                Adipisci deleniti, error quae sed repellat inventore doloribus 
+                illum quas enim autem delectus culpa consequatur veniam fugit 
               </span>
             </div>
     
-            <div className="flex flex-col col-span-1 sm:col-span-2 mb-2">
+            <div className="flex flex-col col-span-1 sm:col-span-2 mb-2 justify-end">
               <span className="text-lg font-medium mb-1">Volgend geplande onderhoud</span>
               <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
                 09/02/2025
               </span>
             </div>
+
           </div>
 
           <div className="mt-14">

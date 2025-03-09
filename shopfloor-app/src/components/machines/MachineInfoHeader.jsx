@@ -7,7 +7,7 @@ const MachineInfoHeader = ({ machine }) => {
       </div>
       <div className="flex flex-col">
         <h2 className="text-xl md:text-2xl font-semibold mb-2">Status: {machine.status}</h2>
-        <span className="text-xl md:text-2xl font-medium">Productiestatus: {machine.productieStatus}</span>
+        <span className="text-xl md:text-2xl font-medium">Productiestatus: {machine.productie_status}</span>
       </div>
     </div>
   );
