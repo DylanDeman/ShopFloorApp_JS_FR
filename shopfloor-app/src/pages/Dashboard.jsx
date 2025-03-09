@@ -1,7 +1,7 @@
 import Dropdown from '../components/genericComponents/Dropdown';
 import TileList from '../components/KPI Tiles/TileList';
 import useSWR from 'swr';
-import { getAll, getDashboardByUserID, deleteById, post } from '../api';
+import { getDashboardByUserID, deleteById, post, getKPIsByRole } from '../api';
 import AsyncData from '../components/AsyncData';
 import useSWRMutation from 'swr/mutation';
 import { useAuth } from '../contexts/auth';
@@ -9,7 +9,6 @@ import { useAuth } from '../contexts/auth';
 const Dashboard = () => {
   const { user } = useAuth();
   const user_id = user ? user.id : null;
-  const rol = user ? user.rol : null;
 
   const {
     data: dashboards = [],
@@ -17,11 +16,15 @@ const Dashboard = () => {
     error,
   } = useSWR(user_id, getDashboardByUserID);
 
+  console.log(dashboards);
+
   const {
     data: kpis = [],
     loading: loadingkpi,
     error: errorkpi,
-  } = useSWR('kpi', getAll);
+  } = useSWR(user ? user.rol : null, getKPIsByRole);
+
+  console.log(kpis);
 
   const {
     trigger: deleteKPI, error: deleteError,
@@ -60,18 +63,17 @@ const Dashboard = () => {
     }
   };
 
-  const selectedKpiIds = new Set(dashboards.map((d) => d.kpi_id));
-  const selectedTiles = Array.isArray(kpis.items) ? kpis.items.filter((kpi) => selectedKpiIds.has(kpi.id)) : [];
-  const availableKpis = Array.isArray(kpis.items) ? kpis.items.filter((kpi) => !selectedKpiIds.has(kpi.id)) : [];
-  const correctRoleKpis = Array.isArray(kpis.items) ? availableKpis.filter((kpi) => kpi.roles.includes(rol)) : [];
+  const gekozenKPIids = new Set(dashboards.map((d) => d.kpi_id));
+  const gekozenKPIs = Array.isArray(kpis) ? kpis.filter((kpi) => gekozenKPIids.has(kpi.id)) : [];
+  const beschikbareKPIs = Array.isArray(kpis) ? kpis.filter((kpi) => !gekozenKPIids.has(kpi.id)) : [];
 
   return (
     <div className="p-6">
       <AsyncData loading={loadingkpi} error={errorkpi}>
-        {correctRoleKpis.length > 0 ? (
+        {beschikbareKPIs.length > 0 ? (
           <Dropdown
             label={'+ Voeg een nieuwe KPI toe'}
-            options={correctRoleKpis}
+            options={beschikbareKPIs}
             onSelect={addKPI}
           />
         ) : (
@@ -80,7 +82,7 @@ const Dashboard = () => {
         )}
       </AsyncData>
       <AsyncData loading={loading} error={error}>
-        <TileList tiles={selectedTiles} onDelete={handleDelete} />
+        <TileList tiles={gekozenKPIs} onDelete={handleDelete} />
       </AsyncData>
     </div>
   );
