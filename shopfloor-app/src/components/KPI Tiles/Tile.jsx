@@ -14,7 +14,7 @@ import { getKPIWaardenByKPIid } from '../../api';
 import useSWR from 'swr';
 import AsyncData from '../AsyncData';
 
-const Tile = ({ id, title, content, onDelete, graphType }) => {
+const Tile = ({ id, title, content, onDelete, graphType, machines }) => {
   const { data: kpiWaarden = [], loading, error } = useSWR(id, getKPIWaardenByKPIid);
 
   const handleDelete = () => {

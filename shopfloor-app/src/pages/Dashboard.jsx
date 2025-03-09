@@ -1,7 +1,7 @@
 import Dropdown from '../components/genericComponents/Dropdown';
 import TileList from '../components/KPI Tiles/TileList';
 import useSWR from 'swr';
-import { getDashboardByUserID, deleteById, post, getKPIsByRole } from '../api';
+import { getDashboardByUserID, deleteById, post, getKPIsByRole, getAll } from '../api';
 import AsyncData from '../components/AsyncData';
 import useSWRMutation from 'swr/mutation';
 import { useAuth } from '../contexts/auth';
@@ -16,15 +16,17 @@ const Dashboard = () => {
     error,
   } = useSWR(user_id, getDashboardByUserID);
 
-  console.log(dashboards);
+  const {
+    data: machines = [],
+    loadingMachines,
+    errorMachines,
+  } = useSWR('machines', getAll);
 
   const {
     data: kpis = [],
     loading: loadingkpi,
     error: errorkpi,
   } = useSWR(user ? user.rol : null, getKPIsByRole);
-
-  console.log(kpis);
 
   const {
     trigger: deleteKPI, error: deleteError,
@@ -81,8 +83,8 @@ const Dashboard = () => {
           </>
         )}
       </AsyncData>
-      <AsyncData loading={loading} error={error}>
-        <TileList tiles={gekozenKPIs} onDelete={handleDelete} />
+      <AsyncData loading={loading || loadingMachines} error={error || errorMachines}>
+        <TileList tiles={gekozenKPIs} onDelete={handleDelete} machines={machines} />
       </AsyncData>
     </div>
   );
