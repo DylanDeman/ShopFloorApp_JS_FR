@@ -1,8 +1,8 @@
 import { FaArrowRightLong } from 'react-icons/fa6';
 import { FaArrowLeftLong } from 'react-icons/fa6';
 
-export function Pagination({currentPage, setCurrentPage, data, loading}){
-  const totalPages = data?.totalPages ?? 1;
+export function Pagination({currentPage, setCurrentPage, data, limit, loading}){
+  const totalPages = Math.ceil(data?.total/limit) ?? 1;
 
   const handlePageChange = (newPage) => {
     if(data && totalPages >= newPage && newPage > 0){
