@@ -66,7 +66,7 @@ const SiteDetails = () => {
         />
 
         <Information 
-          info={'Verantwoordelijke: ' + site.verantwoordelijke}
+          info={'Verantwoordelijke: ' + site.verantwoordelijke?.naam + ' ' + site.verantwoordelijke?.voornaam}
           icon={FaPerson}
         />
       

@@ -64,7 +64,6 @@ export default function MachineList({machinesData}) {
   };
 
   const handleShow = (id) => {
-    window.alert('Machine met id ' + id);
     navigate(`/machines/${id}`);
   };
   
@@ -74,9 +73,9 @@ export default function MachineList({machinesData}) {
   };
 
   const filteredMachines = machines.filter((machine) =>
-    machine.locatie.toLowerCase().includes(zoekterm.toLowerCase()) ||
-    machine.status.toLowerCase().includes(zoekterm.toLowerCase()) ||
-    machine.productieStatus.toLowerCase().includes(zoekterm.toLowerCase()),
+    machine.locatie?.toLowerCase().includes(zoekterm.toLowerCase()) ||
+    machine.status?.toLowerCase().includes(zoekterm.toLowerCase()) ||
+    machine.productieStatus?.toLowerCase().includes(zoekterm.toLowerCase()),
   );
 
   const sortedMachines = sortMachines(filteredMachines);
