@@ -57,28 +57,47 @@ const Tile = ({ id, title, content, onDelete, graphType, machines }) => {
           </div>
         );
       }
-      case 'LIST':
+      case 'LIST': {
+        if (kpiWaarden.length === 0 || machines.length === 0) {
+          return <p className="text-gray-500">Geen data beschikbaar.</p>;
+        }
+
+        const mostRecentKPI = kpiWaarden.sort((a, b) => new Date(b.datum) - new Date(a.datum)).slice(0, 1);
+
+        const firstFiveIDs = mostRecentKPI
+          .flatMap((kpi) => kpi.waarde.split(',').map(Number))
+          .slice(0, 5);
+
+        const machineList = machines.items;
+
+        const filteredMachines = machineList.filter((machine) =>
+          firstFiveIDs.includes(machine.id),
+        );
+
         return (
           <ul className="list-disc list-inside text-gray-700">
-            {formattedData.length > 0 ?
-              formattedData.map((item, index) => (
-                <li key={index}>{`${item.name}: ${item.value}`}</li>
-              )) : (
-                <p>
-                  Geen data beschikbaar!
-                </p>
+            {filteredMachines.length > 0 ? (
+              filteredMachines.map((machine) =>
+                <li key={machine.id}>
+                  {`code: ${machine.code}\n`}
+                  {`locatie: ${machine.locatie}\n`}
+                  {`status: ${machine.status}\n`}
+                </li>,
               )
-            }
+            ) : (
+              <p>Geen relevante machines gevonden.</p>
+            )}
           </ul>
-
         );
+      }
+
       default:
         return <p className="text-gray-500">Geen grafiek beschikbaar.</p>;
     }
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 m-4 max-w-sm w-full">
+    <div className="bg-white shadow-lg rounded-lg p-6 m-4 max-w-sm w-full flex flex-col">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">{title}</h2>
         <button
@@ -89,7 +108,7 @@ const Tile = ({ id, title, content, onDelete, graphType, machines }) => {
         </button>
       </div>
       <p className="text-gray-700 mb-4">{content}</p>
-      <div className="h-48">
+      <div className="h-auto min-h-[192px] flex flex-col">
         <AsyncData loading={loading} error={error}>
           <ResponsiveContainer width="100%" height="100%">
             {renderGraph()}
