@@ -65,6 +65,7 @@ export default function SiteList({ loading: parentLoading, error: parentError })
   };
 
   const handleSearch = (e) => {
+    setCurrentPage(1);
     setZoekterm(e.target.value);
   };
 
