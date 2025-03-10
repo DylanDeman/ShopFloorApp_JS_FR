@@ -1,6 +1,14 @@
 import TableRow from './../genericComponents/TableRow';
 
 const SiteTable = ({ sites, onSortMachines, onSortId, sorteerVolgorde, sorteerVolgordeId, onShow, onEdit }) => {
+  
+  const processedSites = sites.map((site) => ({
+    id: site.id,
+    naam: site.naam,
+    verantwoordelijke: `${site.verantwoordelijke?.voornaam} ${site.verantwoordelijke?.naam}`,
+    aantalMachines: site.machines ? site.machines?.length : 0,
+  }));
+  
   if (sites.length === 0) {
     return (
       <div className="flex justify-center items-center h-32">
@@ -35,10 +43,10 @@ const SiteTable = ({ sites, onSortMachines, onSortId, sorteerVolgorde, sorteerVo
           </tr>
         </thead>
         <tbody>
-          {sites.map((site) => (
+          {processedSites.map((site) => (
             <TableRow
               key={site.id} 
-              data={site} 
+              data={site}
               columns={['id', 'naam', 'verantwoordelijke', 'aantalMachines']} 
               onShow={onShow} 
               onEdit={onEdit}

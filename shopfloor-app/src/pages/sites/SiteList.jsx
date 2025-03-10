@@ -23,6 +23,8 @@ export default function SiteList({ loading: parentLoading, error: parentError })
     getAll,
   );
 
+  console.log(data);
+
   const sites = data?.items || [];
 
   // Sorteer functie (voor id en aantalMachines!)
@@ -88,12 +90,12 @@ export default function SiteList({ loading: parentLoading, error: parentError })
   };
 
   const filteredSites = sites.filter((site) =>
-    site.naam.toLowerCase().includes(zoekterm.toLowerCase()) ||
-    site.verantwoordelijke.toLowerCase().includes(zoekterm.toLowerCase()),
+    site.naam?.toLowerCase().includes(zoekterm.toLowerCase()) ||
+    (`${site.verantwoordelijke?.voornaam} ${site.verantwoordelijke?.naam}`)
+      .toLowerCase().includes(zoekterm.toLowerCase()),
   );
 
   const sorteerdeSites = sorteerSites(filteredSites);
-
   const paginatedSites = paginateSites(sorteerdeSites);
   
   // Gebruik ofwel de loading/error van de parent of van dit component

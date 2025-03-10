@@ -26,10 +26,22 @@ const MachineDetail = () => {
   console.log(machine);
 
   const siteData = [
-    { label: 'Naam site', value: machine.site_id },
-    { label: 'Verantwoordelijke site', value: machine.verantwoordelijke_site_id },
-    { label: 'Locatie', value: machine.locatie },
-    { label: 'Technieker', value: machine.technieker_gebruiker_id },
+    { 
+      label: 'Naam site', 
+      value: machine.site?.naam, 
+    },
+    { 
+      label: 'Verantwoordelijke site', 
+      value: `${machine.site?.verantwoordelijke?.naam} ${machine.site?.verantwoordelijke?.voornaam}`,
+    },
+    { 
+      label: 'Locatie', 
+      value: machine.locatie, 
+    },
+    { 
+      label: 'Technieker', 
+      value: `${machine.technieker?.naam} ${machine.technieker?.voornaam}`, 
+    },
   ];
 
   return (
@@ -81,15 +93,7 @@ const MachineDetail = () => {
               <span className="text-lg font-medium mb-1">Product informatie</span>
               <span className="text-lg bg-gray-200 
                 pl-5 pr-3 py-2 max-h-48 min-h-48 rounded overflow-y-auto">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-                Molestiae perferendis accusamus, eius placeat error repudiandae, 
-                totam ipsum accusantium assumenda vitae labore cupiditate et 
-                dolorem, modi quasi soluta optio voluptas animi.
-                Aliquid assumenda eos quis voluptates voluptatum iure ipsam, 
-                quia quod a tempora molestiae nesciunt nobis sapiente esse deserunt 
-                hic magnam quas possimus adipisci, nisi distinctio? Consequuntur itaque placeat esse delectus.
-                Adipisci deleniti, error quae sed repellat inventore doloribus 
-                illum quas enim autem delectus culpa consequatur veniam fugit 
+                {machine.product_informatie}
               </span>
             </div>
     

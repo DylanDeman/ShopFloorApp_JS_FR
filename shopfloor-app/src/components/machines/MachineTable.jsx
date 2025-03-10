@@ -1,6 +1,14 @@
 import TableRow from './../genericComponents/TableRow';
 
 const MachineTable = ({ machines, onSort, sortConfig, onShow }) => {
+  const processedMachines = machines.map((site) => ({
+    id: site.id,
+    locatie: site.locatie,
+    status: site.status,
+    productie_status: site.productie_status,
+    technieker: `${site.technieker.naam} ${site.technieker.voornaam}`,
+  }));
+
   if (machines.length === 0) {
     return (
       <div className="flex justify-center items-center h-32" data-cy="no-machines-message">
@@ -32,15 +40,16 @@ const MachineTable = ({ machines, onSort, sortConfig, onShow }) => {
             {renderSortableHeader('Locatie', 'locatie')}
             {renderSortableHeader('Status', 'status')}
             {renderSortableHeader('ProductieStatus', 'productieStatus')}
+            {renderSortableHeader('Technieker', 'Technieker')}
             <th className="border border-gray-300 px-4 md:py-2"></th>
           </tr>
         </thead>
         <tbody data-cy="site-details">
-          {machines.map((machine) => (
+          {processedMachines.map((machine) => (
             <TableRow 
               key={machine.id} 
               data={machine} 
-              columns={['id', 'locatie', 'status', 'productieStatus']} 
+              columns={['id', 'locatie', 'status', 'productie_status', 'technieker']} 
               data-cy={`machine-row-${machine.id}`}
               onShow={onShow}
             />

@@ -3,7 +3,7 @@ const MachineInfoHeader = ({ machine }) => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
       <div>
         <h2 className="text-2xl md:text-3xl font-semibold mb-2">Machine informatie</h2>
-        <span className="text-base md:text-lg font-bold">Uptime: </span>
+        <span className="text-base md:text-lg font-bold">Uptime: WIP </span>
       </div>
       <div className="flex flex-col">
         <h2 className="text-xl md:text-2xl font-semibold mb-2">Status: {machine.status}</h2>
