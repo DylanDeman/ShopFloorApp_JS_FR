@@ -23,6 +23,7 @@ const Login = () => {
     async ({ email, password }) => {
       const loggedIn = await login(email, password);
       if (loggedIn) {
+        localStorage.setItem('loginTime', new Date());
         const params = new URLSearchParams(search);
         navigate(params.get('redirect') || '/', { replace: true });
       }

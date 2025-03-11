@@ -11,13 +11,15 @@ export default function Notificatie({id, tijdstip, bericht}){
     await markAsRead({id, tijdstip, bericht, gelezen: true});
   };
 
+  const tijdstipString = new Date(tijdstip).toLocaleDateString();
+
   return (
     <div className='border rounded flex flex-row gap-3 p-3 mb-6 mr-6'>
       <div className='flex items-center'>
         <p>{id}</p>
       </div>
       <div className='flex flex-col w-full'>
-        <p className='font-semibold'>Datum: {tijdstip}</p>
+        <p className='font-semibold'>Datum: {tijdstipString}</p>
         <p>{bericht}</p>
         <p className='font-semibold hover:cursor-pointer' onClick={handleMarkAsRead}>Markeer as gelezen</p>
       </div>
