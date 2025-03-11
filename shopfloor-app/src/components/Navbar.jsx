@@ -51,11 +51,9 @@ const Navbar = () => {
           <p className="text-red-500 text-sm">{functie}</p>
         </div>
         <div className="relative">
-          <Link to="/notificaties">
-            <AsyncData loading={notificatiesLoading} error={notificatiesError}>
-              <NotificatieNavbar notificaties={notificaties} />
-            </AsyncData>
-          </Link>
+          <AsyncData loading={notificatiesLoading} error={notificatiesError}>
+            <NotificatieNavbar notificaties={notificaties} />
+          </AsyncData>
         </div>
 
         <Link
