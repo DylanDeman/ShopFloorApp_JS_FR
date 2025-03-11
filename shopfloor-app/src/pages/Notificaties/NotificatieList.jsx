@@ -1,22 +1,43 @@
-import Notificatie from "../../components/Notificaties/Notificatie";
+import { FaArrowLeftLong } from 'react-icons/fa6';
+import NotificatieBlock from '../../components/Notificaties/NotificatieBlock';
+import { useNavigate } from 'react-router';
 
 export default function NotificatieList({notificaties}){
 
-    if(!notificaties){
-        return (
-            <div className="grid justify-center">Geen ongelezen notificaties gevonden!</div>
-        )
-    }
+  const navigate = useNavigate();
 
+  if(!notificaties){
     return (
-        <div className="w-full">
-            <div className="grid grid-cols-3 border border-gray-300
-             w-full bg-gray-100 text-gray-700 uppercase text-sm font-semibold">
-                <span className="p-3">Tijdstip</span>
-                <span className="p-3">Bericht</span>
-            </div>
-            {notificaties.items.filter((notificatie) => !notificatie.gelezen).map((notificatie) => 
-            <Notificatie key={notificatie.id} id={notificatie.id} tijdstip={notificatie.tijdstip} bericht={notificatie.bericht}/>)}
-        </div>
+      <div className="grid justify-center">Geen notificaties gevonden!</div>
     );
+  }
+
+  const ongelezenNotificaties = notificaties.items.filter((notificatie) => !notificatie.gelezen);
+
+  const loginTime = new Date(localStorage.getItem('loginTime'));
+
+  const nieuweNotificaties = ongelezenNotificaties.filter(
+    (notificatie) => new Date(notificatie.tijdstip) >= loginTime);
+
+  const overigeOngelezenNotificaties = ongelezenNotificaties.filter(
+    (notificatie) =>
+      !nieuweNotificaties.find((nieuw) => nieuw.id === notificatie.id),
+  );
+
+  const gelezenNotificaties = notificaties.items.filter((notificatie) => notificatie.gelezen);
+
+  return (
+    <div className="w-full">
+      <div className='flex flex-row items-center gap-1 text-3xl mt-8 mb-8 hover:cursor-pointer'
+        onClick={() => navigate(-1)}>
+        <FaArrowLeftLong className="transition-transform"/>
+        <h1>
+          Notificaties
+        </h1>
+      </div>
+      <NotificatieBlock notificaties={nieuweNotificaties} type="Nieuwe"/>
+      <NotificatieBlock notificaties={overigeOngelezenNotificaties} type="Ongelezen"/>
+      <NotificatieBlock notificaties={gelezenNotificaties} type="Gelezen"/>
+    </div>
+  );
 }

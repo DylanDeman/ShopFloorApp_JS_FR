@@ -5,6 +5,7 @@ export const axios = axiosRoot.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
+// Request interceptor - adds token to requests
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem(JWT_TOKEN_KEY);
 
@@ -14,6 +15,23 @@ axios.interceptors.request.use((config) => {
 
   return config;
 });
+
+// Response interceptor - handles token expiration
+axios.interceptors.response.use(
+  (response) => response, 
+  (error) => {
+    // Check if error is due to an expired token (usually 401 Unauthorized)
+    if (error.response && error.response.status === 401) {
+      // Remove the expired token from localStorage
+      localStorage.removeItem(JWT_TOKEN_KEY);
+      
+      const pathname = window.location.pathname;
+      window.location.href = `/login?redirect=${pathname}`;
+    }
+    
+    return Promise.reject(error);
+  },
+);
 
 export async function getAll(url) {
   const { data } = await axios.get(url); 

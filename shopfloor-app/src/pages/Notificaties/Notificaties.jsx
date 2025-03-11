@@ -1,14 +1,14 @@
-import { getAll } from "../../api";
-import AsyncData from "../../components/AsyncData"
-import useSWR from "swr";
-import NotificatieList from "./NotificatieList";
+import { getAll } from '../../api';
+import AsyncData from '../../components/AsyncData';
+import useSWR from 'swr';
+import NotificatieList from './NotificatieList';
 
 const Notificaties = () => {
 
   const {
     data: notificaties,
     loading,
-    error
+    error,
   } = useSWR('notificaties', getAll);
 
   return (

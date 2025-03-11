@@ -11,70 +11,77 @@ export default function SiteList({ loading: parentLoading, error: parentError })
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  
-  // state bijhouden van sortering voor deze twee kolommen
-  const [sorteerVolgorde, setSorteerVolgorde] = useState(null);
-  const [sorteerVolgordeId, setSorteerVolgordeId] = useState(null);
-  
   const [zoekterm, setZoekterm] = useState('');
-
+  
   const { data, loading, error } = useSWR(
     'sites', 
     getAll,
   );
+  const rawDataSites = data?.items || [];
 
-  console.log(data);
+  const processedSites = rawDataSites.map((site) => ({
+    id: site.id,
+    naam: site.naam,
+    verantwoordelijke: `${site.verantwoordelijke?.voornaam} ${site.verantwoordelijke?.naam}`,
+    aantal_machines: site.machines ? site.machines?.length : 0,
+  }));
 
-  const sites = data?.items || [];
+  const [sortConfig, setSortConfig] = useState({
+    field: 'id',
+    direction: 'asc',
+  });
 
-  // Sorteer functie (voor id en aantalMachines!)
-  const sorteerSites = (sites) => {
-    let sortedSites = [...sites]; // deep copy maken van sites
-    
-    if (sorteerVolgorde) {
-      sortedSites = sortedSites.sort((a, b) =>
-        sorteerVolgorde === 'asc' 
-          ? a.aantalMachines - b.aantalMachines 
-          : b.aantalMachines - a.aantalMachines,
-      );
-    }
-    
-    if (sorteerVolgordeId) {
-      sortedSites = sortedSites.sort((a, b) =>
-        sorteerVolgordeId === 'asc' 
-          ? a.id - b.id 
-          : b.id - a.id,
-      );
-    }
-    return sortedSites;
-  };
-
-  const paginateSites = (sorteerdeSites) => {
-    if(!sorteerdeSites){
-      return sorteerdeSites;
-    }
-    return sorteerdeSites.slice((currentPage -1) * limit, limit * currentPage);
-  };
-
-  const handleSortMachines = () => {
-    setSorteerVolgordeId(null);
-    setSorteerVolgorde((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+  const sortInteger = (a, b, field, direction) => {
+    return direction === 'asc' 
+      ? a[field] - b[field] 
+      : b[field] - a[field];
   };
   
-  const handleSortId = () => {
-    setSorteerVolgorde(null);
-    setSorteerVolgordeId((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+  const sortString = (a, b, field, direction) => {
+    const valueA = String(a[field]).toLowerCase();
+    const valueB = String(b[field]).toLowerCase();
+    
+    if (valueA < valueB) {
+      return direction === 'asc' ? -1 : 1;
+    }
+    if (valueA > valueB) {
+      return direction === 'asc' ? 1 : -1;
+    }
+    return 0;
   };
 
+  const sortSites = (machines) => {
+    if (!sortConfig.field) return machines;
+    
+    const sortedMachines = [...machines]; 
+    console.log(sortConfig.field);
+    const integerFields = ['id', 'aantal_machines'];
+    const sortFn = integerFields.includes(sortConfig.field) ? sortInteger : sortString;
+    
+    return sortedMachines.sort((a, b) => 
+      sortFn(a, b, sortConfig.field, sortConfig.direction),
+    );
+  };
+
+  const handleSort = (field) => {
+    setSortConfig((prevConfig) => ({
+      field,
+      direction: 
+        prevConfig.field === field
+          ? prevConfig.direction === 'asc' ? 'desc' : 'asc'
+          : 'asc',
+    }));
+  };
+  
   const handleSearch = (e) => {
     setCurrentPage(1);
     setZoekterm(e.target.value);
   };
-
+  
   const handleShow = (id) => {
     navigate(`/sites/${id}`);
   };
-
+  
   const handleShowGrondplan = (id) => {
     navigate(`/sites/${id}/grondplan`);
   };
@@ -84,18 +91,25 @@ export default function SiteList({ loading: parentLoading, error: parentError })
     setCurrentPage(1); 
   };
 
+  const paginateSites = (sorteerdeSites) => {
+    if(!sorteerdeSites){
+      return sorteerdeSites;
+    }
+    return sorteerdeSites.slice((currentPage -1) * limit, limit * currentPage);
+  };
+
   const handleEditSite = (id) => {
     navigate(`/sites/${id}/edit`);
   };
 
-  const filteredSites = sites.filter((site) =>
+  const filteredSites = processedSites.filter((site) =>
     site.naam?.toLowerCase().includes(zoekterm.toLowerCase()) ||
     (`${site.verantwoordelijke?.voornaam} ${site.verantwoordelijke?.naam}`)
       .toLowerCase().includes(zoekterm.toLowerCase()),
   );
 
-  const sorteerdeSites = sorteerSites(filteredSites);
-  const paginatedSites = paginateSites(sorteerdeSites);
+  const sortedMachines = sortSites(filteredSites);
+  const paginatedSites = paginateSites(sortedMachines);
   
   // Gebruik ofwel de loading/error van de parent of van dit component
   const isLoading = parentLoading || loading;
@@ -136,11 +150,9 @@ export default function SiteList({ loading: parentLoading, error: parentError })
         <AsyncData error={hasError} loading={isLoading}>
           <SiteTable
             sites={paginatedSites}
-            sorteerVolgorde={sorteerVolgorde}
-            sorteerVolgordeId={sorteerVolgordeId}
-            onSortMachines={handleSortMachines}
-            onSortId={handleSortId}
             onShow={handleShow}
+            onSort={handleSort}
+            sortConfig={sortConfig}
             onShowGrondplan={handleShowGrondplan}
             onEdit={handleEditSite}
           />
