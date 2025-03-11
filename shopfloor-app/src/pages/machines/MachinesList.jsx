@@ -9,13 +9,20 @@ export default function MachineList({machinesData}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [zoekterm, setZoekterm] = useState('');
+  const rawDataMachines = machinesData || [];
   
+  const processedMachines = rawDataMachines.map((site) => ({
+    id: site.id,
+    locatie: site.locatie,
+    status: site.status,
+    productie_status: site.productie_status,
+    technieker: `${site.technieker.naam} ${site.technieker.voornaam}`,
+  }));
+
   const [sortConfig, setSortConfig] = useState({
     field: 'id',
     direction: 'asc',
   });
-
-  const machines = machinesData || [];
   
   const sortInteger = (a, b, field, direction) => {
     return direction === 'asc' 
@@ -72,7 +79,7 @@ export default function MachineList({machinesData}) {
     setCurrentPage(1); 
   };
 
-  const filteredMachines = machines.filter((machine) =>
+  const filteredMachines = processedMachines.filter((machine) =>
     machine.locatie?.toLowerCase().includes(zoekterm.toLowerCase()) ||
     machine.status?.toLowerCase().includes(zoekterm.toLowerCase()) ||
     machine.productieStatus?.toLowerCase().includes(zoekterm.toLowerCase()),
@@ -126,7 +133,7 @@ export default function MachineList({machinesData}) {
           <Pagination
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-            data={machines}
+            data={processedMachines}
             totalPages={sortedMachines.length === 0 ? 1 : Math.ceil(sortedMachines.length / limit)}
           />
         </div>
