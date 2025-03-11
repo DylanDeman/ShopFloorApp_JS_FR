@@ -85,9 +85,7 @@ export default function SiteList({ loading: parentLoading, error: parentError })
   };
 
   const handleEditSite = (id) => {
-    window.alert('Site bewerken met id ' + id);
-    // TODO: navigeren naar edit scherm!!!
-    //navigate(`/sites/${id}/edit`);
+    navigate(`/sites/${id}/edit`);
   };
 
   const filteredSites = sites.filter((site) =>
