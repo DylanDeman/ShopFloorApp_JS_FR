@@ -3,32 +3,123 @@
     {
       "id": 1,
       "naam": "Site A",
-      "verantwoordelijke_id": 1,
-      "verantwoordelijke": "Jan Janssen",
-      "locatie": "Brussel",
+      "verantwoordelijke": {
+        "id": 1,
+        "naam": "Jan Janssen",
+        "voornaam": "Jan",
+        "email": "janJanssen@example.com"
+      },
       "status": "ACTIEF",
-      "onderhoudsniveau": 80,
-      "aantalMachines": 5
+      "machines": [
+        {
+          "id": 1,
+          "code": "MACHINE_A",
+          "locatie": "Warehouse",
+          "product_informatie": "Machine A is een machine die ...",
+          "status": "DRAAIT",
+          "productie_status": "GEZOND",
+          "technieker": {
+            "id": 2,
+            "naam": "Piet Peeters",
+            "voornaam": "Piet",
+            "email": "pietPeeters@example.com"
+          }
+        },
+        {
+          "id": 2,
+          "code": "MACHINE_B",
+          "locatie": "Factory Floor",
+          "product_informatie": "Machine B is een machine die ...",
+          "status": "MANUEEL_GESTOPT",
+          "productie_status": "FALEND",
+          "technieker": {
+            "id": 3,
+            "naam": "Marie Dubois",
+            "voornaam": "Marie",
+            "email": "MarieDubois@example.com"
+          }
+        }
+      ]
     },
     {
       "id": 2,
       "naam": "Site B",
-      "verantwoordelijke_id": 2,
-      "verantwoordelijke": "Piet Peeters",
-      "locatie": "Antwerpen",
+      "verantwoordelijke": {
+        "id": 2,
+        "naam": "Piet Peeters",
+        "voornaam": "Piet",
+        "email": "pietPeeters@example.com"
+      },
       "status": "INACTIEF",
-      "onderhoudsniveau": 50,
-      "aantalMachines": 10
+      "machines": [
+        {
+          "id": 3,
+          "code": "MACHINE_C",
+          "locatie": "Production Line 1",
+          "product_informatie": "Machine C is een high-speed productielijn ...",
+          "status": "AUTOMATISCH_GESTOPT",
+          "productie_status": "NOOD_ONDERHOUD",
+          "technieker": {
+            "id": 1,
+            "naam": "Jan Janssen",
+            "voornaam": "Jan",
+            "email": "janJanssen@example.com"
+          }
+        }
+      ]
     },
     {
       "id": 3,
       "naam": "Site C",
-      "verantwoordelijke_id": 3,
-      "verantwoordelijke": "Marie Dubois",
-      "locatie": "Brussel",
+      "verantwoordelijke": {
+        "id": 3,
+        "naam": "Marie Dubois",
+        "voornaam": "Marie",
+        "email": "MarieDubois@example.com"
+      },
       "status": "ACTIEF",
-      "onderhoudsniveau": 20,
-      "aantalMachines": 3
+      "machines": [
+        {
+          "id": 4,
+          "code": "MACHINE_D",
+          "locatie": "Assembly Line",
+          "product_informatie": "Machine D is een assemblagemachine voor ...",
+          "status": "DRAAIT",
+          "productie_status": "GEZOND",
+          "technieker": {
+            "id": 2,
+            "naam": "Piet Peeters",
+            "voornaam": "Piet",
+            "email": "pietPeeters@example.com"
+          }
+        }
+      ]
+    }
+  ],
+  "gebruikers": [
+    {
+      "id": 1,
+      "naam": "Jan Janssen",
+      "voornaam": "Jan",
+      "email": "janJanssen@example.com",
+      "gsm": "0478123456",
+      "rol": "Admin"
+    },
+    {
+      "id": 2,
+      "naam": "Piet Peeters",
+      "voornaam": "Piet",
+      "email": "pietPeeters@example.com",
+      "gsm": "0478234567",
+      "rol": "Technieker"
+    },
+    {
+      "id": 3,
+      "naam": "Marie Dubois",
+      "voornaam": "Marie",
+      "email": "MarieDubois@example.com",
+      "gsm": "0478345678",
+      "rol": "Manager"
     }
   ]
 }
