@@ -1,5 +1,5 @@
-import Notificatie from '../../components/Notificaties/Notificatie';
 import { FaArrowLeftLong } from 'react-icons/fa6';
+import NotificatieBlock from '../../components/Notificaties/NotificatieBlock';
 
 export default function NotificatieList({notificaties}){
 
@@ -10,6 +10,7 @@ export default function NotificatieList({notificaties}){
   }
 
   const ongelezenNotificaties = notificaties.items.filter((notificatie) => !notificatie.gelezen);
+
   const gelezenNotificaties = notificaties.items.filter((notificatie) => notificatie.gelezen);
 
   return (
@@ -20,28 +21,8 @@ export default function NotificatieList({notificaties}){
           Notificaties
         </h1>
       </div>
-      <div className='border border-gray-500 rounded'>
-        <div className="pl-8">
-          <h2 className='text-2xl mb-4 mt-4 font-semibold'>Ongelezen berichten ({ongelezenNotificaties.length})</h2>
-          <div>
-            {ongelezenNotificaties.map((notificatie) => 
-              <Notificatie 
-                key={notificatie.id} id={notificatie.id} tijdstip={notificatie.tijdstip} bericht={notificatie.bericht}
-              />)}
-          </div>
-        </div>
-      </div>
-      <div className='border border-gray-500 rounded mt-4'>
-        <div className="pl-8">
-          <h2 className='text-2xl mb-4 mt-4 font-semibold'>Gelezen berichten ({gelezenNotificaties.length})</h2>
-          <div>
-            {gelezenNotificaties.map((notificatie) => 
-              <Notificatie 
-                key={notificatie.id} id={notificatie.id} tijdstip={notificatie.tijdstip} bericht={notificatie.bericht}
-              />)}
-          </div>
-        </div>
-      </div>
+      <NotificatieBlock notificaties={ongelezenNotificaties} type="Ongelezen"/>
+      <NotificatieBlock notificaties={gelezenNotificaties} type="Gelezen"/>
     </div>
   );
 }
