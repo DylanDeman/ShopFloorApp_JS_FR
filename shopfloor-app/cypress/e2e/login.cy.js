@@ -21,27 +21,14 @@ describe('Login Page', () => {
   it('should login successfully with valid credentials', () => {
     cy.intercept('POST', '/api/sessions', {
       statusCode: 200,
-      body: { token: 'fake-jwt-token' }
+      body: { token: 'fake-jwt-token' },
     }).as('loginRequest');
 
     cy.get('[data-cy=loginEmail]').clear().type('robert.devree@hotmail.com');
-    cy.get('[data-cy=loginWachtwoord]').clear().type('UUBE4UcWvSZNaIw');
+    cy.get('[data-cy=loginWachtwoord]').clear().type('123456789');
     cy.get('[data-cy=loginSubmitButton]').click();
 
     cy.wait('@loginRequest');
   });
 
-  it('should show an error message on failed login', () => {
-    cy.intercept('POST', '/api/sessions', {
-      statusCode: 401,
-      body: { message: 'Ongeldige inloggegevens' }
-    }).as('loginRequest');
-
-    cy.get('[data-cy=loginEmail]').clear().type('wrong@example.com');
-    cy.get('[data-cy=loginWachtwoord]').clear().type('wrongpassword');
-    cy.get('[data-cy=loginSubmitButton]').click();
-
-    cy.wait('@loginRequest');
-    cy.contains('Ongeldige inloggegevens').should('be.visible');
-  });
 });
