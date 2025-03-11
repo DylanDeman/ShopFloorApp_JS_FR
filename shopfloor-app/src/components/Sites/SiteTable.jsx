@@ -1,14 +1,13 @@
 import TableRow from './../genericComponents/TableRow';
 
-const SiteTable = ({ sites, onSortMachines, onSortId, sorteerVolgorde, sorteerVolgordeId, onShow, onEdit }) => {
-  
-  const processedSites = sites.map((site) => ({
-    id: site.id,
-    naam: site.naam,
-    verantwoordelijke: `${site.verantwoordelijke?.voornaam} ${site.verantwoordelijke?.naam}`,
-    aantalMachines: site.machines ? site.machines?.length : 0,
-  }));
-  
+const SiteTable = ({ 
+  sites, 
+  onShow, 
+  onEdit, 
+  onSort, 
+  sortConfig, 
+}) => {
+
   if (sites.length === 0) {
     return (
       <div className="flex justify-center items-center h-32">
@@ -17,37 +16,38 @@ const SiteTable = ({ sites, onSortMachines, onSortId, sorteerVolgorde, sorteerVo
     );
   }
 
+  const renderSortableHeader = (label, field) => (
+    <th 
+      className="border border-gray-300 px-4 md:py-2 cursor-pointer select-none"
+      onClick={() => onSort(field)}
+      data-cy={`column-${field}`}
+    >
+      {label}
+      {sortConfig.field === field ? 
+        (sortConfig.direction === 'asc' ? ' 🔼' : ' 🔽') : 
+        ''}
+    </th>
+  );
+
   return (
     <div className="md:overflow-x-auto overflow-x-auto">
       <table className="border-separate border-spacing-0 rounded-md border border-gray-300 w-full">
         <thead>
           <tr className="bg-gray-100 text-gray-700 uppercase text-sm font-semibold">
             <th className="border border-gray-300 px-4 md:py-2 select-none"></th>
-            <th 
-              className="border border-gray-300 px-4 md:py-2 cursor-pointer select-none"
-              onClick={onSortId}
-            >
-              Nr.
-              {sorteerVolgordeId === 'asc' ? ' 🔼' : sorteerVolgordeId === 'desc' ? ' 🔽' : ''}
-            </th>
-            <th className="border border-gray-300 px-4 md:py-2 select-none">Naam</th>
-            <th className="border border-gray-300 px-4 md:py-2 select-none">Verantwoordelijke</th>
-            <th 
-              className="border border-gray-300 px-4 md:py-2 cursor-pointer select-none"
-              onClick={onSortMachines}
-            >
-              Aantal machines
-              {sorteerVolgorde === 'asc' ? ' 🔼' : sorteerVolgorde === 'desc' ? ' 🔽' : ''}
-            </th>
+            {renderSortableHeader('Nr.', 'id')}
+            {renderSortableHeader('Naam', 'naam')}
+            {renderSortableHeader('Verantwoordelijke', 'verantwoordelijke')}
+            {renderSortableHeader('Aantal machines', 'aantal_machines')}
             <th></th>
           </tr>
         </thead>
         <tbody>
-          {processedSites.map((site) => (
+          {sites.map((site) => (
             <TableRow
               key={site.id} 
               data={site}
-              columns={['id', 'naam', 'verantwoordelijke', 'aantalMachines']} 
+              columns={['id', 'naam', 'verantwoordelijke', 'aantal_machines']} 
               onShow={onShow} 
               onEdit={onEdit}
             />

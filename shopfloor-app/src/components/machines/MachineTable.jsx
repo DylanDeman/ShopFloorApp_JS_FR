@@ -1,14 +1,11 @@
 import TableRow from './../genericComponents/TableRow';
 
-const MachineTable = ({ machines, onSort, sortConfig, onShow }) => {
-  const processedMachines = machines.map((site) => ({
-    id: site.id,
-    locatie: site.locatie,
-    status: site.status,
-    productie_status: site.productie_status,
-    technieker: `${site.technieker.naam} ${site.technieker.voornaam}`,
-  }));
-
+const MachineTable = ({ 
+  machines, 
+  onShow, 
+  onSort, 
+  sortConfig, 
+}) => {
   if (machines.length === 0) {
     return (
       <div className="flex justify-center items-center h-32" data-cy="no-machines-message">
@@ -20,7 +17,7 @@ const MachineTable = ({ machines, onSort, sortConfig, onShow }) => {
   // Helper functie om de header van de tabel te renderen met een juiste icoontje
   const renderSortableHeader = (label, field) => (
     <th 
-      className="border border-gray-300 px-4 md:py-2 cursor-pointer"
+      className="border border-gray-300 px-4 md:py-2 cursor-pointer select-none"
       onClick={() => onSort(field)}
       data-cy={`column-${field}`}
     >
@@ -39,13 +36,13 @@ const MachineTable = ({ machines, onSort, sortConfig, onShow }) => {
             {renderSortableHeader('Nr.', 'id')}
             {renderSortableHeader('Locatie', 'locatie')}
             {renderSortableHeader('Status', 'status')}
-            {renderSortableHeader('ProductieStatus', 'productieStatus')}
-            {renderSortableHeader('Technieker', 'Technieker')}
+            {renderSortableHeader('Productiestatus', 'productie_status')}
+            {renderSortableHeader('Technieker', 'technieker')}
             <th className="border border-gray-300 px-4 md:py-2"></th>
           </tr>
         </thead>
         <tbody data-cy="site-details">
-          {processedMachines.map((machine) => (
+          {machines.map((machine) => (
             <TableRow 
               key={machine.id} 
               data={machine} 
