@@ -16,6 +16,7 @@ import { AuthProvider } from './contexts/Auth.context';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import Logout from './pages/Logout.jsx';
 import SiteBeheren from './pages/sites/SiteBeheren.jsx';
+import SiteToevoegen from './pages/sites/SiteToevoegen.jsx';
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,11 @@ const router = createBrowserRouter([
           {
             path: ':id/edit',
             element: <SiteBeheren/>,
+          },
+          {
+            path: 'create',
+            element: <SiteToevoegen/>,
+
           },
         ],
       },

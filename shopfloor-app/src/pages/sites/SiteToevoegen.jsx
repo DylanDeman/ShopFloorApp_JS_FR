@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getAll, updateSite } from '../../api';
+import { useNavigate } from 'react-router-dom';
+import { getAll, createSite } from '../../api';
 import AsyncData from '../../components/AsyncData';
 
-export default function SiteBeheren() {
-  const { id } = useParams();
+export default function SiteToevoegen() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [formData, setFormData] = useState({ 
-    naam: '', 
-    verantwoordelijke_id: '', 
-    status: 'ACTIEF', 
-    machines_ids: [] 
+  const [formData, setFormData] = useState({
+    naam: '',
+    verantwoordelijke_id: '',
+    status: 'ACTIEF',
+    machines_ids: [],
   });
   const [verantwoordelijken, setVerantwoordelijken] = useState([]);
   const [availableMachines, setAvailableMachines] = useState([]);
@@ -36,26 +35,12 @@ export default function SiteBeheren() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const siteData = await getAll(`sites/${id}`);
-        console.log('Fetched Site Data:', siteData);
-        
-        // Set the form data based on the fetched site
-        setFormData({
-          naam: siteData.naam || '',
-          verantwoordelijke_id: siteData.verantwoordelijke?.id || '',
-          status: siteData.status || 'ACTIEF',
-          machines_ids: siteData.machines?.map(m => m.id) || []
-        });
-  
         const [verantwoordelijkenData, machinesResponse] = await Promise.all([
           getAll('users'),
           getAll('machines'),
         ]);
   
-        console.log('Fetched Users:', verantwoordelijkenData);
-        console.log('Fetched Machines:', machinesResponse);
-  
-        // Filter users to only include those with the role 'VERANTWOORDELIJKE'
+        // Filter users to only include those with the role 'MANAGER'
         const filteredVerantwoordelijken = Array.isArray(verantwoordelijkenData.items)
           ? verantwoordelijkenData.items.filter(user => {
             // Handle the double-quoted JSON string format of the rol property
@@ -63,8 +48,7 @@ export default function SiteBeheren() {
               // First, try to parse it as JSON if it's a string
               if (typeof user.rol === 'string') {
                 // Remove any extra escape characters that might be in the console output
-                const cleanedRol = user.rol.replace(/\\/g, '');
-                // Try to parse as JSON or just use the string directly
+               const cleanedRol = user.rol.replace(/\\/g, '');                  // Try to parse as JSON or just use the string directly
                 const parsedRol = cleanedRol.startsWith('"') && cleanedRol.endsWith('"')
                   ? cleanedRol.slice(1, -1) // Remove outer quotes
                   : cleanedRol;
@@ -81,25 +65,12 @@ export default function SiteBeheren() {
         console.log('Filtered users:', filteredVerantwoordelijken);
         setVerantwoordelijken(filteredVerantwoordelijken);
   
-        // Extract machine data correctly
-        const machinesData = Array.isArray(machinesResponse.items) 
-          ? machinesResponse.items 
-          : (Array.isArray(machinesResponse) ? machinesResponse : []);
-        
-        if (siteData && siteData.machines) {
-          const siteIds = Array.isArray(siteData.machines) 
-            ? siteData.machines.map(m => m.id) 
-            : [];
-            
-          const selected = machinesData.filter(machine => siteIds.includes(machine.id));
-          const available = machinesData.filter(machine => !siteIds.includes(machine.id));
+        const machinesData = Array.isArray(machinesResponse.items)
+          ? machinesResponse.items
+          : [];
   
-          setAvailableMachines(available);
-          setSelectedMachines(selected);
-        } else {
-          setAvailableMachines(machinesData);
-          setSelectedMachines([]);
-        }
+        setAvailableMachines(machinesData);
+        setSelectedMachines([]);
       } catch (err) {
         console.error('Error in fetchData:', err);
         setError(err);
@@ -109,8 +80,8 @@ export default function SiteBeheren() {
     }
   
     fetchData();
-  }, [id]);
-  
+  }, []);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -119,11 +90,11 @@ export default function SiteBeheren() {
   const moveToSelected = () => {
     const selected = document.querySelector('#availableMachines').selectedOptions;
     if (selected.length > 0) {
-      const selectedIds = Array.from(selected).map(option => parseInt(option.value));
-      const machinesToMove = availableMachines.filter(m => selectedIds.includes(m.id));
-      
+      const selectedIds = Array.from(selected).map((option) => parseInt(option.value));
+      const machinesToMove = availableMachines.filter((m) => selectedIds.includes(m.id));
+
       setSelectedMachines([...selectedMachines, ...machinesToMove]);
-      setAvailableMachines(availableMachines.filter(m => !selectedIds.includes(m.id)));
+      setAvailableMachines(availableMachines.filter((m) => !selectedIds.includes(m.id)));
     }
   };
 
@@ -131,11 +102,11 @@ export default function SiteBeheren() {
   const moveToAvailable = () => {
     const selected = document.querySelector('#selectedMachines').selectedOptions;
     if (selected.length > 0) {
-      const selectedIds = Array.from(selected).map(option => parseInt(option.value));
-      const machinesToMove = selectedMachines.filter(m => selectedIds.includes(m.id));
-      
+      const selectedIds = Array.from(selected).map((option) => parseInt(option.value));
+      const machinesToMove = selectedMachines.filter((m) => selectedIds.includes(m.id));
+
       setAvailableMachines([...availableMachines, ...machinesToMove]);
-      setSelectedMachines(selectedMachines.filter(m => !selectedIds.includes(m.id)));
+      setSelectedMachines(selectedMachines.filter((m) => !selectedIds.includes(m.id)));
     }
   };
 
@@ -154,27 +125,26 @@ export default function SiteBeheren() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Update site and pass the selected machine IDs
-      await updateSite(id, { 
-        ...formData, 
-        machines_ids: selectedMachines.map(m => m.id)
+      // Create site with the selected machine IDs
+      await createSite({
+        ...formData,
+        machines_ids: selectedMachines.map((m) => m.id),
       });
-  
+
       // Show success message
-      setSuccessMessage('Site succesvol bijgewerkt!');
-  
+      setSuccessMessage('Site succesvol toegevoegd!');
+
       // Redirect after 2 seconds
       setTimeout(() => {
         navigate('/sites');
       }, 2000);
     } catch (err) {
-      console.error('Update failed:', err);
-      setError('Er is een fout opgetreden bij het bijwerken van de site.');
+      console.error('Creation failed:', err);
+      setError('Er is een fout opgetreden bij het toevoegen van de site.');
     }
   };
 
-  const isNewSite = id === 'new';
-  const pageTitle = isNewSite ? "Nieuwe site aanmaken" : `${formData.naam} wijzigen`;
+  const pageTitle = 'Nieuwe site toevoegen';
 
   return (
     <AsyncData loading={loading} error={error}>
@@ -184,16 +154,16 @@ export default function SiteBeheren() {
             ← {pageTitle}
           </a>
         </div>
-        
+
         {successMessage && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
             {successMessage}
           </div>
         )}
-        
+
         <div className="bg-white shadow-md rounded-md p-6">
           <h2 className="text-xl font-semibold mb-6">Informatie</h2>
-          
+
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-2 gap-6 mb-8">
               <div>
@@ -208,7 +178,7 @@ export default function SiteBeheren() {
                   required
                 />
               </div>
-              
+
               <div>
                 <label className="block text-gray-700 mb-2">Verantwoordelijke</label>
                 <select
@@ -226,7 +196,7 @@ export default function SiteBeheren() {
                   ))}
                 </select>
               </div>
-              
+
               <div>
                 <label className="block text-gray-700 mb-2">Status van site</label>
                 <select
@@ -240,7 +210,7 @@ export default function SiteBeheren() {
                 </select>
               </div>
             </div>
-            
+
             <h2 className="text-xl font-semibold mb-4">Machines</h2>
             <div className="flex space-x-4">
               <div className="w-5/12">
@@ -259,7 +229,7 @@ export default function SiteBeheren() {
                   ))}
                 </select>
               </div>
-              
+
               <div className="w-2/12 flex flex-col justify-center items-center space-y-2">
                 <button
                   type="button"
@@ -290,7 +260,7 @@ export default function SiteBeheren() {
                   &lt;&lt;
                 </button>
               </div>
-              
+
               <div className="w-5/12">
                 <h3 className="text-sm mb-1">Geselecteerde machines</h3>
                 <select
@@ -307,7 +277,7 @@ export default function SiteBeheren() {
                 </select>
               </div>
             </div>
-            
+
             <div className="mt-8">
               <button 
                 type="submit" 
