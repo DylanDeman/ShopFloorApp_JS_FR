@@ -6,7 +6,6 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import pluginCypress from 'eslint-plugin-cypress/flat';
 
-
 export default [
   pluginCypress.configs.recommended,
   { ignores: ['dist'] }, // 👈 1

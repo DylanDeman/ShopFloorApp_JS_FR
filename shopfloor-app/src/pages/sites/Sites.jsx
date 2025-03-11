@@ -2,11 +2,13 @@ import SiteList from './SiteList';
 import Information from '../../components/Information';
 import { IoMdAddCircleOutline } from 'react-icons/io';
 import { IoInformationCircleOutline } from 'react-icons/io5';
-
+import { useNavigate } from 'react-router';
 const Sites = () => {
+
+  const navigate = useNavigate();
+  
   const handleAddSite = () => {
-    window.alert('Nieuwe site toevoegen');
-    // TODO navigeren naar ander scherm!!!
+    navigate(`/sites/create`);
   };
   
   return (
