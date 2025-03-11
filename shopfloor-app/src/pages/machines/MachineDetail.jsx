@@ -68,7 +68,7 @@ const MachineDetail = () => {
           icon={IoInformationCircleOutline}
         />
 
-        <div className="border p-4 rounded-lg mt-4 w-full">
+        <div data-cy="machine_details" className="border p-4 rounded-lg mt-4 w-full">
           {/* Algemene machine informatie */}
           <MachineInfoHeader machine={machine} />
         
