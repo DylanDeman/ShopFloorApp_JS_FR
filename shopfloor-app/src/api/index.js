@@ -51,3 +51,18 @@ export const getDashboardByUserID = async (user_id) => {
   const {data } = await axios.get(`users/${user_id}/dashboard`);  
   return data.items;
 };
+
+export const getAllVerantwoordelijken = async () => {
+  const { data } = await axios.get('/users');
+  return data.items; 
+};
+
+export const getAllMachines = async () => {
+  const { data } = await axios.get('/machines');
+  return data.items; 
+};
+
+export const updateSite = async (id, siteData) => {
+  const { data } = await axios.put(`/sites/${id}`, siteData);
+  return data;
+};
