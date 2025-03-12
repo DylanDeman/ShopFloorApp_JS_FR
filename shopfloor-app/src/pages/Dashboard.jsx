@@ -23,6 +23,12 @@ const Dashboard = () => {
   } = useSWR('machines', getAll);
 
   const {
+    data: onderhouden = [],
+    loadingOnderhouden,
+    errorOnderhouden,
+  } = useSWR('onderhouden', getAll);
+
+  const {
     data: kpis = [],
     loading: loadingkpi,
     error: errorkpi,
@@ -83,8 +89,9 @@ const Dashboard = () => {
           </>
         )}
       </AsyncData>
-      <AsyncData loading={loading || loadingMachines} error={error || errorMachines}>
-        <TileList tiles={gekozenKPIs} onDelete={handleDelete} machines={machines} />
+      <AsyncData loading={loading || loadingMachines || loadingOnderhouden}
+        error={error || errorMachines || errorOnderhouden}>
+        <TileList tiles={gekozenKPIs} onDelete={handleDelete} machines={machines} onderhouden={onderhouden} />
       </AsyncData>
     </div>
   );

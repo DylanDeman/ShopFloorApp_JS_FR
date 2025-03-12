@@ -13,31 +13,50 @@ import {
 import { getKPIWaardenByKPIid } from '../../api';
 import useSWR from 'swr';
 import AsyncData from '../AsyncData';
+import { Suspense, useState } from 'react';
+import { useAuth } from '../../contexts/auth';
+import Loader from '../Loader';
 
-const Tile = ({ id, title, content, onDelete, graphType, machines }) => {
+const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }) => {
   const { data: kpiWaarden = [], loading, error } = useSWR(id, getKPIWaardenByKPIid);
+  const [selectedSite, setSelectedSite] = useState(null);
+
+  const { user } = useAuth();
+  const user_id = user ? user.id : null;
 
   const handleDelete = () => {
     onDelete(id);
   };
 
+  const handleSiteChange = (event) => {
+    setSelectedSite(event.target.value ? Number(event.target.value) : null);
+  };
+
   const formattedData = kpiWaarden.map((item) => ({
-    name: new Date(item.datum).toLocaleDateString(),
-    value: item.waarde,
+    name: new Date(item.datum),
+    value: item?.waarde,
+    site_id: item?.site_id,
   }));
+
+  const uniqueSites = [...new Set(formattedData.map((item) => item?.site_id).filter(Boolean))];
 
   const renderGraph = () => {
     switch (graphType) {
-      case 'LINE':
+      case 'LINE': {
         return (
-          <LineChart data={formattedData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="value" stroke="#6366F1" strokeWidth={2} />
-          </LineChart>
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold mb-2">Site {formattedData?.site_id}</h3>
+            <LineChart data={formattedData} width={500} height={300}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="value" stroke="#6366F1" strokeWidth={2} />
+            </LineChart>
+          </div>
         );
+      }
+
       case 'BAR':
         return (
           <BarChart data={formattedData}>
@@ -48,9 +67,52 @@ const Tile = ({ id, title, content, onDelete, graphType, machines }) => {
             <Bar dataKey="value" fill="#6366F1" />
           </BarChart>
         );
+
+      case 'SITES': {
+        const siteGezondheden = formattedData.filter((kpi) => kpi?.site_id != null);
+        const selectedSiteData = siteGezondheden.filter((kpi) => Number(kpi?.site_id) === selectedSite);
+
+        console.log(selectedSiteData);
+
+        return (
+          <div className="space-y-4">
+            <div className="mb-4">
+              <label htmlFor="siteSelect" className="block text-gray-700 font-semibold mb-2">
+                Selecteer een site:
+              </label>
+              <select
+                id="siteSelect"
+                className="border border-gray-300 rounded p-2 w-full"
+                onChange={handleSiteChange}
+                value={selectedSite || ''}
+              >
+                <option value="" disabled>-- Selecteer een site --</option>
+                {uniqueSites.map((siteId) => (
+                  <option key={siteId} value={siteId}>
+                    Site {siteId}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="bg-white rounded-lg p-6 w-full flex flex-col">
+              <Suspense fallback={<Loader />}>
+                <h3 className="text-xl font-semibold mb-2">Site
+                  {selectedSiteData.length === 0 ? '' : ' ' + selectedSiteData[0].site_id}
+                </h3>
+                <p className="text-9xl font-bold text-blue-500">
+                  {selectedSiteData.length === 0 ? '' : `${(selectedSiteData[0].value * 100)}%`}
+                </p>
+              </Suspense>
+            </div>
+          </div>
+        );
+      }
+
       case 'SINGLE': {
         const lastValue = formattedData.length > 0 ?
           formattedData[formattedData.length - 1].value : 'N/A';
+
         return (
           <div className="flex items-center justify-center h-full">
             <p className="text-9xl font-bold text-blue-500">{lastValue}</p>
@@ -80,9 +142,9 @@ const Tile = ({ id, title, content, onDelete, graphType, machines }) => {
               filteredMachines.map((machine) =>
                 <li key={machine.id}>
                   {`code: ${machine.code}\n`}
-                  <br/>
+                  <br />
                   {`locatie: ${machine.locatie}\n`}
-                  <br/>
+                  <br />
                   {`status: ${machine.status}\n`}
                 </li>,
               )
@@ -92,7 +154,35 @@ const Tile = ({ id, title, content, onDelete, graphType, machines }) => {
           </ul>
         );
       }
+      case 'TOP5OND': {
+        if (kpiWaarden.length === 0 || onderhouden.length === 0) {
+          console.log(kpiWaarden);
 
+          return <p className="text-gray-500">Geen data beschikbaar.</p>;
+        }
+
+        const onderhoudList = onderhouden.items;
+
+        const filteredOnderhouden = onderhoudList.filter((onderhoud) => {
+          onderhoud.technieker_gebruiker_id == user_id;
+        });
+
+        console.log(filteredOnderhouden);
+
+        return (
+          <ul className="list-disc list-inside text-gray-700">
+            {filteredOnderhouden.length > 0 ? (
+              filteredOnderhouden.map((onderhoud) =>
+                <li key={onderhoud.onderhoud_id}>
+                  {`id: ${onderhoud.onderhoud_id}\n`}
+                </li>,
+              )
+            ) : (
+              <p>Geen relevante onderhouden gevonden.</p>
+            )}
+          </ul>
+        );
+      }
       default:
         return <p className="text-gray-500">Geen grafiek beschikbaar.</p>;
     }
