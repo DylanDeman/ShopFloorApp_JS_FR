@@ -2,6 +2,16 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getAll, updateSite } from '../../api';
 import AsyncData from '../../components/AsyncData';
+import { FaArrowLeft } from 'react-icons/fa';
+import { 
+  MdKeyboardArrowDown, 
+  MdKeyboardArrowRight, 
+  MdKeyboardDoubleArrowDown, 
+  MdKeyboardDoubleArrowRight, 
+  MdKeyboardArrowUp, 
+  MdKeyboardArrowLeft,
+  MdKeyboardDoubleArrowUp, 
+  MdKeyboardDoubleArrowLeft } from 'react-icons/md';
 
 export default function SiteBeheren() {
   const { id } = useParams();
@@ -12,14 +22,14 @@ export default function SiteBeheren() {
     naam: '', 
     verantwoordelijke_id: '', 
     status: 'ACTIEF', 
-    machines_ids: [], 
+    machines_ids: [],
   });
   const [verantwoordelijken, setVerantwoordelijken] = useState([]);
+  const [locatie, setLocatie] = useState('');
   const [availableMachines, setAvailableMachines] = useState([]);
   const [selectedMachines, setSelectedMachines] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
-
-  // Format machine display text based on the actual machine object structure
+  
   const formatMachineDisplay = (machine) => {
     if (machine.code && machine.locatie) {
       return `${machine.code} - ${machine.locatie}`;
@@ -30,7 +40,6 @@ export default function SiteBeheren() {
     if (machine.locatie) {
       return machine.locatie;
     }
-    return `Machine #${machine.id}`;
   };
 
   useEffect(() => {
@@ -39,7 +48,6 @@ export default function SiteBeheren() {
         const siteData = await getAll(`sites/${id}`);
         console.log('Fetched Site Data:', siteData);
         
-        // Set the form data based on the fetched site
         setFormData({
           naam: siteData.naam || '',
           verantwoordelijke_id: siteData.verantwoordelijke?.id || '',
@@ -51,9 +59,6 @@ export default function SiteBeheren() {
           getAll('users'),
           getAll('machines'),
         ]);
-  
-        console.log('Fetched Users:', verantwoordelijkenData);
-        console.log('Fetched Machines:', machinesResponse);
   
         // Filter users to only include those with the role 'VERANTWOORDELIJKE'
         const filteredVerantwoordelijken = Array.isArray(verantwoordelijkenData.items)
@@ -81,7 +86,6 @@ export default function SiteBeheren() {
         console.log('Filtered users:', filteredVerantwoordelijken);
         setVerantwoordelijken(filteredVerantwoordelijken);
   
-        // Extract machine data correctly
         const machinesData = Array.isArray(machinesResponse.items) 
           ? machinesResponse.items 
           : (Array.isArray(machinesResponse) ? machinesResponse : []);
@@ -173,31 +177,42 @@ export default function SiteBeheren() {
     }
   };
 
+  const handleOnClickBack = () => {
+    navigate('/sites');
+  };
   const isNewSite = id === 'new';
   const pageTitle = isNewSite ? 'Nieuwe site aanmaken' : `${formData.naam} wijzigen`;
 
   return (
     <AsyncData loading={loading} error={error}>
-      <div className="max-w-7xl mx-auto p-4">
-        <div className="mb-6">
-          <a href="/sites" className="inline-flex items-center" data-cy="back-link">
-            ← {pageTitle}
-          </a>
+      <div className="p-2 md:p-4">
+        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 mb-6 md:mb-12">
+          <button 
+            className="text-gray-700 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100 self-start"
+            onClick={handleOnClickBack}
+            aria-label="Go back"
+          >
+            <FaArrowLeft size={20} className="md:text-2xl" />
+          </button>
+            
+          <h1 className="text-2xl md:text-4xl font-semibold"> 
+            Site | {pageTitle}
+          </h1>
         </div>
         
         {successMessage && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" data-cy="success-message">
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
             {successMessage}
           </div>
         )}
         
-        <div className="bg-white shadow-md rounded-md p-6">
-          <h2 className="text-xl font-semibold mb-6">Informatie</h2>
+        <div className="bg-white p-3 md:p-6 border rounded">
+          <h2 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-6">Informatie</h2>
           
           <form onSubmit={handleSubmit}>
-            <div className="grid grid-cols-2 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
               <div>
-                <label className="block text-gray-700 mb-2" data-cy="site-name-label">Naam</label>
+                <label className="block text-gray-700 mb-2">Naam</label>
                 <input
                   type="text"
                   name="naam"
@@ -206,19 +221,17 @@ export default function SiteBeheren() {
                   className="w-full p-2 border rounded"
                   placeholder="naam van de site"
                   required
-                  data-cy="site-name"
                 />
               </div>
-              
+
               <div>
-                <label className="block text-gray-700 mb-2" data-cy="responsible-label">Verantwoordelijke</label>
+                <label className="block text-gray-700 mb-2">Verantwoordelijke</label>
                 <select
                   name="verantwoordelijke_id"
                   value={formData.verantwoordelijke_id}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
                   required
-                  data-cy="verantwoordelijke-select"
                 >
                   <option value="">Selecteer verantwoordelijke</option>
                   {verantwoordelijken.map((verantwoordelijke) => (
@@ -230,13 +243,12 @@ export default function SiteBeheren() {
               </div>
               
               <div>
-                <label className="block text-gray-700 mb-2" data-cy="status-label">Status van site</label>
+                <label className="block text-gray-700 mb-2">Status van site</label>
                 <select
                   name="status"
                   value={formData.status}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
-                  data-cy="status-select"
                 >
                   <option value="ACTIEF">Actief</option>
                   <option value="INACTIEF">Inactief</option>
@@ -244,17 +256,18 @@ export default function SiteBeheren() {
               </div>
             </div>
             
-            <h2 className="text-xl font-semibold mb-4">Machines</h2>
-            <div className="flex space-x-4">
-              <div className="w-5/12">
-                <h3 className="text-sm mb-1" data-cy="available-machines-label">Beschikbare machines</h3>
+            <h2 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-6">Machines</h2>
+            
+            {/* Responsive layout for machines selection */}
+            <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
+              <div className="w-full md:w-5/12">
+                <h3 className="text-sm mb-1">Beschikbare machines</h3>
                 <p className="text-xs text-gray-500 mb-2">(selecteer de rij(en) die aan deze site gelinkt worden)</p>
                 <select
                   id="availableMachines"
                   multiple
-                  className="w-full h-48 border rounded p-2"
+                  className="w-full h-36 md:h-48 border rounded p-2"
                   size="8"
-                  data-cy="available-machines-select"
                 >
                   {availableMachines.map((machine) => (
                     <option key={machine.id} value={machine.id}>
@@ -264,49 +277,71 @@ export default function SiteBeheren() {
                 </select>
               </div>
               
-              <div className="w-2/12 flex flex-col justify-center items-center space-y-2">
+              {/* Control buttons - horizontal on mobile, vertical on desktop */}
+              <div className="w-full md:w-2/12 flex flex-row md:flex-col justify-center items-center
+               space-x-2 md:space-x-0 md:space-y-2">
                 <button
                   type="button"
-                  className="bg-gray-200 hover:bg-gray-300 px-4 py-1 rounded w-16 text-center"
+                  className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded w-14 md:w-16 text-center
+                   flex justify-center items-center"
                   onClick={moveToSelected}
-                  data-cy="move-to-selected"
                 >
-                  &gt;
+                  <span className="block md:hidden">
+                    <MdKeyboardArrowDown size={18} />
+                  </span>
+                  <span className="hidden md:block">
+                    <MdKeyboardArrowRight size={18} />
+                  </span>
                 </button>
                 <button
                   type="button"
-                  className="bg-gray-200 hover:bg-gray-300 px-4 py-1 rounded w-16 text-center"
+                  className="bg-gray-200 hover:bg-gray-300 px-3 py-1 
+                  rounded w-14 md:w-16 text-center flex 
+                  justify-center items-center"
                   onClick={moveAllToSelected}
-                  data-cy="move-all-to-selected"
                 >
-                  &gt;&gt;
+                  <span className="block md:hidden">
+                    <MdKeyboardDoubleArrowDown size={18} />
+                  </span>
+                  <span className="hidden md:block">
+                    <MdKeyboardDoubleArrowRight size={18} />
+                  </span>
                 </button>
                 <button
                   type="button"
-                  className="bg-gray-200 hover:bg-gray-300 px-4 py-1 rounded w-16 text-center"
+                  className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded w-14 md:w-16
+                   text-center flex justify-center items-center"
                   onClick={moveToAvailable}
-                  data-cy="move-to-available"
                 >
-                  &lt;
+                  <span className="block md:hidden">
+                    <MdKeyboardArrowUp size={18} />
+                  </span>
+                  <span className="hidden md:block">
+                    <MdKeyboardArrowLeft size={18} />
+                  </span>
                 </button>
                 <button
                   type="button"
-                  className="bg-gray-200 hover:bg-gray-300 px-4 py-1 rounded w-16 text-center"
+                  className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded w-14 md:w-16 
+                  text-center flex justify-center items-center"
                   onClick={moveAllToAvailable}
-                  data-cy="move-all-to-available"
                 >
-                  &lt;&lt;
+                  <span className="block md:hidden">
+                    <MdKeyboardDoubleArrowUp size={18} />
+                  </span>
+                  <span className="hidden md:block">
+                    <MdKeyboardDoubleArrowLeft size={18} />
+                  </span>
                 </button>
               </div>
               
-              <div className="w-5/12">
-                <h3 className="text-sm mb-1" data-cy="selected-machines-label">Geselecteerde machines</h3>
+              <div className="w-full md:w-5/12">
+                <h3 className="text-sm mb-1">Geselecteerde machines</h3>
                 <select
                   id="selectedMachines"
                   multiple
-                  className="w-full h-48 border rounded p-2"
+                  className="w-full h-36 md:h-48 border rounded p-2"
                   size="8"
-                  data-cy="selected-machines-select"
                 >
                   {selectedMachines.map((machine) => (
                     <option key={machine.id} value={machine.id}>
@@ -317,13 +352,14 @@ export default function SiteBeheren() {
               </div>
             </div>
             
-            <button
-              type="submit"
-              className="mt-6 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              data-cy="submit-button"
-            >
-              Opslaan
-            </button>
+            <div className="mt-6 md:mt-8">
+              <button 
+                type="submit" 
+                className="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+              >
+                Opslaan
+              </button>
+            </div>
           </form>
         </div>
       </div>
