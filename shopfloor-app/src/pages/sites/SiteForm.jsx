@@ -1,20 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAll, createSite } from '../../api';
+import { getAll, createSite, updateSite } from '../../api';
 import AsyncData from '../../components/AsyncData';
-import { FaArrowLeft } from 'react-icons/fa';
-import { 
-  MdKeyboardArrowDown, 
-  MdKeyboardArrowRight, 
-  MdKeyboardDoubleArrowDown, 
-  MdKeyboardDoubleArrowRight, 
-  MdKeyboardArrowUp, 
-  MdKeyboardArrowLeft,
-  MdKeyboardDoubleArrowUp, 
-  MdKeyboardDoubleArrowLeft, 
-} from 'react-icons/md';
 import { useParams } from 'react-router-dom';
-import { updateSite } from '../../api';
+import PageHeader from '../../components/genericComponents/PageHeader';
+import SiteInfoForm from '../../components/sites/SiteInfoForm';
+import MachineSelector from '../../components/sites/MachineSelector';
+import SuccessMessage from '../../components/sites/SuccesMessage';
 
 export default function SiteForm() {
   const { id } = useParams();
@@ -34,19 +26,6 @@ export default function SiteForm() {
   const [selectedMachines, setSelectedMachines] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
 
-  const formatMachineDisplay = (machine) => {
-    if (machine.code && machine.locatie) {
-      return `${machine.code} - ${machine.locatie}`;
-    }
-    if (machine.code) {
-      return machine.code;
-    }
-    if (machine.locatie) {
-      return machine.locatie;
-    }
-    return `Machine #${machine.id}`;
-  };
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -56,35 +35,13 @@ export default function SiteForm() {
         ]);
 
         // Filter users to only include those with the role 'VERANTWOORDELIJKE'
-        const filteredVerantwoordelijken = Array.isArray(verantwoordelijkenData.items)
-          ? verantwoordelijkenData.items.filter((user) => {
-            // Handle the double-quoted JSON string format of the rol property
-            try {
-              // First, try to parse it as JSON if it's a string
-              if (typeof user.rol === 'string') {
-                // Remove any extra escape characters that might be in the console output
-                const cleanedRol = user.rol.replace(/\\/g, '');
-                // Try to parse as JSON or just use the string directly
-                const parsedRol = cleanedRol.startsWith('"') && cleanedRol.endsWith('"')
-                  ? cleanedRol.slice(1, -1) // Remove outer quotes
-                  : cleanedRol;
-                return parsedRol === 'VERANTWOORDELIJKE';
-              }
-              return false;
-            } catch (e) {
-              console.error('Error parsing rol:', e);
-              return false;
-            }
-          })
-          : [];
-        
+        const filteredVerantwoordelijken = filterVerantwoordelijken(verantwoordelijkenData.items);
         setVerantwoordelijken(filteredVerantwoordelijken);
         
         const machinesData = Array.isArray(machinesResponse.items) 
           ? machinesResponse.items 
           : (Array.isArray(machinesResponse) ? machinesResponse : []);
         
-        // If editing existing site, fetch its data
         if (!isNewSite) {
           const siteData = await getAll(`sites/${id}`);
           
@@ -110,7 +67,6 @@ export default function SiteForm() {
             setSelectedMachines([]);
           }
         } else {
-          // For new site, all machines are available
           setAvailableMachines(machinesData);
           setSelectedMachines([]);
         }
@@ -125,44 +81,53 @@ export default function SiteForm() {
     fetchData();
   }, [id, isNewSite]);
   
+  const filterVerantwoordelijken = (users) => {
+    return Array.isArray(users)
+      ? users.filter((user) => {
+        // Handle the double-quoted JSON string format of the rol property
+        try {
+          // First, try to parse it as JSON if it's a string
+          if (typeof user.rol === 'string') {
+            // Remove any extra escape characters that might be in the console output
+            const cleanedRol = user.rol.replace(/\\/g, '');
+            // Try to parse as JSON or just use the string directly
+            const parsedRol = cleanedRol.startsWith('"') && cleanedRol.endsWith('"')
+              ? cleanedRol.slice(1, -1) // Remove outer quotes
+              : cleanedRol;
+            return parsedRol === 'VERANTWOORDELIJKE';
+          }
+          return false;
+        } catch (e) {
+          console.error('Error parsing rol:', e);
+          return false;
+        }
+      })
+      : [];
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Move machine from available to selected
-  const moveToSelected = () => {
-    const selected = document.querySelector('#availableMachines').selectedOptions;
-    if (selected.length > 0) {
-      const selectedIds = Array.from(selected).map((option) => parseInt(option.value));
+  const handleMachineMove = {
+    moveToSelected: (selectedIds) => {
       const machinesToMove = availableMachines.filter((m) => selectedIds.includes(m.id));
-      
       setSelectedMachines([...selectedMachines, ...machinesToMove]);
       setAvailableMachines(availableMachines.filter((m) => !selectedIds.includes(m.id)));
-    }
-  };
-
-  // Move machine from selected to available
-  const moveToAvailable = () => {
-    const selected = document.querySelector('#selectedMachines').selectedOptions;
-    if (selected.length > 0) {
-      const selectedIds = Array.from(selected).map((option) => parseInt(option.value));
+    },
+    moveToAvailable: (selectedIds) => {
       const machinesToMove = selectedMachines.filter((m) => selectedIds.includes(m.id));
-      
       setAvailableMachines([...availableMachines, ...machinesToMove]);
       setSelectedMachines(selectedMachines.filter((m) => !selectedIds.includes(m.id)));
-    }
-  };
-
-  // Move all machines from available to selected
-  const moveAllToSelected = () => {
-    setSelectedMachines([...selectedMachines, ...availableMachines]);
-    setAvailableMachines([]);
-  };
-
-  // Move all machines from selected to available
-  const moveAllToAvailable = () => {
-    setAvailableMachines([...availableMachines, ...selectedMachines]);
-    setSelectedMachines([]);
+    },
+    moveAllToSelected: () => {
+      setSelectedMachines([...selectedMachines, ...availableMachines]);
+      setAvailableMachines([]);
+    },
+    moveAllToAvailable: () => {
+      setAvailableMachines([...availableMachines, ...selectedMachines]);
+      setSelectedMachines([]);
+    },
   };
 
   const handleSubmit = async (e) => {
@@ -183,7 +148,6 @@ export default function SiteForm() {
         setSuccessMessage('Site succesvol bijgewerkt!');
       }
       
-      // Redirect after 2 seconds
       setTimeout(() => {
         navigate('/sites');
       }, 2000);
@@ -202,175 +166,30 @@ export default function SiteForm() {
   return (
     <AsyncData loading={loading} error={error}>
       <div className="p-2 md:p-4">
-        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 mb-6 md:mb-12">
-          <button 
-            className="text-gray-700 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100 self-start"
-            onClick={handleOnClickBack}
-            aria-label="Go back"
-            data-cy="back-button"
-          >
-            <FaArrowLeft size={20} className="md:text-2xl" />
-          </button>
-            
-          <h1 className="text-2xl md:text-4xl font-semibold"> 
-            {isNewSite ? pageTitle : `Site | ${pageTitle}`}
-          </h1>
-        </div>
+        <PageHeader 
+          title={isNewSite ? pageTitle : `Site | ${pageTitle}`}
+          onBackClick={handleOnClickBack}
+        />
         
-        {successMessage && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" data-cy="success-message">
-            {successMessage}
-          </div>
-        )}
+        {successMessage && <SuccessMessage message={successMessage} />}
         
         <div className="bg-white p-3 md:p-6 border rounded">
           <h2 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-6">Informatie</h2>
           
           <form onSubmit={handleSubmit} data-cy="site-form">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
-              <div>
-                <label className="block text-gray-700 mb-2">Naam</label>
-                <input
-                  type="text"
-                  name="naam"
-                  value={formData.naam}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded"
-                  placeholder="naam van de site"
-                  required
-                  data-cy="site-name"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700 mb-2">Verantwoordelijke</label>
-                <select
-                  name="verantwoordelijke_id"
-                  value={formData.verantwoordelijke_id}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded"
-                  required
-                  data-cy="verantwoordelijke-select"
-                >
-                  <option value="">Selecteer verantwoordelijke</option>
-                  {verantwoordelijken.map((verantwoordelijke) => (
-                    <option key={verantwoordelijke.id} value={verantwoordelijke.id}>
-                      {verantwoordelijke.naam || verantwoordelijke.name || `User ${verantwoordelijke.id}`}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              <div>
-                <label className="block text-gray-700 mb-2">Status van site</label>
-                <select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded"
-                  data-cy="status-select"
-                >
-                  <option value="ACTIEF">Actief</option>
-                  <option value="INACTIEF">Inactief</option>
-                </select>
-              </div>
-            </div>
+            <SiteInfoForm 
+              formData={formData}
+              verantwoordelijken={verantwoordelijken}
+              onChange={handleChange}
+            />
             
             <h2 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-6">Machines</h2>
             
-            {/* Responsive layout for machines selection */}
-            <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
-              <div className="w-full md:w-5/12">
-                <h3 className="text-sm mb-1">Beschikbare machines</h3>
-                <p className="text-xs text-gray-500 mb-2">(selecteer de rij(en) die aan deze site gelinkt worden)</p>
-                <select
-                  id="availableMachines"
-                  multiple
-                  className="w-full h-36 md:h-48 border rounded p-2"
-                  size="8"
-                  data-cy="available-machines"
-                >
-                  {availableMachines.map((machine) => (
-                    <option key={machine.id} value={machine.id}>
-                      {formatMachineDisplay(machine)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              {/* Control buttons - horizontal on mobile, vertical on desktop */}
-              <div className="w-full md:w-2/12 flex flex-row md:flex-col justify-center items-center space-x-2 md:space-x-0 md:space-y-2">
-                <button
-                  type="button"
-                  className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded w-14 md:w-16 text-center flex justify-center items-center"
-                  onClick={moveToSelected}
-                  data-cy="move-to-selected"
-                >
-                  <span className="block md:hidden">
-                    <MdKeyboardArrowDown size={18} />
-                  </span>
-                  <span className="hidden md:block">
-                    <MdKeyboardArrowRight size={18} />
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded w-14 md:w-16 text-center flex justify-center items-center"
-                  onClick={moveAllToSelected}
-                  data-cy="move-all-to-selected"
-                >
-                  <span className="block md:hidden">
-                    <MdKeyboardDoubleArrowDown size={18} />
-                  </span>
-                  <span className="hidden md:block">
-                    <MdKeyboardDoubleArrowRight size={18} />
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded w-14 md:w-16 text-center flex justify-center items-center"
-                  onClick={moveToAvailable}
-                  data-cy="move-to-available"
-                >
-                  <span className="block md:hidden">
-                    <MdKeyboardArrowUp size={18} />
-                  </span>
-                  <span className="hidden md:block">
-                    <MdKeyboardArrowLeft size={18} />
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded w-14 md:w-16 text-center flex justify-center items-center"
-                  onClick={moveAllToAvailable}
-                  data-cy="move-all-to-available"
-                >
-                  <span className="block md:hidden">
-                    <MdKeyboardDoubleArrowUp size={18} />
-                  </span>
-                  <span className="hidden md:block">
-                    <MdKeyboardDoubleArrowLeft size={18} />
-                  </span>
-                </button>
-              </div>
-              
-              <div className="w-full md:w-5/12">
-                <h3 className="text-sm mb-1">Geselecteerde machines</h3>
-                <select
-                  id="selectedMachines"
-                  multiple
-                  className="w-full h-36 md:h-48 border rounded p-2"
-                  size="8"
-                  data-cy="selected-machines"
-                >
-                  {selectedMachines.map((machine) => (
-                    <option key={machine.id} value={machine.id}>
-                      {formatMachineDisplay(machine)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+            <MachineSelector
+              availableMachines={availableMachines}
+              selectedMachines={selectedMachines}
+              onMachineMove={handleMachineMove}
+            />
             
             <div className="mt-6 md:mt-8">
               <button 
