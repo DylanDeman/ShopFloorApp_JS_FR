@@ -1,0 +1,148 @@
+{
+  "gebruikers": {
+    "items": [
+      {
+        "id": 1,
+        "adres_id": 1,
+        "naam": "Jansen",
+        "voornaam": "Robert",
+        "geboortedatum": "1985-05-10T00:00:00.000Z",
+        "email": "robert.devree@hotmail.com",
+        "wachtwoord": "hashedpassword123",
+        "gsm": "+32123456789",
+        "rol": "VERANTWOORDELIJKE",
+        "status": "ACTIEF",
+        "sites": {
+          "create": [
+            {
+              "naam": "Test Site",
+              "verantwoordelijke_id": 1,
+              "status": "INACTIEF"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "adres_id": 2,
+        "naam": "De Vries",
+        "voornaam": "John",
+        "geboortedatum": "1990-01-15T00:00:00.000Z",
+        "email": "john.devries@hotmail.com",
+        "wachtwoord": "hashedpassword456",
+        "gsm": "+32234567890",
+        "rol": "TECHNIEKER",
+        "status": "ACTIEF",
+        "sites": {
+          "create": [
+            {
+              "naam": "Test Site",
+              "verantwoordelijke_id": 1,
+              "status": "INACTIEF"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "machines": {
+    "items": [
+      {
+        "id": 1,
+        "site_id": 1,
+        "product_id": 1,
+        "technieker_gebruiker_id": 2,
+        "code": "A001",
+        "locatie": "Locatie 1",
+        "product_informatie": "Details of product A",
+        "status": "DRAAIT",
+        "productie_status": "GEZOND"
+      },
+      {
+        "id": 2,
+        "site_id": 1,
+        "product_id": 2,
+        "technieker_gebruiker_id": 2,
+        "code": "B002",
+        "locatie": "Locatie 2",
+        "product_informatie": "Details of product B",
+        "status": "MANUEEL_GESTOPT",
+        "productie_status": "NOOD_ONDERHOUD"
+      }
+    ]
+  },
+  "sites": {
+    "items": [
+      {
+        "id": 1,
+        "naam": "Test Site",
+        "verantwoordelijke_id": 1,
+        "status": "INACTIEF"
+      }
+    ]
+  },
+  "producten": {
+    "items": [
+      {
+        "id": 1,
+        "naam": "Product A"
+      },
+      {
+        "id": 2,
+        "naam": "Product B"
+      }
+    ]
+  },
+  "notificaties": {
+    "items": [
+      {
+        "id": 1,
+        "tijdstip": "2025-03-12T10:30:00.000Z",
+        "bericht": "Onderhoud gepland voor machine A001",
+        "gelezen": false
+      }
+    ]
+  },
+  "kpis": {
+    "items": [
+      {
+        "id": 1,
+        "onderwerp": "Machine uptime"
+      }
+    ]
+  },
+  "dashboard": {
+    "items": [
+      {
+        "id": 1,
+        "gebruiker_id": 1,
+        "kpi_id": 1
+      }
+    ]
+  },
+  "kpiWaarden": {
+    "items": [
+      {
+        "id": 1,
+        "datum": "2025-03-12T00:00:00.000Z",
+        "waarde": "98%",
+        "kpi_id": 1
+      }
+    ]
+  },
+  "onderhouds": {
+    "items": [
+      {
+        "onderhoud_id": 1,
+        "machine_id": 1,
+        "technieker_gebruiker_id": 2,
+        "datum": "2025-03-12T08:00:00.000Z",
+        "starttijdstip": "2025-03-12T08:00:00.000Z",
+        "eindtijdstip": "2025-03-12T12:00:00.000Z",
+        "reden": "Preventief onderhoud",
+        "status": "IN_UITVOERING",
+        "opmerkingen": "Geen bijzonderheden"
+      }
+    ]
+  }
+}
