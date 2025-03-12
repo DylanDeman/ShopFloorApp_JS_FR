@@ -1,12 +1,14 @@
 import Information from '../../components/Information';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 import { useNavigate, useParams } from 'react-router-dom';
-import useSWR from 'swr';
+import useSWR, {mutate} from 'swr';
 import { getById } from '../../api/index';
 import AsyncData from '../../components/AsyncData';
 import { FaArrowLeft } from 'react-icons/fa';
 import MachineInfoHeader from '../../components/machines/MachineInfoHeader';
+import useSWRMutation from 'swr/mutation';
 import MaintenanceTable from '../../components/machines/MaintenanceTableMachine';
+import { save } from '../../api/index';
 
 const MachineDetail = () => {
   const navigate = useNavigate();
@@ -23,7 +25,36 @@ const MachineDetail = () => {
     error: machineError,
     isLoading: MachineLoading,
   } = useSWR(id ? `machines/${idAsNumber}` : null, getById);
-  console.log(machine);
+  
+  const {
+    trigger: changeMachineStatus,
+    isMutating,
+  } = useSWRMutation('machines', save, {method: 'PUT'});
+
+  const toggleMachineStatus = async () => {
+    let status;
+    if(machine.status === 'DRAAIT'){
+      status = 'MANUEEL_GESTOPT';
+    } else {
+      status = 'DRAAIT';
+    }
+    await changeMachineStatus(
+      {
+        id: machine.id,
+        site_id: machine.site.id, 
+        product_id: machine.product_id, 
+        technieker_gebruiker_id: machine.technieker.id, 
+        code: machine.code, 
+        locatie: machine.locatie,
+        status: status,
+        productie_status: machine.productie_status,
+      },
+    );
+    // machine status gets refetched so the displayed status is up to date
+    mutate(`machines/${idAsNumber}`);
+    // notifications also get updated
+    mutate('notificaties');
+  };
 
   const siteData = [
     { 
@@ -107,11 +138,21 @@ const MachineDetail = () => {
           </div>
 
           <div className="mt-14">
-            <button 
-              className="w-full bg-red-500 hover:bg-red-600 
-              font-bold py-3 md:py-4 text-xl md:text-3xl px-4 
-              border border-black rounded ">
-              STOP
+            <button
+              disabled={isMutating}
+              onClick={toggleMachineStatus}
+              className={`w-full 
+                ${machine.status === 'DRAAIT' ? 
+      'bg-red-500 enabled:hover:bg-red-600' : 
+      'bg-green-500 enabled:hover:bg-green-600'} 
+                font-bold py-3 md:py-4 text-xl md:text-3xl px-4 
+                border border-black rounded flex justify-center items-center`}
+            >
+              {isMutating 
+                ? 'Even geduld...' 
+                : machine.status === 'DRAAIT' 
+                  ? 'STOP' 
+                  : 'START'}
             </button>
             <span className="block mt-2 text-sm md:text-base text-center md:text-left">
               Verantwoordelijke wordt verwittigd
