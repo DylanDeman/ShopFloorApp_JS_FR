@@ -51,3 +51,8 @@ export const getDashboardByUserID = async (user_id) => {
   const {data } = await axios.get(`users/${user_id}/dashboard`);  
   return data.items;
 };
+
+export const getKPIsByRole = async (role) => {
+  const { data } = await axios.get(`kpi/rol/${role}`);
+  return data.items;
+};
