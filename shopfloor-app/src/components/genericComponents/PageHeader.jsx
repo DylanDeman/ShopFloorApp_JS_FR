@@ -2,7 +2,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 
 export default function PageHeader({ title, onBackClick }) {
   return (
-    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 mb-6 md:mb-12">
+    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 mb-6 md:mb-12 mt-10">
       <button 
         className="text-gray-700 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100 self-start"
         onClick={onBackClick}
