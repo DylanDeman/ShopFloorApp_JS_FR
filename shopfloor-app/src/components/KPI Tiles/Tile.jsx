@@ -57,7 +57,7 @@ const Tile = ({ id, title, content, onDelete, graphType, machines }) => {
           </div>
         );
       }
-      case 'LIST': {
+      case 'TOP5': {
         if (kpiWaarden.length === 0 || machines.length === 0) {
           return <p className="text-gray-500">Geen data beschikbaar.</p>;
         }
@@ -80,7 +80,9 @@ const Tile = ({ id, title, content, onDelete, graphType, machines }) => {
               filteredMachines.map((machine) =>
                 <li key={machine.id}>
                   {`code: ${machine.code}\n`}
+                  <br/>
                   {`locatie: ${machine.locatie}\n`}
+                  <br/>
                   {`status: ${machine.status}\n`}
                 </li>,
               )
