@@ -8,7 +8,7 @@ const Sites = () => {
   const navigate = useNavigate();
   
   const handleAddSite = () => {
-    navigate(`/sites/create`);
+    navigate('/sites/create');
   };
   
   return (
