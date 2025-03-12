@@ -74,3 +74,27 @@ export const getKPIsByRole = async (role) => {
   const { data } = await axios.get(`kpi/rol/${role}`);
   return data.items;
 };
+
+export const getAllVerantwoordelijken = async () => {
+  const { data } = await axios.get('/users');
+  
+  // Filter users with the role 'verantwoordelijke'
+  const verantwoordelijkeUsers = data.items.filter((user) => user.role === 'verantwoordelijke');
+  
+  return verantwoordelijkeUsers;
+};
+
+export const getAllMachines = async () => {
+  const { data } = await axios.get('/machines');
+  return data.items; 
+};
+
+export const updateSite = async (id, siteData) => {
+  const { data } = await axios.put(`/sites/${id}`, siteData);
+  return data;
+};
+
+export const createSite = async (siteData) => {
+  const {data} = await axios.post('sites/', siteData);
+  return data;
+};
