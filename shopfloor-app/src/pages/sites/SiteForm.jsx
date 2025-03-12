@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getAll, updateSite } from '../../api';
+import { useNavigate } from 'react-router-dom';
+import { getAll, createSite } from '../../api';
 import AsyncData from '../../components/AsyncData';
 import { FaArrowLeft } from 'react-icons/fa';
 import { 
@@ -11,25 +11,29 @@ import {
   MdKeyboardArrowUp, 
   MdKeyboardArrowLeft,
   MdKeyboardDoubleArrowUp, 
-  MdKeyboardDoubleArrowLeft } from 'react-icons/md';
+  MdKeyboardDoubleArrowLeft, 
+} from 'react-icons/md';
+import { useParams } from 'react-router-dom';
+import { updateSite } from '../../api';
 
-export default function SiteBeheren() {
+export default function SiteForm() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const isNewSite = !id || id === 'new';
+  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [formData, setFormData] = useState({ 
-    naam: '', 
-    verantwoordelijke_id: '', 
-    status: 'ACTIEF', 
+  const [formData, setFormData] = useState({
+    naam: '',
+    verantwoordelijke_id: '',
+    status: 'ACTIEF',
     machines_ids: [],
   });
   const [verantwoordelijken, setVerantwoordelijken] = useState([]);
-  const [locatie, setLocatie] = useState('');
   const [availableMachines, setAvailableMachines] = useState([]);
   const [selectedMachines, setSelectedMachines] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
-  
+
   const formatMachineDisplay = (machine) => {
     if (machine.code && machine.locatie) {
       return `${machine.code} - ${machine.locatie}`;
@@ -40,26 +44,17 @@ export default function SiteBeheren() {
     if (machine.locatie) {
       return machine.locatie;
     }
+    return `Machine #${machine.id}`;
   };
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const siteData = await getAll(`sites/${id}`);
-        console.log('Fetched Site Data:', siteData);
-        
-        setFormData({
-          naam: siteData.naam || '',
-          verantwoordelijke_id: siteData.verantwoordelijke?.id || '',
-          status: siteData.status || 'ACTIEF',
-          machines_ids: siteData.machines?.map((m) => m.id) || [],
-        });
-  
         const [verantwoordelijkenData, machinesResponse] = await Promise.all([
           getAll('users'),
           getAll('machines'),
         ]);
-  
+
         // Filter users to only include those with the role 'VERANTWOORDELIJKE'
         const filteredVerantwoordelijken = Array.isArray(verantwoordelijkenData.items)
           ? verantwoordelijkenData.items.filter((user) => {
@@ -83,24 +78,39 @@ export default function SiteBeheren() {
           })
           : [];
         
-        console.log('Filtered users:', filteredVerantwoordelijken);
         setVerantwoordelijken(filteredVerantwoordelijken);
-  
+        
         const machinesData = Array.isArray(machinesResponse.items) 
           ? machinesResponse.items 
           : (Array.isArray(machinesResponse) ? machinesResponse : []);
         
-        if (siteData && siteData.machines) {
-          const siteIds = Array.isArray(siteData.machines) 
-            ? siteData.machines.map((m) => m.id) 
-            : [];
-            
-          const selected = machinesData.filter((machine) => siteIds.includes(machine.id));
-          const available = machinesData.filter((machine) => !siteIds.includes(machine.id));
-  
-          setAvailableMachines(available);
-          setSelectedMachines(selected);
+        // If editing existing site, fetch its data
+        if (!isNewSite) {
+          const siteData = await getAll(`sites/${id}`);
+          
+          setFormData({
+            naam: siteData.naam || '',
+            verantwoordelijke_id: siteData.verantwoordelijke?.id || '',
+            status: siteData.status || 'ACTIEF',
+            machines_ids: siteData.machines?.map((m) => m.id) || [],
+          });
+
+          if (siteData && siteData.machines) {
+            const siteIds = Array.isArray(siteData.machines) 
+              ? siteData.machines.map((m) => m.id) 
+              : [];
+              
+            const selected = machinesData.filter((machine) => siteIds.includes(machine.id));
+            const available = machinesData.filter((machine) => !siteIds.includes(machine.id));
+    
+            setAvailableMachines(available);
+            setSelectedMachines(selected);
+          } else {
+            setAvailableMachines(machinesData);
+            setSelectedMachines([]);
+          }
         } else {
+          // For new site, all machines are available
           setAvailableMachines(machinesData);
           setSelectedMachines([]);
         }
@@ -113,7 +123,7 @@ export default function SiteBeheren() {
     }
   
     fetchData();
-  }, [id]);
+  }, [id, isNewSite]);
   
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -158,30 +168,36 @@ export default function SiteBeheren() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Update site and pass the selected machine IDs
-      await updateSite(id, { 
-        ...formData, 
+      const siteData = {
+        ...formData,
         machines_ids: selectedMachines.map((m) => m.id),
-      });
-  
-      // Show success message
-      setSuccessMessage('Site succesvol bijgewerkt!');
-  
+      };
+
+      if (isNewSite) {
+        // Create new site
+        await createSite(siteData);
+        setSuccessMessage('Site succesvol toegevoegd!');
+      } else {
+        // Update existing site
+        await updateSite(id, siteData);
+        setSuccessMessage('Site succesvol bijgewerkt!');
+      }
+      
       // Redirect after 2 seconds
       setTimeout(() => {
         navigate('/sites');
       }, 2000);
     } catch (err) {
-      console.error('Update failed:', err);
-      setError('Er is een fout opgetreden bij het bijwerken van de site.');
+      console.error(`${isNewSite ? 'Creation' : 'Update'} failed:`, err);
+      setError(`Er is een fout opgetreden bij het ${isNewSite ? 'toevoegen' : 'bijwerken'} van de site.`);
     }
   };
 
   const handleOnClickBack = () => {
     navigate('/sites');
   };
-  const isNewSite = id === 'new';
-  const pageTitle = isNewSite ? 'Nieuwe site aanmaken' : `${formData.naam} wijzigen`;
+  
+  const pageTitle = isNewSite ? 'Nieuwe site toevoegen' : `${formData.naam} wijzigen`;
 
   return (
     <AsyncData loading={loading} error={error}>
@@ -191,17 +207,18 @@ export default function SiteBeheren() {
             className="text-gray-700 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100 self-start"
             onClick={handleOnClickBack}
             aria-label="Go back"
+            data-cy="back-button"
           >
             <FaArrowLeft size={20} className="md:text-2xl" />
           </button>
             
           <h1 className="text-2xl md:text-4xl font-semibold"> 
-            Site | {pageTitle}
+            {isNewSite ? pageTitle : `Site | ${pageTitle}`}
           </h1>
         </div>
         
         {successMessage && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" data-cy="success-message">
             {successMessage}
           </div>
         )}
@@ -209,7 +226,7 @@ export default function SiteBeheren() {
         <div className="bg-white p-3 md:p-6 border rounded">
           <h2 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-6">Informatie</h2>
           
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} data-cy="site-form">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
               <div>
                 <label className="block text-gray-700 mb-2">Naam</label>
@@ -221,6 +238,7 @@ export default function SiteBeheren() {
                   className="w-full p-2 border rounded"
                   placeholder="naam van de site"
                   required
+                  data-cy="site-name"
                 />
               </div>
 
@@ -232,6 +250,7 @@ export default function SiteBeheren() {
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
                   required
+                  data-cy="verantwoordelijke-select"
                 >
                   <option value="">Selecteer verantwoordelijke</option>
                   {verantwoordelijken.map((verantwoordelijke) => (
@@ -249,6 +268,7 @@ export default function SiteBeheren() {
                   value={formData.status}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
+                  data-cy="status-select"
                 >
                   <option value="ACTIEF">Actief</option>
                   <option value="INACTIEF">Inactief</option>
@@ -268,6 +288,7 @@ export default function SiteBeheren() {
                   multiple
                   className="w-full h-36 md:h-48 border rounded p-2"
                   size="8"
+                  data-cy="available-machines"
                 >
                   {availableMachines.map((machine) => (
                     <option key={machine.id} value={machine.id}>
@@ -278,13 +299,12 @@ export default function SiteBeheren() {
               </div>
               
               {/* Control buttons - horizontal on mobile, vertical on desktop */}
-              <div className="w-full md:w-2/12 flex flex-row md:flex-col justify-center items-center
-               space-x-2 md:space-x-0 md:space-y-2">
+              <div className="w-full md:w-2/12 flex flex-row md:flex-col justify-center items-center space-x-2 md:space-x-0 md:space-y-2">
                 <button
                   type="button"
-                  className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded w-14 md:w-16 text-center
-                   flex justify-center items-center"
+                  className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded w-14 md:w-16 text-center flex justify-center items-center"
                   onClick={moveToSelected}
+                  data-cy="move-to-selected"
                 >
                   <span className="block md:hidden">
                     <MdKeyboardArrowDown size={18} />
@@ -295,10 +315,9 @@ export default function SiteBeheren() {
                 </button>
                 <button
                   type="button"
-                  className="bg-gray-200 hover:bg-gray-300 px-3 py-1 
-                  rounded w-14 md:w-16 text-center flex 
-                  justify-center items-center"
+                  className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded w-14 md:w-16 text-center flex justify-center items-center"
                   onClick={moveAllToSelected}
+                  data-cy="move-all-to-selected"
                 >
                   <span className="block md:hidden">
                     <MdKeyboardDoubleArrowDown size={18} />
@@ -309,9 +328,9 @@ export default function SiteBeheren() {
                 </button>
                 <button
                   type="button"
-                  className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded w-14 md:w-16
-                   text-center flex justify-center items-center"
+                  className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded w-14 md:w-16 text-center flex justify-center items-center"
                   onClick={moveToAvailable}
+                  data-cy="move-to-available"
                 >
                   <span className="block md:hidden">
                     <MdKeyboardArrowUp size={18} />
@@ -322,9 +341,9 @@ export default function SiteBeheren() {
                 </button>
                 <button
                   type="button"
-                  className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded w-14 md:w-16 
-                  text-center flex justify-center items-center"
+                  className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded w-14 md:w-16 text-center flex justify-center items-center"
                   onClick={moveAllToAvailable}
+                  data-cy="move-all-to-available"
                 >
                   <span className="block md:hidden">
                     <MdKeyboardDoubleArrowUp size={18} />
@@ -342,6 +361,7 @@ export default function SiteBeheren() {
                   multiple
                   className="w-full h-36 md:h-48 border rounded p-2"
                   size="8"
+                  data-cy="selected-machines"
                 >
                   {selectedMachines.map((machine) => (
                     <option key={machine.id} value={machine.id}>
@@ -356,6 +376,7 @@ export default function SiteBeheren() {
               <button 
                 type="submit" 
                 className="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                data-cy="submit-button"
               >
                 Opslaan
               </button>
