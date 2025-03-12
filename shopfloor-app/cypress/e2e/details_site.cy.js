@@ -93,3 +93,91 @@ describe('Machine Details Page', () => {
   });
 });
 
+// describe('Machine Start and Stop E2E Tests', () => {
+//   beforeEach(() => {
+//     // Intercept login request and get user details
+//     cy.intercept('POST', 'http://localhost:9000/api/sessions').as('loginRequest');
+//     cy.intercept('GET', 'http://localhost:9000/api/users/me').as('getUser');
+
+//     // Login before tests
+//     cy.login('robert.devree@hotmail.com', '123456789');
+
+//     // Load the fixture data for site and machines
+//     cy.intercept('GET', 'http://localhost:9000/api/sites/1', { fixture: 'siteDetails.json' }).as('getSiteDetails');
+
+//     // Intercept machine details based on the fixture data
+//     cy.fixture('siteDetails.json').then((data) => {
+//       cy.intercept('GET', 'http://localhost:9000/api/machines/1', {
+//         statusCode: 200,
+//         body: data.machines[0], // Machine A from fixture
+//       }).as('getMachineA');
+      
+//       cy.intercept('GET', 'http://localhost:9000/api/machines/2', {
+//         statusCode: 200,
+//         body: data.machines[1], // Machine B from fixture
+//       }).as('getMachineB');
+
+//       // Mock machine status update API
+//       cy.intercept('PUT', 'http://localhost:9000/api/machines', (req) => {
+//         const updatedStatus = req.body.status === 'DRAAIT' ? 'MANUEEL_GESTOPT' : 'DRAAIT';
+//         req.body.status = updatedStatus; // Toggle the status based on action
+//       }).as('updateMachineStatus');
+      
+//       // Visit Machine A's detail page
+//       cy.visit('http://localhost:5173/machines/1');
+//       cy.wait('@getMachineA');
+//     });
+//   });
+
+//   it('should stop a running machine', () => {
+//     // Verify initial machine status is "DRAAIT" (Running)
+//     cy.get('[data-cy="machine_details"]').should('contain.text', 'DRAAIT');
+
+//     // Simulate stopping the machine
+//     cy.get('[data-cy="start-stop-button"]').contains('STOP').click();
+//     cy.wait('@updateMachineStatus');
+
+//     // Mock the updated status to "MANUEEL_GESTOPT"
+//     cy.intercept('GET', 'http://localhost:9000/api/machines/1', {
+//       statusCode: 200,
+//       body: {
+//         ...Cypress._.merge({}, {
+//           id: 1,
+//           status: 'MANUEEL_GESTOPT',
+//         }),
+//       },
+//     }).as('getUpdatedMachine');
+
+//     // Check that the button now shows "START"
+//     cy.get('[data-cy="start-stop-button"]').contains('START');
+//     cy.get('[data-cy="machine_details"]').should('contain.text', 'MANUEEL_GESTOPT');
+//   });
+
+//   it('should start a stopped machine', () => {
+//     // Navigate to Machine B's detail page (initial status: "MANUEEL_GESTOPT")
+//     cy.visit('http://localhost:5173/machines/2');
+//     cy.wait('@getMachineB');
+
+//     // Verify initial machine status is "MANUEEL_GESTOPT"
+//     cy.get('[data-cy="machine_details"]').should('contain.text', 'MANUEEL_GESTOPT');
+
+//     // Simulate starting the machine
+//     cy.get('[data-cy="start-stop-button"]').contains('START').click();
+//     cy.wait('@updateMachineStatus');
+
+//     // Mock the updated status to "DRAAIT"
+//     cy.intercept('GET', 'http://localhost:9000/api/machines/2', {
+//       statusCode: 200,
+//       body: {
+//         ...Cypress._.merge({}, {
+//           id: 2,
+//           status: 'DRAAIT',
+//         }),
+//       },
+//     }).as('getUpdatedMachine');
+
+//     // Check that the button now shows "STOP"
+//     cy.get('[data-cy="start-stop-button"]').contains('STOP');
+//     cy.get('[data-cy="machine_details"]').should('contain.text', 'DRAAIT');
+//   });
+// });

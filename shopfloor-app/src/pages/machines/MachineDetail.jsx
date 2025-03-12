@@ -139,6 +139,7 @@ const MachineDetail = () => {
 
           <div className="mt-14">
             <button
+              data-cy='start-stop-button'
               disabled={isMutating}
               onClick={toggleMachineStatus}
               className={`w-full 
