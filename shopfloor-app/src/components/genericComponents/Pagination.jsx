@@ -1,32 +1,50 @@
-import { FaArrowRightLong } from "react-icons/fa6";
-import { FaArrowLeftLong } from "react-icons/fa6";
+import { FaArrowRightLong } from 'react-icons/fa6';
+import { FaArrowLeftLong } from 'react-icons/fa6';
 
-export function Pagination({currentPage, setCurrentPage, data, loading}){
+export function Pagination({currentPage, setCurrentPage, totalPages, data}){
+  const handlePageChange = (newPage) => {
+    if(data && totalPages >= newPage && newPage > 0){
+      setCurrentPage(newPage);
+    }
+  };
 
-    const handlePageChange = (newPage) => {
-        if(data.totalPages >= newPage){
-            setCurrentPage(newPage);
-        }
-      };
+  // Om te bepalen of de vorige en volgende knoppen disabled mogen worden
+  const isPreviousDisabled = currentPage === 1 || !data;
+  const isNextDisabled = !data || currentPage >= totalPages;
 
-    return (
-        <div className="flex justify-center text-center gap-2">
-            <button className="flex items-center gap-1 transition-all font-bold hover:scale-110 hover:cursor-pointer"
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1 || loading}
-            >
-                <FaArrowLeftLong/>
-                Prev
-            </button>
-            <span className="font-semibold">Page {currentPage}</span>
-            <button className="flex items-center gap-1 transition-all font-bold hover:scale-110 hover:cursor-pointer"
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={loading}
-            >
-                Next
-                <FaArrowRightLong/>
-            </button>
-        </div>
-    )
+  return (
+    <div className="flex justify-between items-center w-full my-4">
+      {/* Vorige button */}
+      <button 
+        className={`flex items-center select-none gap-2 px-4 py-2 rounded-md transition-all duration-300
+          ${isPreviousDisabled 
+      ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+      : 'bg-red-500 hover:bg-red-600 hover:cursor-pointer text-white hover:shadow-lg hover:-translate-x-1'
+    }`}
+        onClick={() => handlePageChange(currentPage - 1)}
+        disabled={isPreviousDisabled}
+      >
+        <FaArrowLeftLong className="transition-transform"/>
+        <span>Vorige</span>
+      </button>
+
+      <div className="font-semibold select-none text-center px-4 py-2 rounded-full bg-gray-100">
+        {data ? `Pagina ${currentPage} van ${totalPages}` : 'Laden...'}
+      </div>
+      
+      {/* Volgende button */}
+      <button 
+        className={`flex items-center select-none gap-2 px-4 py-2 rounded-md transition-all duration-300
+          ${isNextDisabled 
+      ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+      : 'bg-red-500 hover:bg-red-600 hover:cursor-pointer text-white hover:shadow-lg hover:translate-x-1'
+    }`}
+        onClick={() => handlePageChange(currentPage + 1)}
+        disabled={isNextDisabled}
+      >
+        <span>Volgende</span>
+        <FaArrowRightLong className="transition-transform"/>
+      </button>
+    </div>
+  );
 }
-

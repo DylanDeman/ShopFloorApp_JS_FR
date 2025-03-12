@@ -4,7 +4,7 @@ describe('Sites Page', () => {
     cy.intercept('GET', 'http://localhost:9000/api/users/me').as('getUser');
     
     cy.fixture('sites.json').then((sitesData) => {
-      cy.intercept('GET', 'http://localhost:9000/api/sites?page=1&limit=10', { body: sitesData }).as('getSites');
+      cy.intercept('GET', 'http://localhost:9000/api/sites', { body: sitesData }).as('getSites');
     });
 
     cy.login('robert.devree@hotmail.com', '123456789');
@@ -20,24 +20,27 @@ describe('Sites Page', () => {
     cy.get('tbody tr').should('have.length', 3);
 
     cy.get('tbody tr').eq(0).within(() => {
-      cy.get('td').eq(1).should('contain', 'Site A'); // Naam
-      cy.get('td').eq(2).should('contain', 'Jan Janssen'); // Verantwoordelijke
-      cy.get('td').eq(3).should('contain', '5'); // Aantal Machines
+      cy.get('td').eq(1).should('contain', '1'); // ID
+      cy.get('td').eq(2).should('contain', 'Site A'); // Naam
+      cy.get('td').eq(3).should('contain', 'Jan Janssen'); // Verantwoordelijke
+      cy.get('td').eq(4).should('contain', '2'); // Aantal Machines
     });
     cy.get('tbody tr').eq(1).within(() => {
-      cy.get('td').eq(1).should('contain', 'Site B'); // Naam
-      cy.get('td').eq(2).should('contain', 'Piet Peeters'); // Verantwoordelijke
-      cy.get('td').eq(3).should('contain', '10'); // Aantal Machines
+      cy.get('td').eq(1).should('contain', '2'); // ID
+      cy.get('td').eq(2).should('contain', 'Site B'); // Naam
+      cy.get('td').eq(3).should('contain', 'Piet Peeters'); // Verantwoordelijke
+      cy.get('td').eq(4).should('contain', '1'); // Aantal Machines
     });
     cy.get('tbody tr').eq(2).within(() => {
-      cy.get('td').eq(1).should('contain', 'Site C'); // Naam
-      cy.get('td').eq(2).should('contain', 'Marie Dubois'); // Verantwoordelijke
-      cy.get('td').eq(3).should('contain', '3'); // Aantal Machines
+      cy.get('td').eq(1).should('contain', '3'); // ID
+      cy.get('td').eq(2).should('contain', 'Site C'); // Naam
+      cy.get('td').eq(3).should('contain', 'Marie Dubois'); // Verantwoordelijke
+      cy.get('td').eq(4).should('contain', '1'); // Aantal Machines
     });
   });
 
   it('should show "Er zijn geen sites beschikbaar." when no sites exist', () => {
-    cy.intercept('GET', 'http://localhost:9000/api/sites?page=1&limit=10', { body: { items: [] } }).as('emptySites');
+    cy.intercept('GET', 'http://localhost:9000/api/sites', { body: { items: [] } }).as('emptySites');
 
     cy.visit('http://localhost:5173/sites');
     cy.wait('@emptySites');
@@ -51,14 +54,14 @@ describe('Sites Page', () => {
     cy.wait(500); // Ensure sorting happens
 
     cy.get('tbody tr').first().within(() => {
-      cy.get('td').eq(3).should('contain', '3'); // Lowest count first
+      cy.get('td').eq(4).should('contain', '1'); // Lowest count first
     });
 
     cy.get('th').contains('Aantal machines').click();
     cy.wait(500); // Ensure sorting happens
 
     cy.get('tbody tr').first().within(() => {
-      cy.get('td').eq(3).should('contain', '10'); // Highest count first
+      cy.get('td').eq(4).should('contain', '2'); // Highest count first
     });
   });
 
@@ -79,11 +82,11 @@ describe('Sites Page', () => {
   it('should filter sites based on search query', () => {
     cy.get('[data-cy=sites_search]').should('be.visible').clear().type('Site A');
     cy.get('tbody tr').should('have.length', 1);
-    cy.get('tbody tr td').eq(1).should('contain', 'Site A');
+    cy.get('tbody tr td').eq(2).should('contain', 'Site A');
 
     cy.get('[data-cy=sites_search]').clear().type('Jan Janssen');
     cy.get('tbody tr').should('have.length', 1);
-    cy.get('tbody tr td').eq(2).should('contain', 'Jan Janssen');
+    cy.get('tbody tr td').eq(3).should('contain', 'Jan Janssen');
 
     cy.get('[data-cy=sites_search]').clear().type('Nonexistent Site');
     cy.get('tbody tr').should('have.length', 0);

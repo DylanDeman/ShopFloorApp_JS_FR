@@ -1,27 +1,42 @@
-import React, { useState } from 'react';
-import useSWR from 'swr';
-import { getAll } from '../../api';
-import AsyncData from '../../components/AsyncData';
 import SiteList from './SiteList';
-import { Pagination } from '../../components/genericComponents/Pagination';
-
+import Information from '../../components/Information';
+import { IoMdAddCircleOutline } from 'react-icons/io';
+import { IoInformationCircleOutline } from 'react-icons/io5';
+import { useNavigate } from 'react-router';
 const Sites = () => {
-  const [currentPage, setCurrentPage] = useState(1); // Tracks the current page
-  const limit = 10; 
 
-  const { data: paginatedData, loading, error } = useSWR(
-    `sites?page=${currentPage}&limit=${limit}`, 
-    getAll,
-  );
-
-  const sites = paginatedData?.items || [];
-  const pagination = paginatedData;
+  const navigate = useNavigate();
+  
+  const handleAddSite = () => {
+    navigate(`/sites/create`);
+  };
   
   return (
-    <AsyncData loading={loading} error={error}>
-      <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} data={pagination} loading={loading} error={error}/>
-      <SiteList sites={sites} loading={loading} error={error} />
-    </AsyncData>
+    <>
+      <div className="flex justify-between items-center mb-6 mt-10">
+        <h1 className="text-4xl font-semibold"> 
+          Overzicht sites 
+        </h1>
+        <button 
+          className="bg-red-500 hover:cursor-pointer hover:bg-red-700 
+          text-white font-bold py-2 px-4 
+          rounded flex items-center gap-2"
+          onClick={() => handleAddSite()}
+        >
+          <IoMdAddCircleOutline />
+          Site toevoegen
+        </button>
+      </div>
+
+      <Information 
+        info="Hieronder vindt u een overzicht van alle sites. 
+        Klik op een site om de details van de site te bekijken!"
+        icon={IoInformationCircleOutline}
+      />
+      
+      {/* Lijst met alle sites*/}
+      <SiteList/>
+    </>
   );
 };
 

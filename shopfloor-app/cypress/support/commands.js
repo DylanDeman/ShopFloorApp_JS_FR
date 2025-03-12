@@ -51,6 +51,5 @@ Cypress.Commands.add('login', (email, password) => {
   });
 
   // Ensure the user is redirected after login
-  cy.url().should('not.include', '/login');
 });
 

@@ -7,14 +7,16 @@ import Layout from './pages/Layout.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Sites from './pages/sites/Sites';
 import Machines from './pages/Machines.jsx';
+import MachineDetail from './pages/machines/MachineDetail.jsx';
 import Notificaties from './pages/Notificaties/Notificaties.jsx';
 import Login from './pages/Login.jsx';
 import SiteDetail from './pages/sites/SiteDetail.jsx';
 import SiteGrondplan from './pages/sites/SiteGrondplan.jsx';
-
 import { AuthProvider } from './contexts/Auth.context';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import Logout from './pages/Logout.jsx';
+import SiteBeheren from './pages/sites/SiteBeheren.jsx';
+import SiteToevoegen from './pages/sites/SiteToevoegen.jsx';
 
 const router = createBrowserRouter([
   {
@@ -57,6 +59,15 @@ const router = createBrowserRouter([
             path: ':id/grondplan',
             element: <SiteGrondplan />,
           },
+          {
+            path: ':id/edit',
+            element: <SiteBeheren/>,
+          },
+          {
+            path: 'create',
+            element: <SiteToevoegen/>,
+
+          },
         ],
       },
       {
@@ -66,6 +77,10 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Machines />,
+          },
+          {
+            path: ':id',
+            element: <MachineDetail />,
           },
         ],
       },
