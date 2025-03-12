@@ -74,7 +74,7 @@ export const getAllVerantwoordelijken = async () => {
   const { data } = await axios.get('/users');
   
   // Filter users with the role 'verantwoordelijke'
-  const verantwoordelijkeUsers = data.items.filter(user => user.role === 'verantwoordelijke');
+  const verantwoordelijkeUsers = data.items.filter((user) => user.role === 'verantwoordelijke');
   
   return verantwoordelijkeUsers;
 };
@@ -90,6 +90,6 @@ export const updateSite = async (id, siteData) => {
 };
 
 export const createSite = async (siteData) => {
-  const {data} = await axios.post(`sites/`, siteData);
+  const {data} = await axios.post('sites/', siteData);
   return data;
 };
