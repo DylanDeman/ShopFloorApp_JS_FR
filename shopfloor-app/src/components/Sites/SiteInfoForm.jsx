@@ -25,7 +25,11 @@ export default function SiteInfoForm({ formData, verantwoordelijken, onChange })
           required
           data-cy="verantwoordelijke-select"
         >
-          <option value="">Selecteer verantwoordelijke</option>
+          <option 
+            value={verantwoordelijken.filter(
+              (verantwoordelijke) => verantwoordelijke.id == formData.verantwoordelijke_id).naam
+            }>
+            Selecteer verantwoordelijke</option>
           {verantwoordelijken.map((verantwoordelijke) => (
             <option key={verantwoordelijke.id} value={verantwoordelijke.id}>
               {verantwoordelijke.naam || verantwoordelijke.name || `User ${verantwoordelijke.id}`}
