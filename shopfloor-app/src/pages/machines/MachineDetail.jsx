@@ -12,10 +12,6 @@ import { save } from '../../api/index';
 
 const MachineDetail = () => {
   const navigate = useNavigate();
-  
-  const handleOnClickBack = () => {
-    navigate('/sites');
-  };
 
   const { id } = useParams();
   const idAsNumber = Number(id);
@@ -30,6 +26,10 @@ const MachineDetail = () => {
     trigger: changeMachineStatus,
     isMutating,
   } = useSWRMutation('machines', save, {method: 'PUT'});
+
+  const handleOnClickBack = () => {
+    navigate(`../../sites/${machine?.site.id}`);
+  };
 
   const toggleMachineStatus = async () => {
     let status;
