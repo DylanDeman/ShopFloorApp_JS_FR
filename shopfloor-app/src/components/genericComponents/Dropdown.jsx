@@ -7,7 +7,7 @@ export default function Dropdown({ label, options, onSelect }) {
     <div className="relative inline-block text-left">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none"
+        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 hover:cursor-pointer focus:outline-none"
       >
         {label}
       </button>
