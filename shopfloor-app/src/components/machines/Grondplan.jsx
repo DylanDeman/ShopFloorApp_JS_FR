@@ -60,10 +60,8 @@ const Grondplan = ({ machines }) => {
   const getIconColor = (status) => (status === 'DRAAIT' ? 'green' : 'red');
 
   return (
-    <div className="text-center relative p-6 bg-white" data-cy="grondplan">
-      <h2 className="text-3xl font-bold mb-4">Site Grondplan</h2>
-
-      <div className="flex justify-center border border-black rounded-lg relative overflow-hidden p-4 bg-gray-400"
+    <div className="text-center relative bg-white mb-10" data-cy="grondplan">
+      <div className="flex justify-center border py-2 border-black rounded-lg relative overflow-x-scroll bg-gray-400"
         data-cy="map">
         <div className="absolute top-[250px] left-[500px] w-[400px] h-[250px] bg-gray-700 
         border-4 border-gray-600 z-10 rounded-lg"></div>

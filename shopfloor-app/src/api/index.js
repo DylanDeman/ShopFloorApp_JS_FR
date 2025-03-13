@@ -70,6 +70,11 @@ export const getDashboardByUserID = async (user_id) => {
   return data.items;
 };
 
+export const getKPIsByRole = async (role) => {
+  const { data } = await axios.get(`kpi/rol/${role}`);
+  return data.items;
+};
+
 export const getAllVerantwoordelijken = async () => {
   const { data } = await axios.get('/users');
   
