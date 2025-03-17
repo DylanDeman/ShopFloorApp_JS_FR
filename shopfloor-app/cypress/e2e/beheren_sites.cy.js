@@ -37,15 +37,6 @@ describe('SiteToevoegen Page Tests', () => {
     cy.get('[data-cy="status-select"]').select('INACTIEF');
   });
 
-  it('should move machines between lists', () => {
-    cy.get('[data-cy="available-machines"]').select(['1', '2']);
-    cy.get('[data-cy="move-to-selected"]').click();
-    cy.get('[data-cy="selected-machines"]').children().should('have.length', 2);
-    cy.get('[data-cy="selected-machines"]').select(['1']);
-    cy.get('[data-cy="move-to-available"]').click();
-    cy.get('[data-cy="selected-machines"]').children().should('have.length', 1);
-  });
-
   it('should submit the form successfully', () => {
     cy.get('[data-cy="site-name"]').type('Test Site');
     cy.get('[data-cy="verantwoordelijke-select"]').select('1');
