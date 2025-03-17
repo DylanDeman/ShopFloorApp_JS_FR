@@ -34,7 +34,6 @@ export default function SiteForm() {
           getAll('machines'),
         ]);
 
-        // Filter users to only include those with the role 'VERANTWOORDELIJKE'
         const filteredVerantwoordelijken = filterVerantwoordelijken(verantwoordelijkenData.items);
         setVerantwoordelijken(filteredVerantwoordelijken);
         
@@ -84,13 +83,9 @@ export default function SiteForm() {
   const filterVerantwoordelijken = (users) => {
     return Array.isArray(users)
       ? users.filter((user) => {
-        // Handle the double-quoted JSON string format of the rol property
         try {
-          // First, try to parse it as JSON if it's a string
           if (typeof user.rol === 'string') {
-            // Remove any extra escape characters that might be in the console output
             const cleanedRol = user.rol.replace(/\\/g, '');
-            // Try to parse as JSON or just use the string directly
             const parsedRol = cleanedRol.startsWith('"') && cleanedRol.endsWith('"')
               ? cleanedRol.slice(1, -1) // Remove outer quotes
               : cleanedRol;
@@ -139,11 +134,9 @@ export default function SiteForm() {
       };
 
       if (isNewSite) {
-        // Create new site
         await createSite(siteData);
         setSuccessMessage('Site succesvol toegevoegd!');
       } else {
-        // Update existing site
         await updateSite(id, siteData);
         setSuccessMessage('Site succesvol bijgewerkt!');
       }
@@ -194,7 +187,8 @@ export default function SiteForm() {
             <div className="mt-6 md:mt-8">
               <button 
                 type="submit" 
-                className="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                className="w-full bg-[rgb(171,155,203)] hover:bg-[rgb(151,135,183)] text-white px-4 py-2 rounded"
+            
                 data-cy="submit-button"
               >
                 Opslaan

@@ -83,6 +83,7 @@ const Dashboard = () => {
             label={'+ Voeg een nieuwe KPI toe'}
             options={beschikbareKPIs}
             onSelect={addKPI}
+            
           />
         ) : (
           <>
