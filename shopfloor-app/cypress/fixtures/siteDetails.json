@@ -2,39 +2,54 @@
   "site": {
     "id": 1,
     "naam": "Test Site",
-    "status": "ACTIEF",
+    "status": "ACTIEF",  
     "verantwoordelijke": {
       "id": 1,
-      "naam": "Jan Janssen",
+      "naam": "Janssen",
       "voornaam": "Jan",
       "email": "janJanssen@example.com"
-    },
-    "aantalMachines": 2
+    }
   },
   "machines": [
     {
       "id": 1,
-      "site_id": 1,
-      "product_id": 1,
-      "technieker": {
+      "site": { 
         "id": 1,
-        "naam": "Jan Janssen",
+        "naam": "Test Site",
+        "verantwoordelijke": {
+          "id": 1,
+          "naam": "Janssen",
+          "voornaam": "Jan"
+        }
+      },
+      "product_id": 1,
+      "technieker": { 
+        "id": 1,
+        "naam": "Janssen",
         "voornaam": "Jan",
         "email": "janJanssen@example.com"
       },
       "code": "MACHINE_A",
       "locatie": "Warehouse",
       "product_informatie": "Machine A is een machine die ...",
-      "status": "DRAAIT",
+      "status": "DRAAIT",  
       "productie_status": "GEZOND"
     },
     {
       "id": 2,
-      "site_id": 1,
+      "site": { 
+        "id": 1,
+        "naam": "Test Site",
+        "verantwoordelijke": {
+          "id": 1,
+          "naam": "Janssen",
+          "voornaam": "Jan"
+        }
+      },
       "product_id": 2,
-      "technieker": {
+      "technieker": { 
         "id": 2,
-        "naam": "Piet Peeters",
+        "naam": "Peeters",
         "voornaam": "Piet",
         "email": "pietPeeters@example.com"
       },
