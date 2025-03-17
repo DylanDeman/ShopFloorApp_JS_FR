@@ -18,7 +18,7 @@ const Sites = () => {
           Overzicht sites 
         </h1>
         <button 
-          className=" hover:cursor-pointer bg-[rgb(171,155,203)] hover:bg-[rgb(151,135,183)] 
+          className="bg-red-500 hover:cursor-pointer hover:bg-red-700 
           text-white font-bold py-2 px-4 
           rounded flex items-center gap-2"
           onClick={() => handleAddSite()}
