@@ -1,7 +1,7 @@
 import Dropdown from '../components/genericComponents/Dropdown';
 import TileList from '../components/KPI Tiles/TileList';
 import useSWR from 'swr';
-import { getAll, getDashboardByUserID, deleteById, post } from '../api';
+import { getDashboardByUserID, deleteById, post, getKPIsByRole, getAll } from '../api';
 import AsyncData from '../components/AsyncData';
 import useSWRMutation from 'swr/mutation';
 import { useAuth } from '../contexts/auth';
@@ -17,10 +17,22 @@ const Dashboard = () => {
   } = useSWR(user_id, getDashboardByUserID);
 
   const {
+    data: machines = [],
+    loadingMachines,
+    errorMachines,
+  } = useSWR('machines', getAll);
+
+  const {
+    data: onderhouden = [],
+    loadingOnderhouden,
+    errorOnderhouden,
+  } = useSWR('onderhouden', getAll);
+
+  const {
     data: kpis = [],
     loading: loadingkpi,
     error: errorkpi,
-  } = useSWR('kpi', getAll);
+  } = useSWR(user ? user.rol : null, getKPIsByRole);
 
   const {
     trigger: deleteKPI, error: deleteError,
@@ -59,23 +71,27 @@ const Dashboard = () => {
     }
   };
 
-  const selectedKpiIds = new Set(dashboards.map((d) => d.kpi_id));
-
-  const selectedTiles = Array.isArray(kpis.items) ? kpis.items.filter((kpi) => selectedKpiIds.has(kpi.id)) : [];
-
-  const availableKpis = Array.isArray(kpis.items) ? kpis.items.filter((kpi) => !selectedKpiIds.has(kpi.id)) : [];
+  const gekozenKPIids = new Set(dashboards.map((d) => d.kpi_id));
+  const gekozenKPIs = Array.isArray(kpis) ? kpis.filter((kpi) => gekozenKPIids.has(kpi.id)) : [];
+  const beschikbareKPIs = Array.isArray(kpis) ? kpis.filter((kpi) => !gekozenKPIids.has(kpi.id)) : [];
 
   return (
     <div className="p-6">
       <AsyncData loading={loadingkpi} error={errorkpi}>
-        <Dropdown
-          label={'+ Voeg een nieuwe KPI toe'}
-          options={availableKpis}
-          onSelect={addKPI}
-        />
+        {beschikbareKPIs.length > 0 ? (
+          <Dropdown
+            label={'+ Voeg een nieuwe KPI toe'}
+            options={beschikbareKPIs}
+            onSelect={addKPI}
+          />
+        ) : (
+          <>
+          </>
+        )}
       </AsyncData>
-      <AsyncData loading={loading} error={error}>
-        <TileList tiles={selectedTiles} onDelete={handleDelete} />
+      <AsyncData loading={loading || loadingMachines || loadingOnderhouden}
+        error={error || errorMachines || errorOnderhouden}>
+        <TileList tiles={gekozenKPIs} onDelete={handleDelete} machines={machines} onderhouden={onderhouden} />
       </AsyncData>
     </div>
   );

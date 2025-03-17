@@ -34,8 +34,13 @@ const Login = () => {
   return (
     <div className="flex flex-col items-center min-h-screen bg-cover bg-center"
       style={{ backgroundImage: 'url(\'/login_achtergrond.svg\')' }}>
+      <img
+        src='/delaware_logo.png'
+        alt="Delaware Logo"
+        className="w-60 md:w-70 mt-15 mb-3 drop-shadow-lg"
+      />
       <div className="flex flex-col md:flex-row bg-white bg-opacity-90
-       p-8 rounded-lg shadow-lg w-11/12 max-w-4xl mt-15">
+       p-8 rounded-lg shadow-lg w-11/12 max-w-4xl">
         <div className="w-full md:w-1/2 p-6">
           <h2 className="text-2xl font-bold mb-4">WELKOM!</h2>
           <p className="text-gray-600 text-sm mb-4">

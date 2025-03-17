@@ -1,7 +1,7 @@
 import useSWRMutation from 'swr/mutation';
 import { save } from '../../api';
 
-export default function Notificatie({id, tijdstip, bericht}){
+export default function Notificatie({id, tijdstip, bericht, gelezen}){
 
   const {
     trigger: markAsRead,
@@ -21,7 +21,10 @@ export default function Notificatie({id, tijdstip, bericht}){
       <div className='flex flex-col w-full'>
         <p className='font-semibold'>Datum: {tijdstipString}</p>
         <p>{bericht}</p>
-        <p className='font-semibold hover:cursor-pointer' onClick={handleMarkAsRead}>Markeer as gelezen</p>
+        {
+          gelezen ? '' : <p className='font-semibold hover:cursor-pointer' 
+            onClick={handleMarkAsRead}>Markeer as gelezen</p>
+        }
       </div>
       <div className='flex items-center justify-end pl-4'>
         <p className='hover:cursor-pointer font-semibold transition-all hover:scale-105'>Bekijk</p>

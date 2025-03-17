@@ -54,7 +54,6 @@ export default function SiteList({ loading: parentLoading, error: parentError })
     if (!sortConfig.field) return machines;
     
     const sortedMachines = [...machines]; 
-    console.log(sortConfig.field);
     const integerFields = ['id', 'aantal_machines'];
     const sortFn = integerFields.includes(sortConfig.field) ? sortInteger : sortString;
     
