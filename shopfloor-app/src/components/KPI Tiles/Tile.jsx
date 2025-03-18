@@ -16,6 +16,7 @@ import AsyncData from '../AsyncData';
 import { Suspense, useState } from 'react';
 import { useAuth } from '../../contexts/auth';
 import Loader from '../Loader';
+import { useNavigate } from 'react-router-dom';
 
 const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }) => {
   const { data: kpiWaarden = [], loading, error } = useSWR(id, getKPIWaardenByKPIid);
@@ -23,6 +24,8 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
 
   const { user } = useAuth();
   const user_id = user ? user.id : null;
+
+  const navigate = useNavigate();
 
   const handleDelete = () => {
     onDelete(id);
@@ -72,8 +75,6 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
         const siteGezondheden = formattedData.filter((kpi) => kpi?.site_id != null);
         const selectedSiteData = siteGezondheden.filter((kpi) => Number(kpi?.site_id) === selectedSite);
 
-        console.log(selectedSiteData);
-
         return (
           <div className="space-y-4">
             <div className="mb-4">
@@ -101,7 +102,7 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
                   {selectedSiteData.length === 0 ? '' : ' ' + selectedSiteData[0].site_id}
                 </h3>
                 <p className="text-9xl font-bold text-blue-500">
-                  {selectedSiteData.length === 0 ? '' : `${(selectedSiteData[0].value * 100)}%`}
+                  {selectedSiteData.length === 0 ? '' : `${(selectedSiteData[0].value * 100).toFixed(0)}%`}
                 </p>
               </Suspense>
             </div>
@@ -124,50 +125,53 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
           return <p className="text-gray-500">Geen data beschikbaar.</p>;
         }
 
-        const mostRecentKPI = kpiWaarden.sort((a, b) => new Date(b.datum) - new Date(a.datum)).slice(0, 1);
+        const mostRecentKPI = kpiWaarden
+          .sort((a, b) => new Date(b.datum) - new Date(a.datum))
+          .slice(0, 1);
 
         const firstFiveIDs = mostRecentKPI
           .flatMap((kpi) => kpi.waarde.split(',').map(Number))
           .slice(0, 5);
 
         const machineList = machines.items;
-
         const filteredMachines = machineList.filter((machine) =>
           firstFiveIDs.includes(machine.id),
         );
 
         return (
-          <ul className="list-disc list-inside text-gray-700">
+          <div className="space-y-4">
             {filteredMachines.length > 0 ? (
-              filteredMachines.map((machine) =>
-                <li key={machine.id}>
-                  {`code: ${machine.code}\n`}
-                  <br />
-                  {`locatie: ${machine.locatie}\n`}
-                  <br />
-                  {`status: ${machine.status}\n`}
-                </li>,
-              )
+              filteredMachines.map((machine) => (
+                <div key={machine.id} className="border rounded-lg p-4 bg-gray-50 shadow cursor-pointer"
+                  onClick={() => navigate(`/machines/${machine.id}`)}>
+                  <h3 className="text-lg font-semibold text-blue-600">
+                    Machine {machine.id}
+                  </h3>
+                  <p className="text-gray-700">
+                    <strong>Code:</strong> {machine.code} <br />
+                    <strong>Locatie:</strong> {machine.locatie} <br />
+                    <strong>Status:</strong> {machine.status} <br />
+                    <strong>Product info:</strong> {machine.product_informatie} <br />
+                  </p>
+                </div>
+              ))
             ) : (
-              <p>Geen relevante machines gevonden.</p>
+              <p className="text-gray-500">Geen relevante machines gevonden.</p>
             )}
-          </ul>
+          </div>
         );
       }
+
       case 'TOP5OND': {
         if (kpiWaarden.length === 0 || onderhouden.length === 0) {
-          console.log(kpiWaarden);
-
           return <p className="text-gray-500">Geen data beschikbaar.</p>;
         }
 
         const onderhoudList = onderhouden.items;
 
         const filteredOnderhouden = onderhoudList.filter((onderhoud) => {
-          onderhoud.technieker_gebruiker_id == user_id;
+          onderhoud.technieker_gebruiker_id === user_id;
         });
-
-        console.log(filteredOnderhouden);
 
         return (
           <ul className="list-disc list-inside text-gray-700">
