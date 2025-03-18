@@ -1,13 +1,32 @@
 import { FiBell } from 'react-icons/fi';
 import NotificatieListDropdown from './NotificatieListDropdown';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function NotificatieNavbar({ notificaties }) {
   const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setShowDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showDropdown]);
 
   if (!notificaties) {
     return (
@@ -29,7 +48,7 @@ export default function NotificatieNavbar({ notificaties }) {
       </div>
 
       {showDropdown && (
-        <div className="absolute right-0 mt-2 z-50">
+        <div ref={dropdownRef} className="absolute right-0 mt-2 z-50">
           <NotificatieListDropdown notificaties={notificaties} toggleDropdown={toggleDropdown} />
         </div>
       )}
