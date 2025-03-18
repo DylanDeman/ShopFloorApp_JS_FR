@@ -16,6 +16,7 @@ import { AuthProvider } from './contexts/Auth.context';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import Logout from './pages/Logout.jsx';
 import SiteForm from './pages/sites/SiteForm.jsx';
+import Onderhouden from './pages/onderhouden/Onderhouden.jsx';
 
 const router = createBrowserRouter([
   {
@@ -66,6 +67,20 @@ const router = createBrowserRouter([
             path: 'create',
             element: <SiteForm/>,
 
+          },
+        ],
+      },
+      {
+        path: '/machines_onderhouden',
+        element: <PrivateRoute/>,
+        children: [
+          {
+            index: true,
+            element: <Machines />,
+          },
+          {
+            path: ':id',
+            element: <Onderhouden />,
           },
         ],
       },
