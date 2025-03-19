@@ -33,7 +33,7 @@ const SiteDetails = () => {
     error: siteError,
     isLoading: siteLoading,
   } = useSWR(id ? `sites/${idAsNumber}` : null, getById);
-  
+    
   return (
     <>
       <AsyncData error={siteError} loading={siteLoading}>
