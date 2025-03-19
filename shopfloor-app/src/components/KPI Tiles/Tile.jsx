@@ -22,6 +22,8 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
   const { data: kpiWaarden = [], loading, error } = useSWR(id, getKPIWaardenByKPIid);
   const [selectedSite, setSelectedSite] = useState(null);
 
+  //TODO UITLIJNEN KNOP MET TILES 
+
   const { user } = useAuth();
   const user_id = user ? user.id : null;
 
@@ -101,7 +103,7 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
                 <h3 className="text-xl font-semibold mb-2">Site
                   {selectedSiteData.length === 0 ? '' : ' ' + selectedSiteData[0].site_id}
                 </h3>
-                <p className="text-9xl font-bold text-blue-500">
+                <p className="text-8xl font-bold text-blue-500">
                   {selectedSiteData.length === 0 ? '' : `${(selectedSiteData[0].value * 100).toFixed(0)}%`}
                 </p>
               </Suspense>
@@ -169,22 +171,31 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
 
         const onderhoudList = onderhouden.items;
 
-        const filteredOnderhouden = onderhoudList.filter((onderhoud) => {
-          onderhoud.technieker_gebruiker_id === user_id;
-        });
+        const filteredOnderhouden = onderhoudList.filter((onderhoud) =>
+          onderhoud.technieker_gebruiker_id == user_id,
+        );
 
         return (
-          <ul className="list-disc list-inside text-gray-700">
+          <div className="space-y-4">
             {filteredOnderhouden.length > 0 ? (
-              filteredOnderhouden.map((onderhoud) =>
-                <li key={onderhoud.onderhoud_id}>
-                  {`id: ${onderhoud.onderhoud_id}\n`}
-                </li>,
-              )
+              filteredOnderhouden.map((onderhoud) => (
+                <div key={onderhoud.id} className="border rounded-lg p-4 bg-gray-50 shadow">
+                  <h3 className="text-lg font-semibold text-blue-600">
+                    Onderhoud {onderhoud.id}
+                  </h3>
+                  <p className="text-gray-700">
+                    <strong>Starttijd:</strong> {onderhoud.starttijdstip} <br />
+                    <strong>Eindtijd:</strong> {onderhoud.eindtijdstip} <br />
+                    <strong>Status:</strong> {onderhoud.status} <br />
+                    <strong>Reden:</strong> {onderhoud.reden} <br />
+                    <strong>Opmerkingen:</strong> {onderhoud.opmerkingen} <br />
+                  </p>
+                </div>
+              ))
             ) : (
-              <p>Geen relevante onderhouden gevonden.</p>
+              <p className="text-gray-500">Geen relevante machines gevonden.</p>
             )}
-          </ul>
+          </div>
         );
       }
       default:
