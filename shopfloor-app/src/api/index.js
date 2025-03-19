@@ -98,3 +98,8 @@ export const createSite = async (siteData) => {
   const {data} = await axios.post('sites/', siteData);
   return data;
 };
+
+export const createMachine = async(machineData) => {
+  const {data} = await axios.post('machines/', machineData);
+  return data;
+};

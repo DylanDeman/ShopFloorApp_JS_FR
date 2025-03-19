@@ -8,6 +8,7 @@ import useSWR from 'swr';
 import { getById } from '../../api/index';
 import AsyncData from '../../components/AsyncData';
 import { FaArrowLeft } from 'react-icons/fa';
+import { IoMdAddCircleOutline } from 'react-icons/io';
 
 const SiteDetails = () => {
   const navigate = useNavigate();
@@ -18,6 +19,10 @@ const SiteDetails = () => {
 
   const handleOnClickBack = () => {
     navigate('/sites');
+  };
+
+  const handleAddMachine = () => {
+    navigate(`/sites/${id}/machines/create`);
   };
 
   const { id } = useParams();
@@ -46,16 +51,26 @@ const SiteDetails = () => {
               Site | {site.naam}
             </h1>
           </div>
-  
-          <button 
-            className="bg-red-500 hover:cursor-pointer hover:bg-red-700 
-              text-white font-bold py-2 px-4 
-              rounded flex items-center gap-2"
-            onClick={() => handleShowGrondplan()}
-          >
-            <FaMapMarkedAlt />
-            Bekijk grondplan
-          </button>
+          <div className="flex gap-4 items-center">
+            <button 
+              className="bg-red-500 hover:cursor-pointer hover:bg-red-700 
+                text-white font-bold py-2 px-4 
+                rounded flex items-center gap-2"
+              onClick={() => handleShowGrondplan()}
+            >
+              <FaMapMarkedAlt />
+              Bekijk grondplan
+            </button>
+            <button 
+              className="bg-red-500 hover:cursor-pointer hover:bg-red-700 
+                text-white font-bold py-2 px-4 
+                rounded flex items-center gap-2"
+              onClick={() => handleAddMachine()}
+            >
+              <IoMdAddCircleOutline />
+              Machine toevoegen
+            </button>
+          </div>
         </div>
 
         <Information 
