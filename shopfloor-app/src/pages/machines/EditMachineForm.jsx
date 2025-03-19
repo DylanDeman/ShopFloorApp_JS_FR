@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getAll, createMachine } from '../../api';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getById, updateMachine, getAll } from '../../api';
 import AsyncData from '../../components/AsyncData';
-import { useParams } from 'react-router-dom';
 import PageHeader from '../../components/genericComponents/PageHeader';
 import SuccessMessage from '../../components/sites/SuccesMessage';
 
-export default function MachineForm() {
-  const { id, machineId } = useParams();  // `id` is the site ID, `machineId` is the machine ID
+export default function EditMachineForm() {
+  const { id } = useParams(); // Get machine ID from URL
   const navigate = useNavigate();
-  const isNewMachine = !machineId || machineId === 'new';
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
+  
   const [formData, setFormData] = useState({
     code: '',
     locatie: '',
@@ -21,59 +21,77 @@ export default function MachineForm() {
     technieker_gebruiker_id: '',
     product_id: '',
     product_informatie: '',
-    site_id: id,
+    //site_id: '',
   });
 
   const [techniekers, setTechniekers] = useState([]);
   const [products, setProducts] = useState([]);
-  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     async function fetchData() {
       try {
+        
+        const machineData = await getById('machines', id);
+        
+        // Set form data
+        setFormData({
+          code: machineData.code || '',
+          locatie: machineData.locatie || '',
+          status: machineData.status || 'DRAAIT',
+          productie_status: machineData.productie_status || 'GEZOND',
+          technieker_gebruiker_id: machineData.technieker_gebruiker_id || '',
+          product_id: machineData.product_id || '',
+          product_informatie: machineData.product_informatie || '',
+          site_id: machineData.site_id || '',
+        });
+
+        // Fetch techniekers and products
         const [techniekersData, productsData] = await Promise.all([
           getAll('users'),
           getAll('producten'),
         ]);
-  
-        // Filter and set techniekers
+
+        // Filter techniekers
         const filteredTechniekers = techniekersData.items.filter((user) => user.rol === 'TECHNIEKER');
         setTechniekers(filteredTechniekers);
-  
+        
         // Set products
         setProducts(productsData.items);
       } catch (err) {
-        console.error('Error in fetchData:', err);
+        console.error('Error fetching data:', err);
         setError(err.message || 'Er is een fout opgetreden');
       } finally {
         setLoading(false);
       }
     }
-  
+
     fetchData();
   }, [id]);
-  
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Exclude site_id from the update request
+    const { site_id, ...updatedFormData } = formData;
+    
     try {
-      const machineData = { ...formData };
-
-      await createMachine(machineData);
-      setSuccessMessage('Machine succesvol toegevoegd!');
+      await updateMachine(id, updatedFormData);
+      setSuccessMessage('Machine succesvol bijgewerkt!');
       
+      // Store the previous page in the state and navigate back to it
       setTimeout(() => {
-        navigate(-1); // Redirect to machines list after 2 seconds
+        navigate(-1); // Go back to the previous page
       }, 2000);
     } catch (err) {
-      console.error('Creation failed:', err);
-      setError('Er is een fout opgetreden bij het toevoegen van de machine.');
+      console.error('Update failed:', err);
+      setError('Er is een fout opgetreden bij het bijwerken van de machine.');
     }
   };
-
+  
   const handleOnClickBack = () => {
     navigate(-1);
   };
@@ -81,10 +99,7 @@ export default function MachineForm() {
   return (
     <AsyncData loading={loading} error={error}>
       <div className="p-2 md:p-4">
-        <PageHeader 
-          title={isNewMachine ? 'Nieuwe machine toevoegen' : 'Machine wijzigen'}
-          onBackClick={handleOnClickBack}
-        />
+        <PageHeader title="Machine wijzigen" onBackClick={handleOnClickBack} />
         
         {successMessage && <SuccessMessage message={successMessage} />}
         
@@ -92,7 +107,6 @@ export default function MachineForm() {
           <h2 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-6">Machine Informatie</h2>
           
           <form onSubmit={handleSubmit} data-cy="machine-form">
-            {/* Machine Form Inputs */}
             <div className="mb-4">
               <label htmlFor="code" className="block text-sm font-medium text-gray-700">Machine Code</label>
               <input 
@@ -119,6 +133,7 @@ export default function MachineForm() {
 
             <div className="mb-4">
               <label htmlFor="technieker_gebruiker_id" className="block text-sm font-medium text-gray-700">Technieker
+
               </label>
               <select 
                 name="technieker_gebruiker_id" 
@@ -156,7 +171,7 @@ export default function MachineForm() {
 
             <div className="mb-4">
               <label htmlFor="product_informatie" className="block text-sm font-medium text-gray-700">Product Informatie
-
+                
               </label>
               <textarea 
                 name="product_informatie" 

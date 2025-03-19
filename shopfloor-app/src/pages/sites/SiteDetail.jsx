@@ -22,7 +22,7 @@ const SiteDetails = () => {
   };
 
   const handleAddMachine = () => {
-    navigate(`/sites/${id}/machines/create`);
+    navigate(`/sites/${id}/machines/new`);
   };
 
   const { id } = useParams();

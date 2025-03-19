@@ -103,3 +103,8 @@ export const createMachine = async(machineData) => {
   const {data} = await axios.post('machines/', machineData);
   return data;
 };
+
+export const updateMachine = async(id, machineData) => {
+  const {data}  = await axios.put(`/machines/${id}`, machineData);
+  return data;
+};

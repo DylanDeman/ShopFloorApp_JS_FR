@@ -176,13 +176,13 @@ export default function SiteForm() {
               onChange={handleChange}
             />
             
-            <h2 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-6">Machines</h2>
+            {/*<h2 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-6">Machines</h2>
             
             <MachineSelector
               availableMachines={availableMachines}
               selectedMachines={selectedMachines}
               onMachineMove={handleMachineMove}
-            />
+            /> */}
             
             <div className="mt-6 md:mt-8">
               <button 
