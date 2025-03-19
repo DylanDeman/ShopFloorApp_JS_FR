@@ -17,6 +17,7 @@ import PrivateRoute from './components/PrivateRoute.jsx';
 import Logout from './pages/Logout.jsx';
 import SiteForm from './pages/sites/SiteForm.jsx';
 import MachineForm from './pages/machines/MachineForm.jsx';
+import EditMachineForm from './pages/machines/EditMachineForm.jsx';
 
 const router = createBrowserRouter([
   {
@@ -64,7 +65,7 @@ const router = createBrowserRouter([
             element: <SiteForm/>,
           },
           {
-            path:':id/machines/create',
+            path:':id/machines/new',
             element: <MachineForm/>,
 
           },
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
           {
             path: ':id',
             element: <MachineDetail />,
+          },
+          {
+            path: ':id/edit',
+            element: <EditMachineForm/>,
           },
         ],
       },
