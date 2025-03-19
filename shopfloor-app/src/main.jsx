@@ -16,6 +16,7 @@ import { AuthProvider } from './contexts/Auth.context';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import Logout from './pages/Logout.jsx';
 import SiteForm from './pages/sites/SiteForm.jsx';
+import MachineForm from './pages/machines/MachineForm.jsx';
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,11 @@ const router = createBrowserRouter([
           {
             path: ':id/edit',
             element: <SiteForm/>,
+          },
+          {
+            path:':id/machines/create',
+            element: <MachineForm/>,
+
           },
           {
             path: 'create',

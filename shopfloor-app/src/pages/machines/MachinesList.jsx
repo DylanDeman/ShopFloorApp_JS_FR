@@ -65,7 +65,10 @@ export default function MachineList({machinesData}) {
           : 'asc',
     }));
   };
-  
+
+  const handleEditMachine = (id) => {
+    navigate(`/machines/${id}/edit`);
+  };  
   const handleSearch = (e) => {
     setZoekterm(e.target.value);
   };
@@ -126,6 +129,7 @@ export default function MachineList({machinesData}) {
           machines={paginatedMachines}
           onShow={handleShow}
           onSort={handleSort}
+          onEdit={handleEditMachine}
           sortConfig={sortConfig}
         />
         
