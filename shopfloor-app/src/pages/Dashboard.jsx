@@ -1,14 +1,16 @@
 import Dropdown from '../components/genericComponents/Dropdown';
 import TileList from '../components/KPI Tiles/TileList';
 import useSWR from 'swr';
-import { getDashboardByUserID, deleteById, post, getKPIsByRole, getAll } from '../api';
+import { getDashboardByUserID, deleteById, post, getAll, getById } from '../api';
 import AsyncData from '../components/AsyncData';
 import useSWRMutation from 'swr/mutation';
 import { useAuth } from '../contexts/auth';
 
 const Dashboard = () => {
   const { user } = useAuth();
+
   const user_id = user ? user.id : null;
+  const role = user ? user.rol : null;
 
   const {
     data: dashboards = [],
@@ -32,7 +34,7 @@ const Dashboard = () => {
     data: kpis = [],
     loading: loadingkpi,
     error: errorkpi,
-  } = useSWR(user ? user.rol : null, getKPIsByRole);
+  } = useSWR(`kpi/rol/${role}`, getById);
 
   const {
     trigger: deleteKPI, error: deleteError,
@@ -72,8 +74,11 @@ const Dashboard = () => {
   };
 
   const gekozenKPIids = new Set(dashboards.map((d) => d.kpi_id));
-  const gekozenKPIs = Array.isArray(kpis) ? kpis.filter((kpi) => gekozenKPIids.has(kpi.id)) : [];
-  const beschikbareKPIs = Array.isArray(kpis) ? kpis.filter((kpi) => !gekozenKPIids.has(kpi.id)) : [];
+  const gekozenKPIs = Array.isArray(kpis.items) ? kpis.items.filter((kpi) => gekozenKPIids.has(kpi.id)) : [];
+
+  const beschikbareKPIs = Array.isArray(kpis.items) ? kpis.items.filter((kpi) => !gekozenKPIids.has(kpi.id)) : [];
+
+  console.log(kpis);
 
   return (
     <div className="p-6">
@@ -83,7 +88,7 @@ const Dashboard = () => {
             label={'+ Voeg een nieuwe KPI toe'}
             options={beschikbareKPIs}
             onSelect={addKPI}
-            
+
           />
         ) : (
           <>
