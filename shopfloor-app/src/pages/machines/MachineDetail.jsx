@@ -98,65 +98,100 @@ const MachineDetail = () => {
           icon={IoInformationCircleOutline}
         />
 
-        <div data-cy="machine_details" className="border p-4 rounded-lg mt-4 w-full">
-          {/* Algemene machine informatie */}
-          <MachineInfoHeader machine={machine} />
+        <div className='grid-cols-6 grid gap-4 gap-y-6 grid-flow-col mb-12'>
+          <div data-cy="machine_details" className="col-span-4 border p-4 rounded-lg mt-4">
+            {/* Algemene machine informatie */}
+            <MachineInfoHeader machine={machine} />
         
-          {/* Machine data grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 gap-y-6">
+            {/* Machine data grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 gap-y-6">
 
-            {/* Site data grid */}
-            {siteData.map((site, index) => (
-              <div key={index} className="flex flex-col">
-                <span className="text-lg font-medium mb-1">{site.label}</span>
-                <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
-                  {site.value}
+              {/* Site data grid */}
+              {siteData.map((site, index) => (
+                <div key={index} className="flex flex-col">
+                  <span className="text-lg font-medium mb-1">{site.label}</span>
+                  <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
+                    {site.value}
+                  </span>
+                </div>
+              ))}
+
+              {/* Onderhoudstabel */}
+              <MaintenanceTable />
+
+              {/* Product informatie */}
+              <div className="flex flex-col col-span-1 sm:col-span-2 row-span-2 mb-2">
+                <span className="text-lg font-medium mb-1">Product informatie</span>
+                <span className="text-lg bg-gray-200 
+                pl-5 pr-3 py-2 max-h-48 min-h-48 rounded overflow-y-auto">
+                  {machine.product_informatie}
                 </span>
               </div>
-            ))}
-
-            {/* Onderhoudstabel */}
-            <MaintenanceTable />
-
-            {/* Product informatie */}
-            <div className="flex flex-col col-span-1 sm:col-span-2 row-span-2 mb-2">
-              <span className="text-lg font-medium mb-1">Product informatie</span>
-              <span className="text-lg bg-gray-200 
-                pl-5 pr-3 py-2 max-h-48 min-h-48 rounded overflow-y-auto">
-                {machine.product_informatie}
-              </span>
-            </div>
     
-            <div className="flex flex-col col-span-1 sm:col-span-2 mb-2 justify-end">
-              <span className="text-lg font-medium mb-1">Volgend geplande onderhoud</span>
-              <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
-                09/02/2025
-              </span>
+              <div className="flex flex-col col-span-1 sm:col-span-2 mb-2 justify-end">
+                <span className="text-lg font-medium mb-1">Volgend geplande onderhoud</span>
+                <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
+                  09/02/2025
+                </span>
+              </div>
+
             </div>
 
           </div>
 
-          <div className="mt-14">
-            <button
-              data-cy='start-stop-button'
-              disabled={isMutating}
-              onClick={toggleMachineStatus}
-              className={`w-full 
+          {/* Machine Status */}
+          <div className="border p-4 rounded-lg mt-4 col-span-2">
+            <h2 className="text-2xl md:text-3xl font-semibold mb-2">Productie informatie</h2>
+
+            <div className="flex flex-col">
+              <span className="text-lg font-medium mb-1">qsdf</span>
+              <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
+                qdsf
+              </span>
+            </div>
+
+            <div className="flex flex-col">
+              <span className="text-lg font-medium mb-1">qsdf</span>
+              <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
+                qdsf
+              </span>
+            </div>
+            
+            <div className="flex flex-col">
+              <span className="text-lg font-medium mb-1">qsdf</span>
+              <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
+                qdsf
+              </span>
+            </div>
+
+            <div className="flex flex-col">
+              <span className="text-lg font-medium mb-1">qsdf</span>
+              <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
+                qdsf
+              </span>
+            </div>
+            <div className="mt-14">
+              <button
+                data-cy='start-stop-button'
+                disabled={isMutating}
+                onClick={toggleMachineStatus}
+                className={`w-full 
                 ${machine.status === 'DRAAIT' ? 
       'bg-red-500 enabled:hover:bg-red-600' : 
       'bg-green-500 enabled:hover:bg-green-600'} 
                 font-bold py-3 md:py-4 text-xl md:text-3xl px-4 
                 border border-black rounded flex justify-center items-center`}
-            >
-              {isMutating 
-                ? 'Even geduld...' 
-                : machine.status === 'DRAAIT' 
-                  ? 'STOP' 
-                  : 'START'}
-            </button>
-            <span className="block mt-2 text-sm md:text-base text-center md:text-left">
-              Verantwoordelijke wordt verwittigd
-            </span>
+              >
+                {isMutating 
+                  ? 'Even geduld...' 
+                  : machine.status === 'DRAAIT' 
+                    ? 'STOP' 
+                    : 'START'}
+              </button>
+              <span className="block mt-2 text-sm md:text-base text-center md:text-left">
+                Verantwoordelijke wordt verwittigd
+              </span>
+            </div>
           </div>
         </div>
       </AsyncData>
