@@ -78,8 +78,6 @@ const Dashboard = () => {
 
   const beschikbareKPIs = Array.isArray(kpis.items) ? kpis.items.filter((kpi) => !gekozenKPIids.has(kpi.id)) : [];
 
-  console.log(kpis);
-
   return (
     <div className="p-6">
       <AsyncData loading={loadingkpi} error={errorkpi}>

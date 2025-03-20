@@ -131,12 +131,17 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
       }
 
       case 'GEZONDHEID': {
-        const lastValue = formattedData.length > 0 ?
-          formattedData[formattedData.length - 1].value : 'N/A';
+        const lastValue = formattedData.length > 0
+          ? formattedData[formattedData.length - 1].value
+          : 'N/A';
+
+        const percentage = lastValue !== 'N/A'
+          ? `${(parseFloat(lastValue) * 100).toFixed(0)}%`
+          : 'N/A';
 
         return (
           <div className="flex items-center justify-center h-full">
-            <p className="text-9xl font-bold text-blue-500">{lastValue * 100 + '%'}</p>
+            <p className="text-9xl font-bold text-blue-500">{percentage}</p>
           </div>
         );
       }
@@ -252,8 +257,6 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
       }
 
       case 'AANKOND': {
-        console.log(kpiWaarden.items);
-
         const kpiIds = kpiWaarden?.items?.map((kpi) => kpi.waarde.split(',').map(Number)).flat() || [];
 
         const onderhoudList = onderhouden.items;
