@@ -11,8 +11,11 @@
     "test": "cypress open"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^4.3.0",
     "@tailwindcss/vite": "^4.0.7",
     "axios": "^1.7.9",
+    "buffer": "^6.0.3",
+    "file-saver": "^2.0.5",
     "konva": "^9.3.18",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -23,6 +26,7 @@
     "react-router-dom": "~6.26.0",
     "react-spinners": "^0.15.0",
     "recharts": "^2.15.1",
+    "rollup-plugin-node-polyfills": "^0.2.1",
     "swr": "^2.3.2",
     "tailwindcss": "^4.0.7"
   },

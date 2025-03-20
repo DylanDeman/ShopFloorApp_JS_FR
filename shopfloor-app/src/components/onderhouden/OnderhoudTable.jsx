@@ -1,6 +1,7 @@
 import OnderhoudRow from './OnderhoudRow';
 
 export default function OnderhoudTable({
+  machine,
   onderhouden, 
   show, 
   onSort, 
@@ -37,6 +38,7 @@ export default function OnderhoudTable({
         <tbody data-cy="site-details">
           {onderhouden.map((onderhoud) => (
             <OnderhoudRow
+              machine={machine}
               onShow={show}
               key={onderhoud.id} 
               data={onderhoud} 
