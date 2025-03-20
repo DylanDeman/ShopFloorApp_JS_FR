@@ -103,8 +103,7 @@ export default function SiteList({ loading: parentLoading, error: parentError })
 
   const filteredSites = processedSites.filter((site) =>
     site.naam?.toLowerCase().includes(zoekterm.toLowerCase()) ||
-    (`${site.verantwoordelijke?.voornaam} ${site.verantwoordelijke?.naam}`)
-      .toLowerCase().includes(zoekterm.toLowerCase()),
+    site.verantwoordelijke?.toLowerCase().includes(zoekterm.toLowerCase()),
   );
 
   const sortedMachines = sortSites(filteredSites);
