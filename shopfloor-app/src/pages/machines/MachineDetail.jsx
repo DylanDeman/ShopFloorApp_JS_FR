@@ -41,7 +41,6 @@ const MachineDetail = () => {
     await changeMachineStatus(
       {
         id: machine.id,
-        site_id: machine.site.id, 
         product_id: machine.product_id, 
         technieker_gebruiker_id: machine.technieker.id, 
         code: machine.code, 
