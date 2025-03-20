@@ -145,7 +145,12 @@ export default function OnderhoudenList({machine}){
         </button>
         <h1 className="text-4xl font-semibold flex">Onderhoudshistoriek [{machine.code}]</h1>
       </div>
-      <OnderhoudTable onderhouden={sortedOnderhouden} onSort={handleSort} sortConfig={sortConfig} show={handleShow}/>
+      <OnderhoudTable 
+        machine={machine} 
+        onderhouden={sortedOnderhouden} 
+        onSort={handleSort} 
+        sortConfig={sortConfig} 
+        show={handleShow}/>
       <Pagination 
         currentPage={currentPage} 
         setCurrentPage={setCurrentPage} 
