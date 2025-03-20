@@ -42,5 +42,42 @@
         "code": "B001"
       }
     ]
+  },
+  "sites": {
+    "items": [
+      {
+        "id": 1,
+        "naam": "Test Site",
+        "verantwoordelijke_id": 1, 
+        "status": "ACTIEF",
+        "machines": [
+          {
+            "id": 1,
+            "naam": "Machine A",
+            "status": "ACTIEF",
+            "locatie": "Locatie 1",
+            "code": "A001"
+          },
+          {
+            "id": 2,
+            "naam": "Machine B",
+            "status": "INACTIEF",
+            "locatie": "Locatie 2",
+            "code": "B001"
+          }
+        ],
+        "verantwoordelijke": {
+         "id": 1,
+        "naam": "Jansen",
+        "voornaam": "Pieter",
+        "geboortedatum": "1985-06-15T00:00:00Z",
+        "email": "pieter.jansen@example.com",
+        "wachtwoord": "hashedpassword123",
+        "gsm": "+31612345678",
+        "rol": "VERANTWOORDELIJKE",
+        "status": "ACTIEF"
+        }
+      }
+    ]
   }
 }
