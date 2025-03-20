@@ -5,7 +5,7 @@
       "naam": "Site A",
       "verantwoordelijke": {
         "id": 1,
-        "naam": "Jan Janssen",
+        "naam": "Janssen",
         "voornaam": "Jan",
         "email": "janJanssen@example.com"
       },
@@ -20,7 +20,7 @@
           "productie_status": "GEZOND",
           "technieker": {
             "id": 2,
-            "naam": "Piet Peeters",
+            "naam": "Peeters",
             "voornaam": "Piet",
             "email": "pietPeeters@example.com"
           }
@@ -34,7 +34,7 @@
           "productie_status": "FALEND",
           "technieker": {
             "id": 3,
-            "naam": "Marie Dubois",
+            "naam": "Dubois",
             "voornaam": "Marie",
             "email": "MarieDubois@example.com"
           }
@@ -46,7 +46,7 @@
       "naam": "Site B",
       "verantwoordelijke": {
         "id": 2,
-        "naam": "Piet Peeters",
+        "naam": "Peeters",
         "voornaam": "Piet",
         "email": "pietPeeters@example.com"
       },
@@ -61,7 +61,7 @@
           "productie_status": "NOOD_ONDERHOUD",
           "technieker": {
             "id": 1,
-            "naam": "Jan Janssen",
+            "naam": "Janssen",
             "voornaam": "Jan",
             "email": "janJanssen@example.com"
           }
@@ -73,7 +73,7 @@
       "naam": "Site C",
       "verantwoordelijke": {
         "id": 3,
-        "naam": "Marie Dubois",
+        "naam": "Dubois",
         "voornaam": "Marie",
         "email": "MarieDubois@example.com"
       },
@@ -88,7 +88,7 @@
           "productie_status": "GEZOND",
           "technieker": {
             "id": 2,
-            "naam": "Piet Peeters",
+            "naam": "Peeters",
             "voornaam": "Piet",
             "email": "pietPeeters@example.com"
           }
@@ -99,7 +99,7 @@
   "gebruikers": [
     {
       "id": 1,
-      "naam": "Jan Janssen",
+      "naam": "Janssen",
       "voornaam": "Jan",
       "email": "janJanssen@example.com",
       "gsm": "0478123456",
@@ -107,7 +107,7 @@
     },
     {
       "id": 2,
-      "naam": "Piet Peeters",
+      "naam": "Peeters",
       "voornaam": "Piet",
       "email": "pietPeeters@example.com",
       "gsm": "0478234567",
@@ -115,7 +115,7 @@
     },
     {
       "id": 3,
-      "naam": "Marie Dubois",
+      "naam": "Dubois",
       "voornaam": "Marie",
       "email": "MarieDubois@example.com",
       "gsm": "0478345678",

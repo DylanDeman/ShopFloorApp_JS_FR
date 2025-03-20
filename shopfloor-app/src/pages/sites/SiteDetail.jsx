@@ -37,7 +37,7 @@ const SiteDetails = () => {
   return (
     <>
       <AsyncData error={siteError} loading={siteLoading}>
-        <div className="flex justify-between items-center mb-6 mt-10">
+        <div data-cy="site-details" className="flex justify-between items-center mb-6 mt-10">
           <div className="flex items-center gap-4">
             <button 
               className="text-gray-700 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100"

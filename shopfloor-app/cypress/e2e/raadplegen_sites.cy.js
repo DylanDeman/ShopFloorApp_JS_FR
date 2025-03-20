@@ -20,22 +20,22 @@ describe('Sites Page', () => {
     cy.get('tbody tr').should('have.length', 3);
 
     cy.get('tbody tr').eq(0).within(() => {
-      cy.get('td').eq(1).should('contain', '1'); // ID
-      cy.get('td').eq(2).should('contain', 'Site A'); // Naam
-      cy.get('td').eq(3).should('contain', 'Jan Janssen'); // Verantwoordelijke
-      cy.get('td').eq(4).should('contain', '2'); // Aantal Machines
+      cy.get('td').eq(1).should('contain', '1'); 
+      cy.get('td').eq(2).should('contain', 'Site A'); 
+      cy.get('td').eq(3).should('contain', 'Jan Janssen'); 
+      cy.get('td').eq(4).should('contain', '2'); 
     });
     cy.get('tbody tr').eq(1).within(() => {
-      cy.get('td').eq(1).should('contain', '2'); // ID
-      cy.get('td').eq(2).should('contain', 'Site B'); // Naam
-      cy.get('td').eq(3).should('contain', 'Piet Peeters'); // Verantwoordelijke
-      cy.get('td').eq(4).should('contain', '1'); // Aantal Machines
+      cy.get('td').eq(1).should('contain', '2'); 
+      cy.get('td').eq(2).should('contain', 'Site B'); 
+      cy.get('td').eq(3).should('contain', 'Piet Peeters'); 
+      cy.get('td').eq(4).should('contain', '1'); 
     });
     cy.get('tbody tr').eq(2).within(() => {
-      cy.get('td').eq(1).should('contain', '3'); // ID
-      cy.get('td').eq(2).should('contain', 'Site C'); // Naam
-      cy.get('td').eq(3).should('contain', 'Marie Dubois'); // Verantwoordelijke
-      cy.get('td').eq(4).should('contain', '1'); // Aantal Machines
+      cy.get('td').eq(1).should('contain', '3'); 
+      cy.get('td').eq(2).should('contain', 'Site C'); 
+      cy.get('td').eq(3).should('contain', 'Marie Dubois'); 
+      cy.get('td').eq(4).should('contain', '1'); 
     });
   });
 
@@ -51,17 +51,15 @@ describe('Sites Page', () => {
 
   it('should allow sorting by Aantal Machines', () => {
     cy.get('th').contains('Aantal machines').click();
-    cy.wait(500); // Ensure sorting happens
 
     cy.get('tbody tr').first().within(() => {
-      cy.get('td').eq(4).should('contain', '1'); // Lowest count first
+      cy.get('td').eq(4).should('contain', '1'); 
     });
 
-    cy.get('th').contains('Aantal machines').click();
-    cy.wait(500); // Ensure sorting happens
+    cy.get('th').contains('Aantal machines').click(); 
 
     cy.get('tbody tr').first().within(() => {
-      cy.get('td').eq(4).should('contain', '2'); // Highest count first
+      cy.get('td').eq(4).should('contain', '2'); 
     });
   });
 
