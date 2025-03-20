@@ -5,6 +5,7 @@ const MachineTable = ({
   onShow, 
   onSort, 
   sortConfig, 
+  onEdit,
 }) => {
   if (machines.length === 0) {
     return (
@@ -14,7 +15,6 @@ const MachineTable = ({
     );
   }
 
-  // Helper functie om de header van de tabel te renderen met een juiste icoontje
   const renderSortableHeader = (label, field) => (
     <th 
       className="border border-gray-300 px-4 md:py-2 cursor-pointer select-none"
@@ -29,26 +29,28 @@ const MachineTable = ({
   );
 
   return (
-    <div className="overflow-x-auto" data-cy="machine-table-container">
-      <table className="border-separate border-spacing-0 rounded-md border border-gray-300 w-full" >
+    <div className="md:overflow-x-auto overflow-x-auto">
+      <table className="border-separate border-spacing-0 rounded-md border border-gray-300 w-full">
         <thead>
           <tr className="bg-gray-100 text-gray-700 uppercase text-sm font-semibold">
+            <th className="border border-gray-300 px-4 md:py-2 select-none"></th>
             {renderSortableHeader('Nr.', 'id')}
             {renderSortableHeader('Locatie', 'locatie')}
             {renderSortableHeader('Status', 'status')}
             {renderSortableHeader('Productiestatus', 'productie_status')}
             {renderSortableHeader('Technieker', 'technieker')}
-            <th className="border border-gray-300 px-4 md:py-2"></th>
+            <th></th>
           </tr>
         </thead>
-        <tbody data-cy="site-details">
+        <tbody>
           {machines.map((machine) => (
-            <TableRow 
+            <TableRow
               key={machine.id} 
-              data={machine} 
+              data={machine}
               columns={['id', 'locatie', 'status', 'productie_status', 'technieker']} 
               data-cy={`machine-row-${machine.id}`}
-              onShow={onShow}
+              onShow={onShow} 
+              onEdit={onEdit}
             />
           ))}
         </tbody>
