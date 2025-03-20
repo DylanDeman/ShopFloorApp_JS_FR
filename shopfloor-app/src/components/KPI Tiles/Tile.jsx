@@ -141,6 +141,39 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
         );
       }
 
+      case 'MACHLIST': {
+        if (kpiWaarden.length === 0 || machines.length === 0) {
+          return <p className="text-gray-500">Geen data beschikbaar.</p>;
+        }
+
+        const machineList = machines.items;
+        const filteredMachines = machineList.filter((machine) => machine.technieker?.id === user_id
+          || machine.site.verantwoordelijke.id === user_id);
+
+        return (
+          <div className="space-y-4">
+            {filteredMachines.length > 0 ? (
+              filteredMachines.map((machine) => (
+                <div key={machine.id} className="border rounded-lg p-4 bg-gray-50 shadow cursor-pointer"
+                  onClick={() => navigate(`/machines/${machine.id}`)}>
+                  <h3 className="text-lg font-semibold text-blue-600">
+                    Machine {machine.id}
+                  </h3>
+                  <p className="text-gray-700">
+                    <strong>Code:</strong> {machine.code} <br />
+                    <strong>Locatie:</strong> {machine.locatie} <br />
+                    <strong>Status:</strong> {machine.status} <br />
+                    <strong>Product info:</strong> {machine.product_informatie} <br />
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500">Geen relevante machines gevonden.</p>
+            )}
+          </div>
+        );
+      }
+
       case 'TOP5': {
         if (kpiWaarden.length === 0 || machines.length === 0) {
           return <p className="text-gray-500">Geen data beschikbaar.</p>;
@@ -226,7 +259,7 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
         const onderhoudList = onderhouden.items;
 
         const gefilterdeOnderhouden = onderhoudList.filter(
-          (onderhoud) => kpiIds.includes(onderhoud.id));
+          (onderhoud) => kpiIds.includes(onderhoud.id) && onderhoud.technieker_gebruiker_id === user_id);
 
         return (
           <div className='space-y-4'>
