@@ -57,7 +57,7 @@ const Navbar = () => {
         </div>
 
         <Link
-          to="/login"
+          to="/logout"
           className="ml-4 px-4 py-2 bg-red-500 text-white 
           font-semibold rounded-lg hover:bg-red-600 transition duration-300"
         >
