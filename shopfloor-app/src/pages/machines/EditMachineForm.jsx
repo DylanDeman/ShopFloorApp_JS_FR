@@ -42,7 +42,7 @@ export default function EditMachineForm() {
           product_id: data.product?.id || '',
           product_naam: data.product?.naam || '',
           product_informatie: data.product?.product_informatie || '',
-          limiet_voor_onderhoud: data.limiet_voor_onderhoud || 100,
+          limiet_voor_onderhoud: data.limiet_voor_onderhoud || 150,
         });
       },
     },
