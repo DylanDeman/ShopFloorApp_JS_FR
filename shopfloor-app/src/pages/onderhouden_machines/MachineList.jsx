@@ -15,12 +15,13 @@ export default function MachineList({machinesData}) {
   const [zoekterm, setZoekterm] = useState('');
   const rawDataMachines = machinesData || { items: [] };
   
-  const rawMachines = rawDataMachines.items.map((site) => ({
-    id: site.id,
-    locatie: site.locatie,
-    rawStatus: site.status,
-    rawProductieStatus: site.productie_status,
-    technieker: `${site.technieker.naam} ${site.technieker.voornaam}`,
+  const rawMachines = rawDataMachines.items.map((machine) => ({
+    id: machine.id,
+    locatie: machine.locatie,
+    aantal_onderhoudsbeurten: machine.onderhouden.length || 0,
+    rawStatus: machine.status,
+    rawProductieStatus: machine.productie_status,
+    technieker: `${machine.technieker.naam} ${machine.technieker.voornaam}`,
   }));
 
   const [sortConfig, setSortConfig] = useState({
@@ -77,12 +78,12 @@ export default function MachineList({machinesData}) {
     }));
   };
   
-  const handleShowOnderhouden = (id) => {
-    navigate(`./${id}`);
-  };
+  //const handleShowOnderhouden = (id) => {
+  //  navigate(`./${id}`);
+  //};
 
   const handleShow = (id) => {
-    navigate(`./${id}`);
+    navigate(`/machines/${id}`);
   };
 
   const handleSearch = (e) => {
@@ -114,6 +115,7 @@ export default function MachineList({machinesData}) {
     status: <StatusDisplay status={machine.rawStatus} />,
     productie_status: <ProductieStatusDisplay status={machine.rawProductieStatus} />,
     technieker: machine.technieker,
+    aantal_onderhoudsbeurten: machine.aantal_onderhoudsbeurten,
   }));
   
   return (
@@ -150,7 +152,7 @@ export default function MachineList({machinesData}) {
 
         <MachineTable
           machines={processedPaginatedMachines}
-          showOnderhouden={handleShowOnderhouden}
+          //showOnderhouden={handleShowOnderhouden}
           onShow={handleShow}
           onSort={handleSort}
           sortConfig={sortConfig}

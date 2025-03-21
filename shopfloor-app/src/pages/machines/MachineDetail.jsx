@@ -48,7 +48,7 @@ const MachineDetail = () => {
   };
 
   const handleOnClickBack = () => {
-    navigate(`../../sites/${machine?.site.id}`);
+    navigate(-1);
   };
 
   const toggleMachineStatus = async () => {
@@ -178,10 +178,14 @@ const MachineDetail = () => {
                   <span className="text-lg font-medium mb-1">Onderhoud</span>
                   <button 
                     onClick={() => navigate(`/machines_onderhouden/${machine.id}`)}
-                    className="text-lg bg-red-500 text-white pl-5 pr-3 py-1 rounded 
-                    hover:bg-red-600 transition-colors text-left hover:cursor-pointer"
+                    className={`text-lg pl-5 pr-3 py-1 rounded text-left transition-colors ${
+                      machine?.onderhouden?.length === 0 
+                        ? 'bg-gray-400 text-gray-200 cursor-not-allowed' 
+                        : 'bg-red-500 text-white hover:bg-red-600 hover:cursor-pointer'
+                    }`}
+                    disabled={machine?.onderhouden?.length === 0}
                   >
-                    Bekijk onderhouds historiek
+                    {machine?.onderhouden?.length === 0 ? 'Geen onderhoud gehad' : 'Bekijk onderhouds historiek'}
                   </button>
                 </div>
 
@@ -189,7 +193,7 @@ const MachineDetail = () => {
                 <div className="flex flex-col">
                   <span className="text-lg font-medium mb-1">Volgend geplande onderhoud</span>
                   <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
-                    09/02/2025
+                    [WIP]
                   </span>
                 </div>
               </div>

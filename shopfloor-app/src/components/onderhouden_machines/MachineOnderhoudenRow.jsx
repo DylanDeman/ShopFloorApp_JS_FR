@@ -1,6 +1,6 @@
 import { MdEdit } from 'react-icons/md';
 
-const MachineOnderhoudenRow = ({ data, columns, onShow, onEdit, onShowGrondplan, cellProps = () => ({}) }) => {
+const MachineOnderhoudenRow = ({ data, columns, onShow, onEdit, showOnderhouden, cellProps = () => ({}) }) => {
   return (
     <tr className="border border-gray-300 hover:bg-gray-50" data-cy={`table-row-${data.id}`}>
       {/* Edit Button */}
@@ -28,7 +28,27 @@ const MachineOnderhoudenRow = ({ data, columns, onShow, onEdit, onShowGrondplan,
         </td>
       ))}
 
-      {(onShow || onShowGrondplan) && (
+      {onShow  && (
+        <td className="border border-gray-300 px-1 py-1 text-center" data-cy={`table-actions-${data.id}`}>
+          <div className="inline-flex gap-2">
+            {onShow && (
+              <td className="border-gray-300 px-1 py-1 text-center">
+                <div
+                  className="inline-flex gap-2"
+                  onClick={() => onShow(data.id)}
+                  data-cy={`button-onderhouden-${data.id}`}
+                >
+                  <span className="font-bold hover:cursor-pointer hover:underline hover:text-red-700 transition-all">
+                    Bekijk
+                  </span>
+                </div>
+              </td>
+            )}
+          </div>
+        </td>
+      )}
+
+      {showOnderhouden  && (
         <td className="border border-gray-300 px-1 py-1 text-center" data-cy={`table-actions-${data.id}`}>
           <div className="inline-flex gap-2">
             {onShow && (
@@ -47,6 +67,7 @@ const MachineOnderhoudenRow = ({ data, columns, onShow, onEdit, onShowGrondplan,
           </div>
         </td>
       )}
+      
     </tr>
   );
 };

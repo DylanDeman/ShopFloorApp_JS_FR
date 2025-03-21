@@ -7,13 +7,22 @@ export default function OnderhoudTable({
   onSort, 
   sortConfig, 
 }) {
+  
+  if (onderhouden.length === 0) {
+    return (
+      <div className="flex justify-center items-center h-32" data-cy="no-onderhouden-message">
+        <h2 className="text-lg font-semibold text-gray-700">Er zijn geen onderhoudsbeurten beschikbaar.</h2>
+      </div>
+    );
+  }
+
   const renderSortableHeader = (label, field) => (
     <th 
-      className="border border-gray-300 px-2 sm:px-4 py-1 sm:py-2 cursor-pointer select-none"
+      className="border border-gray-300 px-4 md:py-2 cursor-pointer select-none"
       onClick={() => onSort(field)}
       data-cy={`column-${field}`}
     >
-      <span className="text-xs sm:text-sm md:text-base">{label}</span>
+      {label}
       {sortConfig.field === field ? 
         (sortConfig.direction === 'asc' ? ' 🔼' : ' 🔽') : 
         ''}
