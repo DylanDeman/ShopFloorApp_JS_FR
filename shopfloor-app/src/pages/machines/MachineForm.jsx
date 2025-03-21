@@ -18,7 +18,7 @@ export default function MachineForm() {
     locatie: '',
     status: 'DRAAIT',
     productie_status: 'GEZOND',
-    technieker_gebruiker_id: '',
+    technieker_id: '',
     product_id: '',
     product_informatie: '',
     site_id: id,

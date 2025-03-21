@@ -22,6 +22,7 @@ export default function SiteList({ loading: parentLoading, error: parentError })
   const processedSites = rawDataSites.map((site) => ({
     id: site.id,
     naam: site.naam,
+    status: site.status,
     verantwoordelijke: `${site.verantwoordelijke?.voornaam} ${site.verantwoordelijke?.naam}`,
     aantal_machines: site.machines ? site.machines?.length : 0,
   }));

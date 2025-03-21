@@ -15,7 +15,7 @@ export default function NotificatieListDropdown({ notificaties, toggleDropdown }
   
   return (
     <div className='bg-white shadow-md rounded'>
-      <div className="w-64 max-h-80 overflow-y-auto p-2">
+      <div className="w-128 max-h-80 overflow-y-auto p-2">
         <div className="p-3">
           <p className="font-bold">Notificaties</p>
         </div>

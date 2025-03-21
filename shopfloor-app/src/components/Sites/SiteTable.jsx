@@ -38,6 +38,7 @@ const SiteTable = ({
             {renderSortableHeader('Nr.', 'id')}
             {renderSortableHeader('Naam', 'naam')}
             {renderSortableHeader('Verantwoordelijke', 'verantwoordelijke')}
+            {renderSortableHeader('Status', 'status')}
             {renderSortableHeader('Aantal machines', 'aantal_machines')}
             <th></th>
           </tr>
@@ -47,7 +48,7 @@ const SiteTable = ({
             <TableRow
               key={site.id} 
               data={site}
-              columns={['id', 'naam', 'verantwoordelijke', 'aantal_machines']} 
+              columns={['id', 'naam' ,'verantwoordelijke', 'status', 'aantal_machines']} 
               onShow={onShow} 
               onEdit={onEdit}
             />

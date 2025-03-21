@@ -43,9 +43,9 @@ const OnderhoudRow = ({machine, data, columns, onEdit, cellProps = () => ({}) })
           <td key={index}
             className="border border-gray-300 px-4 md:py-2 text-center"
           >
-            <button className='hover:cursor-pointer hover:bg-[rgb(171,155,203)]
+            <button className='hover:cursor-pointer hover:bg-red-700
             ml-4 px-4 py-2 text-white 
-            font-semibold rounded-lg bg-[rgba(171,155,203,0.8)] transition duration-300'
+            font-semibold rounded-lg bg-red-500 transition duration-300'
             onClick={() => handleRapport(machine, data)}>Genereer rapport
             </button>
           </td>

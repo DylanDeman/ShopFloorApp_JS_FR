@@ -1,88 +1,94 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getById, updateMachine, getAll } from '../../api';
+import useSWR from 'swr';
 import AsyncData from '../../components/AsyncData';
 import PageHeader from '../../components/genericComponents/PageHeader';
 import SuccessMessage from '../../components/sites/SuccesMessage';
+import { getAll, getById, updateMachine } from '../../api';
 
 export default function EditMachineForm() {
   const { id } = useParams(); // Get machine ID from URL
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
+  const [error, setError] = useState(null);
   
   const [formData, setFormData] = useState({
     code: '',
-    locatie: '',
     status: 'DRAAIT',
     productie_status: 'GEZOND',
-    technieker_gebruiker_id: '',
+    locatie: '',
+    technieker_id: '',
+    site_id: '',
     product_id: '',
+    product_naam: '',
     product_informatie: '',
-    //site_id: '',
+    limiet_voor_onderhoud: 100,
   });
 
-  const [techniekers, setTechniekers] = useState([]);
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        
-        const machineData = await getById('machines', id);
-        
-        // Set form data
+  // Fetch machine data using SWR
+  const { data: machineData, error: machineError } = useSWR(
+    `/machines/${id}`,
+    () => getById(`/machines/${id}`),
+    {
+      onSuccess: (data) => {
         setFormData({
-          code: machineData.code || '',
-          locatie: machineData.locatie || '',
-          status: machineData.status || 'DRAAIT',
-          productie_status: machineData.productie_status || 'GEZOND',
-          technieker_gebruiker_id: machineData.technieker_gebruiker_id || '',
-          product_id: machineData.product_id || '',
-          product_informatie: machineData.product_informatie || '',
-          site_id: machineData.site_id || '',
+          code: data.code || '',
+          locatie: data.locatie || '',
+          status: data.status || 'DRAAIT',
+          productie_status: data.productie_status || 'GEZOND',
+          technieker_id: data.technieker?.id || '',
+          site_id: data.site?.id || '',
+          product_id: data.product?.id || '',
+          product_naam: data.product?.naam || '',
+          product_informatie: data.product?.product_informatie || '',
+          limiet_voor_onderhoud: data.limiet_voor_onderhoud || 100,
         });
+      },
+    },
+  );
 
-        // Fetch techniekers and products
-        const [techniekersData, productsData] = await Promise.all([
-          getAll('users'),
-          getAll('producten'),
-        ]);
+  // Fetch techniekers using SWR
+  const { data: techniekersData, error: techniekersError } = useSWR('/users', () => getAll('/users'));
+  const techniekers = techniekersData?.items.filter((user) => user.rol === 'TECHNIEKER') || [];
 
-        // Filter techniekers
-        const filteredTechniekers = techniekersData.items.filter((user) => user.rol === 'TECHNIEKER');
-        setTechniekers(filteredTechniekers);
-        
-        // Set products
-        setProducts(productsData.items);
-      } catch (err) {
-        console.error('Error fetching data:', err);
-        setError(err.message || 'Er is een fout opgetreden');
-      } finally {
-        setLoading(false);
-      }
-    }
+  // Fetch sites using SWR
+  const { data: sitesData, error: sitesError } = useSWR('/sites', () => getAll('/sites'));
+  const sites = sitesData?.items || [];
 
-    fetchData();
-  }, [id]);
+  // Determine loading and error states
+  const isLoading = !machineData || !techniekersData  || !sitesData;
+  const fetchError = machineError || techniekersError || sitesError;
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Exclude site_id from the update request
-    const { site_id, ...updatedFormData } = formData;
-    
     try {
-      await updateMachine(id, updatedFormData);
+      // Format the data for the API
+      const machineUpdateData = {
+        code: formData.code,
+        status: formData.status,
+        productie_status: formData.productie_status,
+        locatie: formData.locatie,
+        limiet_voor_onderhoud: formData.limiet_voor_onderhoud,
+        technieker_id: formData.technieker_id,
+        site_id: formData.site_id, 
+        product: {
+          id: formData.product_id, 
+          naam: formData.product_naam,
+          product_informatie: formData.product_informatie,
+        },
+      };
+      
+      await updateMachine(id, machineUpdateData);
       setSuccessMessage('Machine succesvol bijgewerkt!');
       
-      // Store the previous page in the state and navigate back to it
+      // Navigate back after successful update
       setTimeout(() => {
         navigate(-1); // Go back to the previous page
       }, 2000);
@@ -97,7 +103,7 @@ export default function EditMachineForm() {
   };
 
   return (
-    <AsyncData loading={loading} error={error}>
+    <AsyncData loading={isLoading} error={fetchError || error}>
       <div className="p-2 md:p-4">
         <PageHeader title="Machine wijzigen" onBackClick={handleOnClickBack} />
         
@@ -132,12 +138,28 @@ export default function EditMachineForm() {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="technieker_gebruiker_id" className="block text-sm font-medium text-gray-700">Technieker
-
-              </label>
+              <label htmlFor="site_id" className="block text-sm font-medium text-gray-700">Site</label>
               <select 
-                name="technieker_gebruiker_id" 
-                value={formData.technieker_gebruiker_id} 
+                name="site_id" 
+                value={formData.site_id} 
+                onChange={handleChange} 
+                className="mt-1 p-2 border rounded w-full" 
+                required
+              >
+                <option value="">Selecteer een site</option>
+                {sites.map((site) => (
+                  <option key={site.id} value={site.id}>
+                    {site.naam}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="technieker_id" className="block text-sm font-medium text-gray-700">Technieker</label>
+              <select 
+                name="technieker_id" 
+                value={formData.technieker_id} 
                 onChange={handleChange} 
                 className="mt-1 p-2 border rounded w-full" 
                 required
@@ -150,32 +172,39 @@ export default function EditMachineForm() {
                 ))}
               </select>
             </div>
-
+            
             <div className="mb-4">
-              <label htmlFor="product_id" className="block text-sm font-medium text-gray-700">Product</label>
-              <select 
-                name="product_id" 
-                value={formData.product_id} 
+              <label htmlFor="product_naam" className="block text-sm font-medium text-gray-700">Product Naam</label>
+              <input 
+                type="text" 
+                name="product_naam" 
+                value={formData.product_naam} 
                 onChange={handleChange} 
                 className="mt-1 p-2 border rounded w-full" 
                 required
-              >
-                <option value="">Selecteer een product</option>
-                {products.map((product) => (
-                  <option key={product.id} value={product.id}>
-                    {product.naam}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
-
+            
             <div className="mb-4">
-              <label htmlFor="product_informatie" className="block text-sm font-medium text-gray-700">Product Informatie
-                
-              </label>
+              <label htmlFor="product_informatie" 
+                className="block text-sm font-medium text-gray-700">Product Informatie</label>
               <textarea 
                 name="product_informatie" 
                 value={formData.product_informatie} 
+                onChange={handleChange} 
+                className="mt-1 p-2 border rounded w-full" 
+                rows="3"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="limiet_voor_onderhoud" className="block text-sm font-medium text-gray-700">
+                Aantal producten te produceren voor onderhoud
+              </label>
+              <input 
+                type="number" 
+                name="limiet_voor_onderhoud" 
+                value={formData.limiet_voor_onderhoud} 
                 onChange={handleChange} 
                 className="mt-1 p-2 border rounded w-full" 
                 required
