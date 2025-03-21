@@ -41,12 +41,14 @@ const MachineDetail = () => {
     await changeMachineStatus(
       {
         id: machine.id,
-        product_id: machine.product_id, 
-        technieker_gebruiker_id: machine.technieker.id, 
         code: machine.code, 
-        locatie: machine.locatie,
         status: status,
         productie_status: machine.productie_status,
+        locatie: machine.locatie,
+        technieker_id: machine.technieker.id, 
+        site_id: machine.site.id,
+        product_id: machine.product.id,
+        limiet_voor_onderhoud: machine.limiet_voor_onderhoud,
       },
     );
     // machine status gets refetched so the displayed status is up to date
