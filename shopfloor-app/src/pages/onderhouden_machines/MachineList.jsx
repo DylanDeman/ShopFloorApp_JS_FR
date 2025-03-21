@@ -3,19 +3,23 @@ import { useNavigate } from 'react-router-dom';
 import MachineTable from '../../components/onderhouden_machines/MachineTable';
 import { Pagination } from '../../components/genericComponents/Pagination';
 import Search from '../../components/genericComponents/Search';
+import { convertStatus } from '../../components/machines/StatusConverter';
+import { convertProductieStatus } from '../../components/machines/ProductieConverter';
+import { ProductieStatusDisplay } from '../../components/machines/ProductieStatusConverter';
+import { StatusDisplay } from '../../components/machines/StatusDisplay';
 
 export default function MachineList({machinesData}) {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [zoekterm, setZoekterm] = useState('');
-  const rawDataMachines = machinesData || [];
+  const rawDataMachines = machinesData || { items: [] };
   
-  const processedMachines = rawDataMachines.items.map((site) => ({
+  const rawMachines = rawDataMachines.items.map((site) => ({
     id: site.id,
     locatie: site.locatie,
-    status: site.status,
-    productie_status: site.productie_status,
+    rawStatus: site.status,
+    rawProductieStatus: site.productie_status,
     technieker: `${site.technieker.naam} ${site.technieker.voornaam}`,
   }));
 
@@ -48,11 +52,18 @@ export default function MachineList({machinesData}) {
     
     const sortedMachines = [...machines]; 
     
+    // Map special fields to their sortable values
+    const fieldMap = {
+      'status': 'rawStatus',
+      'productie_status': 'rawProductieStatus',
+    };
+    
+    const sortField = fieldMap[sortConfig.field] || sortConfig.field;
     const integerFields = ['id'];
-    const sortFn = integerFields.includes(sortConfig.field) ? sortInteger : sortString;
+    const sortFn = integerFields.includes(sortField) ? sortInteger : sortString;
     
     return sortedMachines.sort((a, b) => 
-      sortFn(a, b, sortConfig.field, sortConfig.direction),
+      sortFn(a, b, sortField, sortConfig.direction),
     );
   };
   
@@ -83,16 +94,27 @@ export default function MachineList({machinesData}) {
     setCurrentPage(1); 
   };
 
-  const filteredMachines = processedMachines.filter((machine) =>
-    machine.locatie?.toLowerCase().includes(zoekterm.toLowerCase()) ||
-    machine.status?.toLowerCase().includes(zoekterm.toLowerCase()) ||
-    machine.productieStatus?.toLowerCase().includes(zoekterm.toLowerCase()),
-  );
+  const filteredMachines = rawMachines.filter((machine) => {
+    const statusText = convertStatus(machine.rawStatus)?.text?.toLowerCase() || '';
+    const productieStatusText = convertProductieStatus(machine.rawProductieStatus)?.text?.toLowerCase() || '';
+    
+    return machine.locatie?.toLowerCase().includes(zoekterm.toLowerCase()) ||
+           statusText.includes(zoekterm.toLowerCase()) ||
+           productieStatusText.includes(zoekterm.toLowerCase());
+  });
 
   const sortedMachines = sortMachines(filteredMachines);
   
   const startIndex = (currentPage - 1) * limit;
   const paginatedMachines = sortedMachines.slice(startIndex, startIndex + limit);
+  
+  const processedPaginatedMachines = paginatedMachines.map((machine) => ({
+    id: machine.id,
+    locatie: machine.locatie,
+    status: <StatusDisplay status={machine.rawStatus} />,
+    productie_status: <ProductieStatusDisplay status={machine.rawProductieStatus} />,
+    technieker: machine.technieker,
+  }));
   
   return (
     <div className="flex-col md:flex-row flex justify-between py-6">
@@ -127,7 +149,7 @@ export default function MachineList({machinesData}) {
         </div>
 
         <MachineTable
-          machines={paginatedMachines}
+          machines={processedPaginatedMachines}
           showOnderhouden={handleShowOnderhouden}
           onShow={handleShow}
           onSort={handleSort}
@@ -138,7 +160,7 @@ export default function MachineList({machinesData}) {
           <Pagination
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-            data={processedMachines}
+            data={rawMachines}
             totalPages={sortedMachines.length === 0 ? 1 : Math.ceil(sortedMachines.length / limit)}
           />
         </div>

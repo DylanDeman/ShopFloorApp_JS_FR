@@ -151,6 +151,7 @@ export default function OnderhoudenList({machine}){
         onSort={handleSort} 
         sortConfig={sortConfig} 
         show={handleShow}/>
+        
       <Pagination 
         currentPage={currentPage} 
         setCurrentPage={setCurrentPage} 
