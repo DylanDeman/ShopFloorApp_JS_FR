@@ -7,7 +7,7 @@ import SuccessMessage from '../../components/sites/SuccesMessage';
 import { getAll, getById, updateMachine } from '../../api';
 
 export default function EditMachineForm() {
-  const { id } = useParams(); // Get machine ID from URL
+  const { id } = useParams(); 
   const navigate = useNavigate();
 
   const [successMessage, setSuccessMessage] = useState('');
@@ -69,7 +69,6 @@ export default function EditMachineForm() {
     e.preventDefault();
     
     try {
-      // Format the data for the API
       const machineUpdateData = {
         code: formData.code,
         status: formData.status,
@@ -88,10 +87,6 @@ export default function EditMachineForm() {
       await updateMachine(id, machineUpdateData);
       setSuccessMessage('Machine succesvol bijgewerkt!');
       
-      // Navigate back after successful update
-      setTimeout(() => {
-        navigate(-1); // Go back to the previous page
-      }, 2000);
     } catch (err) {
       console.error('Update failed:', err);
       setError('Er is een fout opgetreden bij het bijwerken van de machine.');

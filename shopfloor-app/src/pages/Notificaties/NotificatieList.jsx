@@ -3,7 +3,6 @@ import NotificatieBlock from '../../components/notificaties/NotificatieBlock';
 import { useNavigate } from 'react-router';
 
 export default function NotificatieList({notificaties}){
-
   const navigate = useNavigate();
 
   if(!notificaties){
