@@ -4,7 +4,7 @@ export default function Dropdown({ label, options, onSelect }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="relative inline-block text-left">
+    <div className="relative inline-block text-left ml-4">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="px-4 py-2 bg-[rgb(171,155,203)] hover:bg-[rgb(151,135,183)] 

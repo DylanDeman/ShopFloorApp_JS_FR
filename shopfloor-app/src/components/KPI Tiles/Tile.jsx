@@ -22,8 +22,6 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
   const { data: kpiWaarden = [], loading, error } = useSWR(`kpi/${id}/kpiwaarden`, getById);
   const [selectedSite, setSelectedSite] = useState(null);
 
-  //TODO UITLIJNEN KNOP MET TILES 
-
   const { user } = useAuth();
   const user_id = user ? user.id : null;
 
@@ -67,14 +65,56 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
           </div>
         );
       }
-
-      case 'BAR':
+      case 'BARHOOGLAAG':
         return (
-          <BarChart data={formattedData}>
+          <BarChart data={[...formattedData].sort((a, b) => b.value - a.value)}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
+            <XAxis
+              dataKey="name"
+              label={{ value: 'Site', position: 'insideBottom', offset: -5 }}
+            />
+            <YAxis
+              label={{ value: 'Productiegraad', angle: -90, position: 'outsideTop', dx: -30 }}
+            />
+            <Tooltip
+              formatter={(value, name, props) => {
+                const siteId = props?.payload?.site_id;
+                const formattedValue = value;
+
+                return [
+                  `Site: ${siteId !== undefined ? siteId : 'N/A'}`,
+                  `Productiegraad: ${formattedValue}`,
+                ];
+              }}
+              labelFormatter={() => ''}
+            />
+            <Bar dataKey="value" fill="#6366F1" />
+          </BarChart>
+        );
+
+      case 'BARLAAGHOOG':
+        return (
+          <BarChart data={[...formattedData].sort((a, b) => a.value - b.value)}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="name"
+              label={{ value: 'Site', position: 'insideBottom', offset: -5 }}
+            />
+            <YAxis
+              label={{ value: 'Productiegraad', angle: -90, position: 'outsideTop', dx: -30 }}
+            />
+            <Tooltip
+              formatter={(value, name, props) => {
+                const siteId = props?.payload?.site_id;
+                const formattedValue = value;
+
+                return [
+                  `Site: ${siteId !== undefined ? siteId : 'N/A'}`,
+                  `Productiegraad: ${formattedValue}`,
+                ];
+              }}
+              labelFormatter={() => ''}
+            />
             <Bar dataKey="value" fill="#6366F1" />
           </BarChart>
         );
