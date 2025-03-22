@@ -269,14 +269,16 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
         const onderhoudList = onderhouden.items;
 
         const filteredOnderhouden = onderhoudList.filter((onderhoud) =>
-          onderhoud.technieker_gebruiker_id == user_id,
+          onderhoud.technieker.id == user_id,
         ).slice(0, 5);
 
         return (
           <div className="space-y-4">
             {filteredOnderhouden.length > 0 ? (
               filteredOnderhouden.map((onderhoud) => (
-                <div key={onderhoud.id} className="border rounded-lg p-4 bg-gray-50 shadow">
+                <div key={onderhoud.id} className="border rounded-lg p-4 bg-gray-50 shadow cursor-pointer"
+                  onClick={() => navigate(`/machines_onderhouden/${onderhoud.machine_id}`)}
+                >
                   <h3 className="text-lg font-semibold text-blue-600">
                     Onderhoud {onderhoud.id}
                   </h3>
@@ -302,13 +304,14 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
         const onderhoudList = onderhouden.items;
 
         const gefilterdeOnderhouden = onderhoudList.filter(
-          (onderhoud) => kpiIds.includes(onderhoud.id) && onderhoud.technieker_gebruiker_id === user_id);
+          (onderhoud) => kpiIds.includes(onderhoud.id) && onderhoud.technieker.id === user_id);
 
         return (
           <div className='space-y-4'>
             {gefilterdeOnderhouden.length > 0 ? (
               gefilterdeOnderhouden.map((onderhoud) => (
-                <div key={onderhoud.id} className="border rounded-lg p-4 bg-gray-50 shadow">
+                <div key={onderhoud.id} className="border rounded-lg p-4 bg-gray-50 shadow cursor-pointer"
+                  onClick={() => navigate(`/machines_onderhouden/${onderhoud.machine_id}`)}>
                   <h3 className="text-lg font-semibold text-blue-600">
                     Onderhoud {onderhoud.id}
                   </h3>
