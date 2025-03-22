@@ -1,4 +1,3 @@
-// SiteListHeader.jsx
 import Search from '../../genericComponents/Search';
 
 export default function SiteListHeader({ zoekterm, onSearch, limit, onLimitChange }) {

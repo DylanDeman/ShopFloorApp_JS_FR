@@ -20,8 +20,6 @@ const MachineDetail = () => {
     error: machineError,
     isLoading: MachineLoading,
   } = useSWR(id ? `machines/${idAsNumber}` : null, getById);
-
-  console.log('Machine data in MachineDetail:', machine);
   
   const {
     trigger: changeMachineStatus,

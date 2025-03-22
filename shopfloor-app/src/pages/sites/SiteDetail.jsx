@@ -9,6 +9,7 @@ import { getById } from '../../api/index';
 import AsyncData from '../../components/AsyncData';
 import { IoMdAddCircleOutline } from 'react-icons/io';
 import PageHeader from '../../components/genericComponents/PageHeader';
+import GenericButton from '../../components/genericComponents/GenericButton';
 
 const SiteDetails = () => {
   const navigate = useNavigate();
@@ -40,24 +41,8 @@ const SiteDetails = () => {
         <div data-cy="site-details" className="flex justify-between items-center">
           <PageHeader title={`Site | ${site.naam}`} onBackClick={handleOnClickBack} />
           <div className="flex gap-4 items-center">
-            <button 
-              className="bg-red-500 hover:cursor-pointer hover:bg-red-700 
-                text-white font-bold py-2 px-4 
-                rounded flex items-center gap-2"
-              onClick={() => handleShowGrondplan()}
-            >
-              <FaMapMarkedAlt />
-              Bekijk grondplan
-            </button>
-            <button 
-              className="bg-red-500 hover:cursor-pointer hover:bg-red-700 
-                text-white font-bold py-2 px-4 
-                rounded flex items-center gap-2"
-              onClick={() => handleAddMachine()}
-            >
-              <IoMdAddCircleOutline />
-              Machine toevoegen
-            </button>
+            <GenericButton icon={FaMapMarkedAlt} onClick={handleShowGrondplan} text="Bekijk grondplan"/>
+            <GenericButton icon={IoMdAddCircleOutline} onClick={handleAddMachine} text="Machine toevoegen"/>
           </div>
         </div>
 

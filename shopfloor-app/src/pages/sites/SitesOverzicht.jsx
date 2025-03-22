@@ -4,6 +4,7 @@ import { IoMdAddCircleOutline } from 'react-icons/io';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router';
 import PageHeader from '../../components/genericComponents/PageHeader';
+import GenericButton from '../../components/genericComponents/GenericButton';
 
 const SitesOverzicht = () => {
   const navigate = useNavigate();
@@ -15,15 +16,7 @@ const SitesOverzicht = () => {
     <>
       <div className="flex justify-between items-center">
         <PageHeader title="Sites" />
-        <button 
-          className="bg-red-500 hover:cursor-pointer hover:bg-red-700 
-          text-white font-bold py-2 px-4 
-          rounded flex items-center gap-x-2"
-          onClick={() => handleAddSite()}
-        >
-          <IoMdAddCircleOutline />
-          Site toevoegen
-        </button>
+        <GenericButton icon={IoMdAddCircleOutline} onClick={handleAddSite} text="Site toevoegen"/>
       </div>
 
       <Information 

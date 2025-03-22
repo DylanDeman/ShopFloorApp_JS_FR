@@ -40,7 +40,7 @@ const SiteTable = ({
             {renderSortableHeader('Verantwoordelijke', 'verantwoordelijke')}
             {renderSortableHeader('Status', 'status')}
             {renderSortableHeader('Aantal machines', 'aantal_machines')}
-            <th></th>
+            {renderSortableHeader('', '')}
           </tr>
         </thead>
         <tbody>
