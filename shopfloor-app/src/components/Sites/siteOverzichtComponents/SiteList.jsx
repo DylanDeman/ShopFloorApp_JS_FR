@@ -10,7 +10,7 @@ import useSiteData from '../../../hooks/useSiteData';
 import SiteListHeader from './SiteListHeader';
 import SiteListFilters from './SiteListFilters';
 
-export default function SiteList({ loading: parentLoading, error: parentError }) {
+export default function SiteList() {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -118,10 +118,6 @@ export default function SiteList({ loading: parentLoading, error: parentError })
     },
   };
   
-  // Check loading and error state
-  const isLoading = parentLoading || loading;
-  const hasError = parentError || error;
-
   return (
     <div className="flex-col md:flex-row flex justify-between py-6">
       <div className="w-full">
@@ -143,7 +139,7 @@ export default function SiteList({ loading: parentLoading, error: parentError })
           onResetFilters={handleResetFilters}
         />
 
-        <AsyncData error={hasError} loading={isLoading}>
+        <AsyncData error={error} loading={loading}>
           <SiteTable
             sites={paginatedSites}
             onShow={handleShow}

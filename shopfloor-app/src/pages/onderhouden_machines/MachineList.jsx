@@ -7,6 +7,7 @@ import { convertProductieStatus } from '../../components/machines/ProductieConve
 import { ProductieStatusDisplay } from '../../components/machines/ProductieStatusDisplay';
 import { StatusDisplay } from '../../components/machines/StatusDisplay';
 import { convertStatus } from '../../components/machines/StatusConverter';
+import { Link } from 'react-router-dom';
 
 export default function MachineList({machinesData}) {
   const navigate = useNavigate();
@@ -115,7 +116,9 @@ export default function MachineList({machinesData}) {
     status: <StatusDisplay status={machine.rawStatus} />,
     productie_status: <ProductieStatusDisplay status={machine.rawProductieStatus} />,
     technieker: machine.technieker,
-    aantal_onderhoudsbeurten: machine.aantal_onderhoudsbeurten,
+    aantal_onderhoudsbeurten: machine.aantal_onderhoudsbeurten !== 0 ? (
+      <Link to={`/machines_onderhouden/${machine.id}`} className='underline'>{machine.aantal_onderhoudsbeurten}</Link>
+    ) : machine.aantal_onderhoudsbeurten,
   }));
   
   return (

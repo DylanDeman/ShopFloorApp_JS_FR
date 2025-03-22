@@ -7,7 +7,7 @@ import PageHeader from '../../components/genericComponents/PageHeader';
 import SiteInfoForm from '../../components/sites/SiteInfoForm';
 import SuccessMessage from '../../components/sites/SuccesMessage';
 
-export default function SiteForm() {
+export default function AddOrEditSite() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isNewSite = !id || id === 'new';

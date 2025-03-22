@@ -48,8 +48,8 @@ const SiteDetails = () => {
 
         <Information 
           info="Hieronder vindt u een overzicht van alle sites. 
-        Klik op een site om een site te raadplegen 
-        en zijn machines te bekijken."
+            Klik op een site om een site te raadplegen 
+            en zijn machines te bekijken."
           icon={IoInformationCircleOutline}
         />
 

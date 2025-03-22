@@ -26,7 +26,7 @@ const SitesOverzicht = () => {
       />
       
       {/* Lijst met alle sites*/}
-      <SiteList/>
+      <SiteList />
     </>
   );
 };

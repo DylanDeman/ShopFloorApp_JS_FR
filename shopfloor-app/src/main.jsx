@@ -6,7 +6,7 @@ import NotFound from './pages/NotFound.jsx';
 import Layout from './pages/Layout.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import SitesOverzicht from './pages/sites/SitesOverzicht.jsx';
-import Machines from './pages/Machines.jsx';
+import Machines from './pages/machines/Machines.jsx';
 import MachineDetail from './pages/machines/MachineDetail.jsx';
 import Notificaties from './pages/Notificaties/Notificaties.jsx';
 import Login from './pages/Login.jsx';
@@ -15,10 +15,10 @@ import SiteGrondplan from './pages/sites/SiteGrondplan.jsx';
 import { AuthProvider } from './contexts/Auth.context';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import Logout from './pages/Logout.jsx';
-import SiteForm from './pages/sites/SiteForm.jsx';
 import Onderhouden from './pages/onderhouden/Onderhouden.jsx';
 import MachineForm from './pages/machines/MachineForm.jsx';
 import EditMachineForm from './pages/machines/EditMachineForm.jsx';
+import AddOrEditSite from './pages/sites/AddOrEditSite.jsx';
 
 const router = createBrowserRouter([
   {
@@ -63,7 +63,7 @@ const router = createBrowserRouter([
           },
           {
             path: ':id/edit',
-            element: <SiteForm/>,
+            element: <AddOrEditSite/>,
           },
           {
             path:':id/machines/new',
@@ -72,7 +72,7 @@ const router = createBrowserRouter([
           },
           {
             path: 'create',
-            element: <SiteForm/>,
+            element: <AddOrEditSite/>,
 
           },
         ],
