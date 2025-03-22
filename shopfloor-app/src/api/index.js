@@ -60,18 +60,8 @@ export const post = async (url, { arg }) => {
   return data;
 };
 
-export const getKPIWaardenByKPIid = async (id) => {
-  const { data } = await axios.get(`kpi/${id}/kpiwaarden`);  
-  return data.items;
-};
-
 export const getDashboardByUserID = async (user_id) => {
   const {data } = await axios.get(`users/${user_id}/dashboard`);  
-  return data.items;
-};
-
-export const getKPIsByRole = async (role) => {
-  const { data } = await axios.get(`kpi/rol/${role}`);
   return data.items;
 };
 

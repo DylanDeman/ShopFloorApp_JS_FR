@@ -10,7 +10,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { getKPIWaardenByKPIid } from '../../api';
+import { getById } from '../../api';
 import useSWR from 'swr';
 import AsyncData from '../AsyncData';
 import { Suspense, useState } from 'react';
@@ -19,8 +19,10 @@ import Loader from '../Loader';
 import { useNavigate } from 'react-router-dom';
 
 const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }) => {
-  const { data: kpiWaarden = [], loading, error } = useSWR(id, getKPIWaardenByKPIid);
+  const { data: kpiWaarden = [], loading, error } = useSWR(`kpi/${id}/kpiwaarden`, getById);
   const [selectedSite, setSelectedSite] = useState(null);
+
+  //TODO UITLIJNEN KNOP MET TILES 
 
   const { user } = useAuth();
   const user_id = user ? user.id : null;
@@ -35,13 +37,19 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
     setSelectedSite(event.target.value ? Number(event.target.value) : null);
   };
 
-  const formattedData = kpiWaarden.map((item) => ({
-    name: new Date(item.datum),
-    value: item?.waarde,
-    site_id: item?.site_id,
-  }));
+  let formattedData = [];
+  if (kpiWaarden && Array.isArray(kpiWaarden.items)) {
+    formattedData = kpiWaarden.items.map((item) => ({
+      name: new Date(item?.datum),
+      value: item?.waarde,
+      site_id: item?.site_id,
+    }));
+  }
 
   const uniqueSites = [...new Set(formattedData.map((item) => item?.site_id).filter(Boolean))];
+
+  const datum = new Date();
+  datum.toISOString();
 
   const renderGraph = () => {
     switch (graphType) {
@@ -88,6 +96,7 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
                 value={selectedSite || ''}
               >
                 <option value="" disabled>-- Selecteer een site --</option>
+
                 {uniqueSites.map((siteId) => (
                   <option key={siteId} value={siteId}>
                     Site {siteId}
@@ -101,7 +110,7 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
                 <h3 className="text-xl font-semibold mb-2">Site
                   {selectedSiteData.length === 0 ? '' : ' ' + selectedSiteData[0].site_id}
                 </h3>
-                <p className="text-9xl font-bold text-blue-500">
+                <p className="text-8xl font-bold text-blue-500">
                   {selectedSiteData.length === 0 ? '' : `${(selectedSiteData[0].value * 100).toFixed(0)}%`}
                 </p>
               </Suspense>
@@ -120,12 +129,62 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
           </div>
         );
       }
+
+      case 'GEZONDHEID': {
+        const lastValue = formattedData.length > 0
+          ? formattedData[formattedData.length - 1].value
+          : 'N/A';
+
+        const percentage = lastValue !== 'N/A'
+          ? `${(parseFloat(lastValue) * 100).toFixed(0)}%`
+          : 'N/A';
+
+        return (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-9xl font-bold text-blue-500">{percentage}</p>
+          </div>
+        );
+      }
+
+      case 'MACHLIST': {
+        if (kpiWaarden.length === 0 || machines.length === 0) {
+          return <p className="text-gray-500">Geen data beschikbaar.</p>;
+        }
+
+        const machineList = machines.items;
+        const filteredMachines = machineList.filter((machine) => machine.technieker?.id === user_id
+          || machine.site.verantwoordelijke.id === user_id);
+
+        return (
+          <div className="space-y-4">
+            {filteredMachines.length > 0 ? (
+              filteredMachines.map((machine) => (
+                <div key={machine.id} className="border rounded-lg p-4 bg-gray-50 shadow cursor-pointer"
+                  onClick={() => navigate(`/machines/${machine.id}`)}>
+                  <h3 className="text-lg font-semibold text-blue-600">
+                    Machine {machine.id}
+                  </h3>
+                  <p className="text-gray-700">
+                    <strong>Code:</strong> {machine.code} <br />
+                    <strong>Locatie:</strong> {machine.locatie} <br />
+                    <strong>Status:</strong> {machine.status} <br />
+                    <strong>Product info:</strong> {machine.product_informatie} <br />
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500">Geen relevante machines gevonden.</p>
+            )}
+          </div>
+        );
+      }
+
       case 'TOP5': {
         if (kpiWaarden.length === 0 || machines.length === 0) {
           return <p className="text-gray-500">Geen data beschikbaar.</p>;
         }
 
-        const mostRecentKPI = kpiWaarden
+        const mostRecentKPI = kpiWaarden.items
           .sort((a, b) => new Date(b.datum) - new Date(a.datum))
           .slice(0, 1);
 
@@ -169,22 +228,63 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
 
         const onderhoudList = onderhouden.items;
 
-        const filteredOnderhouden = onderhoudList.filter((onderhoud) => {
-          onderhoud.technieker_gebruiker_id === user_id;
-        });
+        const filteredOnderhouden = onderhoudList.filter((onderhoud) =>
+          onderhoud.technieker_gebruiker_id == user_id,
+        ).slice(0, 5);
 
         return (
-          <ul className="list-disc list-inside text-gray-700">
+          <div className="space-y-4">
             {filteredOnderhouden.length > 0 ? (
-              filteredOnderhouden.map((onderhoud) =>
-                <li key={onderhoud.onderhoud_id}>
-                  {`id: ${onderhoud.onderhoud_id}\n`}
-                </li>,
-              )
+              filteredOnderhouden.map((onderhoud) => (
+                <div key={onderhoud.id} className="border rounded-lg p-4 bg-gray-50 shadow">
+                  <h3 className="text-lg font-semibold text-blue-600">
+                    Onderhoud {onderhoud.id}
+                  </h3>
+                  <p className="text-gray-700">
+                    <strong>Starttijd:</strong> {new Date(onderhoud.starttijdstip).toLocaleDateString()} <br />
+                    <strong>Eindtijd:</strong> {new Date(onderhoud.eindtijdstip).toLocaleDateString()} <br />
+                    <strong>Status:</strong> {onderhoud.status} <br />
+                    <strong>Reden:</strong> {onderhoud.reden} <br />
+                    <strong>Opmerkingen:</strong> {onderhoud.opmerkingen} <br />
+                  </p>
+                </div>
+              ))
             ) : (
-              <p>Geen relevante onderhouden gevonden.</p>
+              <p className="text-gray-500">Geen onderhouden gevonden.</p>
             )}
-          </ul>
+          </div>
+        );
+      }
+
+      case 'AANKOND': {
+        const kpiIds = kpiWaarden?.items?.map((kpi) => kpi.waarde.split(',').map(Number)).flat() || [];
+
+        const onderhoudList = onderhouden.items;
+
+        const gefilterdeOnderhouden = onderhoudList.filter(
+          (onderhoud) => kpiIds.includes(onderhoud.id) && onderhoud.technieker_gebruiker_id === user_id);
+
+        return (
+          <div className='space-y-4'>
+            {gefilterdeOnderhouden.length > 0 ? (
+              gefilterdeOnderhouden.map((onderhoud) => (
+                <div key={onderhoud.id} className="border rounded-lg p-4 bg-gray-50 shadow">
+                  <h3 className="text-lg font-semibold text-blue-600">
+                    Onderhoud {onderhoud.id}
+                  </h3>
+                  <p className="text-gray-700">
+                    <strong>Starttijd:</strong> {new Date(onderhoud.starttijdstip).toLocaleDateString()} <br />
+                    <strong>Eindtijd:</strong> {new Date(onderhoud.eindtijdstip).toLocaleDateString()} <br />
+                    <strong>Status:</strong> {onderhoud.status} <br />
+                    <strong>Reden:</strong> {onderhoud.reden} <br />
+                    <strong>Opmerkingen:</strong> {onderhoud.opmerkingen} <br />
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500">Geen onderhouden gevonden.</p>
+            )}
+          </div>
         );
       }
       default:
