@@ -168,7 +168,7 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
                     <strong>Code:</strong> {machine.code} <br />
                     <strong>Locatie:</strong> {machine.locatie} <br />
                     <strong>Status:</strong> {machine.status} <br />
-                    <strong>Product info:</strong> {machine.product_informatie} <br />
+                    <strong>Product info:</strong> {machine.product.naam} <br />
                   </p>
                 </div>
               ))
@@ -210,7 +210,7 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
                     <strong>Code:</strong> {machine.code} <br />
                     <strong>Locatie:</strong> {machine.locatie} <br />
                     <strong>Status:</strong> {machine.status} <br />
-                    <strong>Product info:</strong> {machine.product_informatie} <br />
+                    <strong>Product:</strong> {machine.product.naam} <br />
                   </p>
                 </div>
               ))
