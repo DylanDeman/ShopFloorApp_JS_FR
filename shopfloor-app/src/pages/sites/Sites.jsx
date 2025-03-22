@@ -3,24 +3,21 @@ import Information from '../../components/Information';
 import { IoMdAddCircleOutline } from 'react-icons/io';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router';
+import PageHeader from '../../components/genericComponents/PageHeader';
 const Sites = () => {
-
   const navigate = useNavigate();
-  
   const handleAddSite = () => {
     navigate('/sites/create');
   };
   
   return (
     <>
-      <div className="flex justify-between items-center mb-6 mt-10">
-        <h1 className="text-4xl font-semibold"> 
-          Overzicht sites 
-        </h1>
+      <div className="flex justify-between items-center">
+        <PageHeader title="Sites" />
         <button 
           className="bg-red-500 hover:cursor-pointer hover:bg-red-700 
           text-white font-bold py-2 px-4 
-          rounded flex items-center gap-2"
+          rounded flex items-center gap-x-2"
           onClick={() => handleAddSite()}
         >
           <IoMdAddCircleOutline />

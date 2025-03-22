@@ -4,11 +4,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useSWR, {mutate} from 'swr';
 import { getById } from '../../api/index';
 import AsyncData from '../../components/AsyncData';
-import { FaArrowLeft } from 'react-icons/fa';
-import MachineInfoHeader from '../../components/machines/MachineInfoHeader';
+import MachineInfoHeader from '../../components/machines/machineDetailsComponents/MachineInfoHeader';
 import useSWRMutation from 'swr/mutation';
 import { save } from '../../api/index';
-import { ProductieStatusDisplay } from '../../components/machines/ProductieStatusConverter';
+import { ProductieStatusDisplay } from '../../components/machines/ProductieStatusDisplay';
+import PageHeader from '../../components/genericComponents/PageHeader';
 
 const MachineDetail = () => {
   const navigate = useNavigate();
@@ -58,6 +58,7 @@ const MachineDetail = () => {
     } else {
       status = 'DRAAIT';
     }
+    
     await changeMachineStatus(
       {
         id: machine.id,
@@ -103,21 +104,7 @@ const MachineDetail = () => {
   return (
     <>
       <AsyncData error={machineError} loading={MachineLoading}>
-        <div className="flex justify-between items-center mb-6 mt-10">
-          <div className="flex items-center gap-4">
-            <button 
-              className="text-gray-700 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100"
-              onClick={handleOnClickBack}
-              aria-label="Go back"
-            >
-              <FaArrowLeft size={24} />
-            </button>
-    
-            <h1 className="text-4xl font-semibold"> 
-              Machine | {machine.code}
-            </h1>
-          </div>
-        </div>
+        <PageHeader title={`Machine | ${machine.code}`} onBackClick={handleOnClickBack} />
 
         <Information 
           info={'Hieronder vindt u alle informatie over de machine met code: ' + machine.code}

@@ -1,4 +1,4 @@
-import TableRow from './../genericComponents/TableRow';
+import TableRow from '../../genericComponents/TableRow';
 
 const MachineTable = ({ 
   machines, 

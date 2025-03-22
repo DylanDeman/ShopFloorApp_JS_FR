@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import MachineTable from '../../components/machines/MachineTable';
+import MachineTable from '../../components/machines/machineOverzichtComponents/MachineTable';
 import { Pagination } from '../../components/genericComponents/Pagination';
-import Search from '../../components/genericComponents/Search';
-import { ProductieStatusDisplay } from '../../components/machines/ProductieStatusConverter';
+import { convertProductieStatus } from '../../components/machines/ProductieConverter';
+import { ProductieStatusDisplay } from '../../components/machines/ProductieStatusDisplay';
 import { StatusDisplay } from '../../components/machines/StatusDisplay';
 import { convertStatus } from '../../components/machines/StatusConverter';
-import { convertProductieStatus } from '../../components/machines/ProductieConverter';
+import MachineListHeader from '../../components/machines/machineOverzichtComponents/MachineListHeader';
 
 export default function MachineList({machinesData}) {
   const navigate = useNavigate();
@@ -118,34 +118,12 @@ export default function MachineList({machinesData}) {
   return (
     <div className="flex-col md:flex-row flex justify-between py-6">
       <div className="w-full">
-        <div className="mb-4 flex flex-wrap items-center justify-between">
-
-          {/* Search input */}
-          <Search 
-            value={zoekterm} 
-            onChange={handleSearch} 
-            placeholder="Zoeken naar locatie, status, productie status, ..."
-          />
-          
-          {/* Page size selector - niet zichtbaar op small screens */}
-          <div className="hidden md:flex items-center mt-3 md:mt-0">
-            <label htmlFor="page-size" className="mr-2 text-gray-700">
-              Aantal machines per pagina:
-            </label>
-            <select
-              id="page-size"
-              value={limit}
-              onChange={handleLimitChange}
-              className="border border-gray-300 rounded-md px-3 py-2"
-              data-cy="machines_page_size"
-            >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
-            </select>
-          </div>
-        </div>
+        <MachineListHeader
+          zoekterm={zoekterm}
+          onSearch={handleSearch}
+          limit={limit}
+          onLimitChange={handleLimitChange}
+        />
 
         <MachineTable
           machines={processedPaginatedMachines}

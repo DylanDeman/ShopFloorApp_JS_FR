@@ -1,4 +1,4 @@
-import { StatusDisplay } from './StatusDisplay';
+import { StatusDisplay } from '../StatusDisplay';
 
 const MachineInfoHeader = ({ machine }) => {
   return (

@@ -7,8 +7,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import { getById } from '../../api/index';
 import AsyncData from '../../components/AsyncData';
-import { FaArrowLeft } from 'react-icons/fa';
 import { IoMdAddCircleOutline } from 'react-icons/io';
+import PageHeader from '../../components/genericComponents/PageHeader';
 
 const SiteDetails = () => {
   const navigate = useNavigate();
@@ -37,20 +37,8 @@ const SiteDetails = () => {
   return (
     <>
       <AsyncData error={siteError} loading={siteLoading}>
-        <div data-cy="site-details" className="flex justify-between items-center mb-6 mt-10">
-          <div className="flex items-center gap-4">
-            <button 
-              className="text-gray-700 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100"
-              onClick={handleOnClickBack}
-              aria-label="Go back"
-            >
-              <FaArrowLeft size={24} />
-            </button>
-    
-            <h1 className="text-4xl font-semibold"> 
-              Site | {site.naam}
-            </h1>
-          </div>
+        <div data-cy="site-details" className="flex justify-between items-center">
+          <PageHeader title={`Site | ${site.naam}`} onBackClick={handleOnClickBack} />
           <div className="flex gap-4 items-center">
             <button 
               className="bg-red-500 hover:cursor-pointer hover:bg-red-700 

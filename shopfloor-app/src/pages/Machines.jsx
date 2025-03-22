@@ -4,6 +4,7 @@ import MachineList from './onderhouden_machines/MachineList';
 import AsyncData from '../components/AsyncData';
 import Information from '../components/Information';
 import { IoInformationCircleOutline } from 'react-icons/io5';
+import PageHeader from '../components/genericComponents/PageHeader';
 
 const Machines = () => {
 
@@ -15,9 +16,7 @@ const Machines = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center mb-6 mt-10">
-        <h1 className="text-4xl font-semibold">Overzicht machines</h1>
-      </div>
+      <PageHeader title="Overzicht machines" />
       <Information
         info={
           'Hieronder vindt u een overzicht van machines.\
