@@ -181,7 +181,7 @@ const PdfDocument = ({ data, base64Logo }) => {
             </View>
 
             <View style={styles.infoRow}>
-              <Text style={styles.label}>Naam Technieker</Text>
+              <Text style={styles.label}>Technieker</Text>
               <Text style={styles.value}>{data.technieker}</Text>
             </View>
 
