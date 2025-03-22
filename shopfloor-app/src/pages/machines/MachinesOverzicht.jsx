@@ -6,7 +6,7 @@ import { IoInformationCircleOutline } from 'react-icons/io5';
 import PageHeader from '../../components/genericComponents/PageHeader';
 import MachineList from '../onderhouden_machines/MachineList';
 
-const Machines = () => {
+const MachinesOverzicht = () => {
 
   const {
     data: machines = [],
@@ -30,4 +30,4 @@ const Machines = () => {
     </>
   );
 };
-export default Machines;
+export default MachinesOverzicht;

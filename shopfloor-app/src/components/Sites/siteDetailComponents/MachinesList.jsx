@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import MachineTable from '../../components/machines/machineOverzichtComponents/MachineTable';
-import { Pagination } from '../../components/genericComponents/Pagination';
-import { convertProductieStatus } from '../../components/machines/ProductieConverter';
-import { ProductieStatusDisplay } from '../../components/machines/ProductieStatusDisplay';
-import { StatusDisplay } from '../../components/machines/StatusDisplay';
-import { convertStatus } from '../../components/machines/StatusConverter';
-import MachineListHeader from '../../components/machines/machineOverzichtComponents/MachineListHeader';
+import MachineTable from '../../machines/machineOverzichtComponents/MachineTable';
+import { Pagination } from '../../genericComponents/Pagination';
+import { convertProductieStatus } from '../../machines/ProductieConverter';
+import { ProductieStatusDisplay } from '../../machines/ProductieStatusDisplay';
+import { StatusDisplay } from '../../machines/StatusDisplay';
+import { convertStatus } from '../../machines/StatusConverter';
+import MachineListHeader from '../../machines/machineOverzichtComponents/MachineListHeader';
 
 export default function MachineList({machinesData}) {
   const navigate = useNavigate();

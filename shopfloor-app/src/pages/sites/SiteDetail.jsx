@@ -1,4 +1,4 @@
-import MachineList from './../machines/MachinesList';
+import MachineList from '../../components/Sites/siteDetailComponents/MachinesList';
 import Information from '../../components/Information';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 import { FaMapMarkedAlt } from 'react-icons/fa';

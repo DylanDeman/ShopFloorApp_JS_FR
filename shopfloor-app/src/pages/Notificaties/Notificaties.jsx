@@ -4,7 +4,6 @@ import useSWR from 'swr';
 import NotificatieList from './NotificatieList';
 
 const Notificaties = () => {
-
   const {
     data: notificaties,
     loading,
@@ -17,4 +16,5 @@ const Notificaties = () => {
     </AsyncData>
   );
 };
+
 export default Notificaties;
