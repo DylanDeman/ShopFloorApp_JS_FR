@@ -5,7 +5,6 @@ import AsyncData from '../../components/AsyncData';
 import { useParams } from 'react-router-dom';
 import PageHeader from '../../components/genericComponents/PageHeader';
 import SiteInfoForm from '../../components/sites/SiteInfoForm';
-import MachineSelector from '../../components/sites/MachineSelector';
 import SuccessMessage from '../../components/sites/SuccesMessage';
 
 export default function SiteForm() {
@@ -22,7 +21,6 @@ export default function SiteForm() {
     machines_ids: [],
   });
   const [verantwoordelijken, setVerantwoordelijken] = useState([]);
-  const [availableMachines, setAvailableMachines] = useState([]);
   const [selectedMachines, setSelectedMachines] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -57,16 +55,11 @@ export default function SiteForm() {
               : [];
               
             const selected = machinesData.filter((machine) => siteIds.includes(machine.id));
-            const available = machinesData.filter((machine) => !siteIds.includes(machine.id));
-    
-            setAvailableMachines(available);
             setSelectedMachines(selected);
           } else {
-            setAvailableMachines(machinesData);
             setSelectedMachines([]);
           }
         } else {
-          setAvailableMachines(machinesData);
           setSelectedMachines([]);
         }
       } catch (err) {
@@ -102,27 +95,6 @@ export default function SiteForm() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleMachineMove = {
-    moveToSelected: (selectedIds) => {
-      const machinesToMove = availableMachines.filter((m) => selectedIds.includes(m.id));
-      setSelectedMachines([...selectedMachines, ...machinesToMove]);
-      setAvailableMachines(availableMachines.filter((m) => !selectedIds.includes(m.id)));
-    },
-    moveToAvailable: (selectedIds) => {
-      const machinesToMove = selectedMachines.filter((m) => selectedIds.includes(m.id));
-      setAvailableMachines([...availableMachines, ...machinesToMove]);
-      setSelectedMachines(selectedMachines.filter((m) => !selectedIds.includes(m.id)));
-    },
-    moveAllToSelected: () => {
-      setSelectedMachines([...selectedMachines, ...availableMachines]);
-      setAvailableMachines([]);
-    },
-    moveAllToAvailable: () => {
-      setAvailableMachines([...availableMachines, ...selectedMachines]);
-      setSelectedMachines([]);
-    },
   };
 
   const handleSubmit = async (e) => {
@@ -175,14 +147,6 @@ export default function SiteForm() {
               verantwoordelijken={verantwoordelijken}
               onChange={handleChange}
             />
-            
-            {/*<h2 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-6">Machines</h2>
-            
-            <MachineSelector
-              availableMachines={availableMachines}
-              selectedMachines={selectedMachines}
-              onMachineMove={handleMachineMove}
-            /> */}
             
             <div className="mt-6 md:mt-8">
               <button 

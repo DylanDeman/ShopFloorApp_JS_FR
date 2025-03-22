@@ -5,7 +5,7 @@ import './index.css';
 import NotFound from './pages/NotFound.jsx';
 import Layout from './pages/Layout.jsx';
 import Dashboard from './pages/Dashboard.jsx';
-import Sites from './pages/sites/Sites';
+import SitesOverzicht from './pages/sites/SitesOverzicht.jsx';
 import Machines from './pages/Machines.jsx';
 import MachineDetail from './pages/machines/MachineDetail.jsx';
 import Notificaties from './pages/Notificaties/Notificaties.jsx';
@@ -51,7 +51,7 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Sites/>,
+            element: <SitesOverzicht/>,
           },
           {
             path: ':id',

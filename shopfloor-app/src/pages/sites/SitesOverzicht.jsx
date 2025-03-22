@@ -1,10 +1,11 @@
-import SiteList from './SiteList';
+import SiteList from '../../components/Sites/siteOverzichtComponents/SiteList';
 import Information from '../../components/Information';
 import { IoMdAddCircleOutline } from 'react-icons/io';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router';
 import PageHeader from '../../components/genericComponents/PageHeader';
-const Sites = () => {
+
+const SitesOverzicht = () => {
   const navigate = useNavigate();
   const handleAddSite = () => {
     navigate('/sites/create');
@@ -37,4 +38,4 @@ const Sites = () => {
   );
 };
 
-export default Sites;
+export default SitesOverzicht;

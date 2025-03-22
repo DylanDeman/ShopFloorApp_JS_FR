@@ -1,9 +1,9 @@
-import { FaArrowLeft } from 'react-icons/fa6';
 import { useNavigate } from 'react-router';
 import OnderhoudTable from './OnderhoudTable';
 import { useState } from 'react';
 import { Pagination } from '../genericComponents/Pagination';
 import Search from '../genericComponents/Search';
+import PageHeader from '../genericComponents/PageHeader';
 
 export default function OnderhoudenList({machine}) {
   const navigate = useNavigate();
@@ -106,19 +106,9 @@ export default function OnderhoudenList({machine}) {
   }
 
   return (
-    <div className="flex-col md:flex-row flex justify-between py-6">
+    <div className="flex-col md:flex-row flex justify-between">
       <div className="w-full">
-        <div className='flex items-center gap-4 mb-8'>
-          <button 
-            className="text-gray-700 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100"
-            onClick={handleOnClickBack}
-            aria-label="Go back"
-          >
-            <FaArrowLeft size={24} />
-          </button>
-          <h1 className="text-4xl font-semibold flex">Onderhoudshistoriek | {machine.code}</h1>
-        </div>
-
+        <PageHeader title={`Onderhoudshistoriek | ${machine.code}`} onBackClick={handleOnClickBack}/>
         <div className="mb-4 flex flex-wrap items-center justify-between">
           {/* Search input */}
           <Search 

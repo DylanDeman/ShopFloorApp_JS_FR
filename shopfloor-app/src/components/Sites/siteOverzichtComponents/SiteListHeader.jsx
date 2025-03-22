@@ -1,5 +1,5 @@
 // SiteListHeader.jsx
-import Search from '../../components/genericComponents/Search';
+import Search from '../../genericComponents/Search';
 
 export default function SiteListHeader({ zoekterm, onSearch, limit, onLimitChange }) {
   return (
