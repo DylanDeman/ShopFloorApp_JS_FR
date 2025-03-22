@@ -5,6 +5,10 @@ import nodePolyfills from 'rollup-plugin-node-polyfills'; // Add this import
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    allowedHosts: ['novafox.duckdns.org'],
+    // optionally other server settings
+  },
   plugins: [
     react(),
     tailwindcss(),

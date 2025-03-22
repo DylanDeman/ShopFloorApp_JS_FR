@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AsyncData from '../../components/AsyncData';
-import SiteTable from '../../components/Sites/SiteTable';
+import SiteTable from '../../components/sites/SiteTable';
 import { Pagination } from '../../components/genericComponents/Pagination';
 import useSWR from 'swr';
 import { getAll } from '../../api';
