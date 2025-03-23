@@ -23,7 +23,6 @@ export default function MachineList({machinesData}) {
     field: 'id',
     direction: 'asc',
   });
-  console.log('machinesData:', machinesData);
   
   // Process data with custom hook
   const { 

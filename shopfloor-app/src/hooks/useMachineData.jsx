@@ -1,9 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
-import { convertProductieStatus } from '../components/machines/ProductieConverter';
-import { convertStatus } from '../components/machines/StatusConverter';
-import { StatusDisplay } from '../components/machines/StatusDisplay';
-import { ProductieStatusDisplay } from '../components/machines/ProductieStatusDisplay';
+import { StatusDisplay } from '../components/genericComponents/StatusDisplay';
 import { Link } from 'react-router-dom';
+import { convertStatus } from '../components/genericComponents/StatusConverter';
 
 export default function useMachineData({
   rawData,
@@ -47,7 +45,7 @@ export default function useMachineData({
       setUniqueStatuses(statuses);
       
       const productieStatuses = [...new Set(processed.map((machine) => {
-        const status = convertProductieStatus(machine.rawProductieStatus);
+        const status = convertStatus(machine.rawProductieStatus);
         return status?.text || '';
       }))].filter(Boolean).sort();
       setUniqueProductieStatuses(productieStatuses);
@@ -61,7 +59,7 @@ export default function useMachineData({
   const filteredMachines = useMemo(() => {
     return processedMachines.filter((machine) => {
       const statusText = convertStatus(machine.rawStatus)?.text || '';
-      const productieStatusText = convertProductieStatus(machine.rawProductieStatus)?.text || '';
+      const productieStatusText = convertStatus(machine.rawProductieStatus)?.text || '';
       
       // Text search filter
       const matchesSearch = !zoekterm || 
@@ -103,7 +101,7 @@ export default function useMachineData({
       id: machine.id,
       locatie: machine.locatie,
       status: <StatusDisplay status={machine.rawStatus} />,
-      productie_status: <ProductieStatusDisplay status={machine.rawProductieStatus} />,
+      productie_status: <StatusDisplay status={machine.rawProductieStatus} />,
       technieker: machine.technieker,
       aantal_onderhoudsbeurten: machine.aantal_onderhoudsbeurten !== 0 ? (
         <Link to={`./${machine.id}/onderhouden`} className='underline'>{machine.aantal_onderhoudsbeurten}</Link>

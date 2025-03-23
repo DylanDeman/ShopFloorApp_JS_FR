@@ -23,7 +23,8 @@ export default function SiteList({data}) {
     field: 'id',
     direction: 'asc',
   });
-
+  console.log(data);
+  
   // Process data with custom hook
   const { 
     filteredSites,

@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { StatusDisplay } from '../components/genericComponents/StatusDisplay';
+import { convertStatus } from '../components/genericComponents/StatusConverter';
 
 export default function useSiteData({
   rawData,
@@ -16,24 +18,25 @@ export default function useSiteData({
   const [uniqueVerantwoordelijken, setUniqueVerantwoordelijken] = useState([]);
   const [maxMachineCount, setMaxMachineCount] = useState(0);
 
-  // Process raw data into a more usable format
   useEffect(() => {
     if (rawData && rawData.length > 0) {
       const processed = rawData.map((site) => ({
         id: site.id,
         naam: site.naam,
-        status: site.status,
+        rawStatus: site.status,
         verantwoordelijke: `${site.verantwoordelijke?.voornaam} ${site.verantwoordelijke?.naam}`,
         aantal_machines: site.machines ? site.machines?.length : 0,
       }));
       
       setProcessedSites(processed);
       
-      // Extract unique values for filters
-      const statuses = [...new Set(processed.map((site) => site.status))].filter(Boolean);
+      const statuses = [...new Set(processed.map((site) => {
+        const status = convertStatus(site.rawStatus);
+        return status?.text || '';
+      }))].filter(Boolean).sort();
       setUniqueStatuses(statuses);
       
-      const verantwoordelijken = [...new Set(processed.map((site) => site.verantwoordelijke))].filter(Boolean);
+      const verantwoordelijken = [...new Set(processed.map((site) => site.verantwoordelijke))].filter(Boolean).sort();
       setUniqueVerantwoordelijken(verantwoordelijken);
       
       const maxMachines = Math.max(...processed.map((site) => site.aantal_machines));
@@ -41,83 +44,99 @@ export default function useSiteData({
     }
   }, [rawData]);
 
-  // Filter sites based on search term and filters
-  const filteredSites = processedSites.filter((site) => {
-    // Text search filter
-    const matchesSearch =
-      !zoekterm || 
-      site.naam?.toLowerCase().includes(zoekterm.toLowerCase()) ||
-      site.verantwoordelijke?.toLowerCase().includes(zoekterm.toLowerCase());
-    
-    // Status filter
-    const matchesStatus = !statusFilter || site.status === statusFilter;
-    
-    // Verantwoordelijke filter
-    const matchesVerantwoordelijke = !verantwoordelijkeFilter || 
-      site.verantwoordelijke === verantwoordelijkeFilter;
-    
-    // Aantal machines filter - min value
-    const minMachines = aantalMachinesMin === '' ? null : parseInt(aantalMachinesMin, 10);
-    const matchesMinMachines = minMachines === null || site.aantal_machines >= minMachines;
-    
-    // Aantal machines filter - max value
-    const maxMachines = aantalMachinesMax === '' ? null : parseInt(aantalMachinesMax, 10);
-    const matchesMaxMachines = maxMachines === null || site.aantal_machines <= maxMachines;
-    
-    return matchesSearch && matchesStatus && matchesVerantwoordelijke && 
-           matchesMinMachines && matchesMaxMachines;
-  });
+  const filteredSites = useMemo(() => {
+    return processedSites.filter((site) => {
+      const statusText = convertStatus(site.rawStatus)?.text || '';
+      
+      // Text search filter
+      const matchesSearch = !zoekterm || 
+        site.naam?.toLowerCase().includes(zoekterm.toLowerCase()) ||
+        statusText.toLowerCase().includes(zoekterm.toLowerCase()) ||
+        site.verantwoordelijke?.toLowerCase().includes(zoekterm.toLowerCase());
+      
+      // Other filters
+      const matchesStatus = !statusFilter || statusText === statusFilter;
+      const matchesVerantwoordelijke = !verantwoordelijkeFilter || site.verantwoordelijke === verantwoordelijkeFilter;
+      
+      const minMachines = aantalMachinesMin === '' ? null : parseInt(aantalMachinesMin, 10);
+      const matchesMinMachines = minMachines === null || site.aantal_machines >= minMachines;
+      
+      const maxMachines = aantalMachinesMax === '' ? null : parseInt(aantalMachinesMax, 10);
+      const matchesMaxMachines = maxMachines === null || site.aantal_machines <= maxMachines;
+      
+      return matchesSearch && matchesStatus && matchesVerantwoordelijke && matchesMinMachines && matchesMaxMachines;
+    });
+  }, [
+    processedSites,
+    zoekterm,
+    statusFilter,
+    verantwoordelijkeFilter,
+    aantalMachinesMin,
+    aantalMachinesMax,
+  ]);
 
-  // Sort sites
-  const sortedAndFilteredSites = sortSites(filteredSites, sortConfig);
+  const sortedSites = useMemo(() => {
+    return sortSites(filteredSites, sortConfig);
+  }, [filteredSites, sortConfig]);
   
-  // Paginate sites
-  const paginatedSites = paginateSites(sortedAndFilteredSites, currentPage, limit);
+  const paginatedSites = useMemo(() => {
+    return paginateSites(sortedSites, currentPage, limit);
+  }, [sortedSites, currentPage, limit]);
+  
+  const formattedPaginatedSites = useMemo(() => {
+    return paginatedSites.map((site) => ({
+      id: site.id,
+      naam: site.naam,
+      status: <StatusDisplay status={site.rawStatus} />,
+      verantwoordelijke: site.verantwoordelijke,
+      aantal_machines: site.aantal_machines,
+    }));
+  }, [paginatedSites]);
   
   return {
     processedSites,
     filteredSites,
-    sortedAndFilteredSites,
-    paginatedSites,
+    sortedSites,
+    paginatedSites: formattedPaginatedSites,
     uniqueStatuses,
     uniqueVerantwoordelijken,
     maxMachineCount,
   };
 }
 
-// Utility functions
 function sortSites(sites, sortConfig) {
   if (!sortConfig.field || !sites) return sites;
   
   const sortedSites = [...sites]; 
+
+  // Map special fields to their sortable values
+  const fieldMap = {
+    'status': 'rawStatus',
+  };
+
+  const sortField = fieldMap[sortConfig.field] || sortConfig.field;
   const integerFields = ['id', 'aantal_machines'];
   const sortFn = integerFields.includes(sortConfig.field) ? sortInteger : sortString;
   
   return sortedSites.sort((a, b) => 
-    sortFn(a, b, sortConfig.field, sortConfig.direction),
+    sortFn(a, b, sortField, sortConfig.direction),
   );
 }
 
 function paginateSites(sites, currentPage, limit) {
-  if(!sites) return sites;
+  if (!sites) return sites;
   return sites.slice((currentPage - 1) * limit, limit * currentPage);
 }
 
 function sortInteger(a, b, field, direction) {
-  return direction === 'asc' 
-    ? a[field] - b[field] 
-    : b[field] - a[field];
+  return direction === 'asc' ? a[field] - b[field] : b[field] - a[field];
 }
 
 function sortString(a, b, field, direction) {
   const valueA = String(a[field]).toLowerCase();
   const valueB = String(b[field]).toLowerCase();
   
-  if (valueA < valueB) {
-    return direction === 'asc' ? -1 : 1;
-  }
-  if (valueA > valueB) {
-    return direction === 'asc' ? 1 : -1;
-  }
+  if (valueA < valueB) return direction === 'asc' ? -1 : 1;
+  if (valueA > valueB) return direction === 'asc' ? 1 : -1;
   return 0;
 }

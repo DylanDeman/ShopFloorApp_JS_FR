@@ -31,4 +31,5 @@ const MachinesOverzicht = () => {
     </>
   );
 };
+
 export default MachinesOverzicht;

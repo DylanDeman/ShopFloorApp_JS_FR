@@ -7,8 +7,8 @@ import AsyncData from '../../components/AsyncData';
 import MachineInfoHeader from '../../components/machines/machineDetailsComponents/MachineInfoHeader';
 import useSWRMutation from 'swr/mutation';
 import { save } from '../../api/index';
-import { ProductieStatusDisplay } from '../../components/machines/ProductieStatusDisplay';
 import PageHeader from '../../components/genericComponents/PageHeader';
+import {StatusDisplay} from '../../components/genericComponents/StatusDisplay';
 
 const MachineDetail = () => {
   const navigate = useNavigate();
@@ -79,7 +79,7 @@ const MachineDetail = () => {
   const productionData = [
     {
       label: 'Productie Status',
-      value: <ProductieStatusDisplay status={machine.productie_status} />,
+      value: <StatusDisplay status={machine.productie_status} />,
     },
     {
       label: 'Productiegraad',
