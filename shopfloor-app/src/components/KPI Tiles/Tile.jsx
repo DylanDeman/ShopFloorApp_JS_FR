@@ -151,7 +151,7 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
                   {selectedSiteData.length === 0 ? '' : ' ' + selectedSiteData[0].site_id}
                 </h3>
                 <p className="text-8xl font-bold text-blue-500">
-                  {selectedSiteData.length === 0 ? '' : `${(selectedSiteData[0].value * 100).toFixed(0)}%`}
+                  {selectedSiteData.length === 0 ? '' : `${(parseFloat(selectedSiteData[0].value)).toFixed(0)}%`}
                 </p>
               </Suspense>
             </div>
@@ -176,7 +176,7 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
           : 'N/A';
 
         const percentage = lastValue !== 'N/A'
-          ? `${(parseFloat(lastValue) * 100).toFixed(0)}%`
+          ? `${(parseFloat(lastValue)).toFixed(0)}%`
           : 'N/A';
 
         return (
