@@ -4,7 +4,7 @@ import { getAll } from '../../api/index';
 import Information from '../../components/Information';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 import PageHeader from '../../components/genericComponents/PageHeader';
-import MachineList from '../onderhouden_machines/MachineList';
+import MachineList from '../../components/machines/machineOverzichtComponents/MachineList';
 
 const MachinesOverzicht = () => {
   const {

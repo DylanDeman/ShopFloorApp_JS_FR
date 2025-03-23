@@ -86,7 +86,7 @@ const router = createBrowserRouter([
             element: <AddOrEditMachine/>,
           },
           {
-            index: ':id/onderhouden',
+            path: ':id/onderhouden',
             element: <OnderhoudenMachineOverzicht/>,
           },
           {

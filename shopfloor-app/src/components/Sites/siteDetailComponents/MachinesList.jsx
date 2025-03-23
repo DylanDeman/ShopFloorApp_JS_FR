@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import MachineTable from '../../machines/machineOverzichtComponents/MachineTable';
+import MachineTable from '../../machines/machineDetailsComponents/MachineTable';
 import { Pagination } from '../../genericComponents/Pagination';
 import MachineListHeader from '../../machines/machineOverzichtComponents/MachineListHeader';
 import MachineListFilters from './MachineListFilters';
-import useMachineData from '../../../hooks/useMachineData';
+import useMachineData from '../../../hooks/useSiteMachineData';
 
 export default function MachineList({machinesData}) {
   const navigate = useNavigate();

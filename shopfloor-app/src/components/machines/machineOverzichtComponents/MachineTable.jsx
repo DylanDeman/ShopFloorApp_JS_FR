@@ -2,10 +2,10 @@ import TableRow from '../../genericComponents/TableRow';
 
 const MachineTable = ({ 
   machines, 
-  onShow, 
+  showOnderhouden, 
+  onShow,
   onSort, 
   sortConfig, 
-  onEdit,
 }) => {
   if (machines.length === 0) {
     return (
@@ -15,6 +15,7 @@ const MachineTable = ({
     );
   }
 
+  // Helper functie om de header van de tabel te renderen met een juiste icoontje
   const renderSortableHeader = (label, field) => (
     <th 
       className="border border-gray-300 px-4 md:py-2 cursor-pointer select-none"
@@ -29,28 +30,28 @@ const MachineTable = ({
   );
 
   return (
-    <div className="md:overflow-x-auto overflow-x-auto">
-      <table className="border-separate border-spacing-0 rounded-md border border-gray-300 w-full">
+    <div className="overflow-x-auto" data-cy="machine-table-container">
+      <table className="min-w-full border-separate border-spacing-0 rounded-md border border-gray-300" >
         <thead>
-          <tr className="bg-gray-100 text-gray-700 uppercase text-sm font-semibold">
-            <th className="border border-gray-300 px-4 md:py-2 select-none"></th>
+          <tr className="bg-gray-100 text-gray-700 uppercase text-xs sm:text-sm md:text-base font-semibold">
             {renderSortableHeader('Nr.', 'id')}
             {renderSortableHeader('Locatie', 'locatie')}
             {renderSortableHeader('Status', 'status')}
             {renderSortableHeader('Productiestatus', 'productie_status')}
             {renderSortableHeader('Technieker', 'technieker')}
-            <th></th>
+            {renderSortableHeader('Aantal Onderhoudsbeurten', 'aantal_onderhoudsbeurten')}
+            <th className="border border-gray-300 px-4 md:py-2"></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody data-cy="site-details">
           {machines.map((machine) => (
             <TableRow
               key={machine.id} 
-              data={machine}
-              columns={['id', 'locatie', 'status', 'productie_status', 'technieker']} 
+              data={machine} 
+              columns={['id', 'locatie', 'status', 'productie_status', 'technieker', 'aantal_onderhoudsbeurten']} 
               data-cy={`machine-row-${machine.id}`}
-              onShow={onShow} 
-              onEdit={onEdit}
+              showOnderhouden={showOnderhouden}
+              onShow={onShow}
             />
           ))}
         </tbody>
