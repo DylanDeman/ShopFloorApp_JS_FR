@@ -70,12 +70,11 @@ const Login = () => {
                 />
               </div>
               <Error error={error} />
-              <p className="text-sm text-red-500 cursor-pointer">Wachtwoord vergeten?</p>
               <button
                 type="submit"
                 className="disabled:bg-red-400 enabled:hover:cursor-pointer 
                   w-full bg-red-500 text-white py-2 rounded 
-                  hover:bg-red-600 transition"
+                  hover:bg-red-600 transition mt-5"
                 disabled={loading}
                 data-cy="loginSubmitButton"
               >
