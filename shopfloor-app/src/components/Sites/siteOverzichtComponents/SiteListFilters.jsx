@@ -88,7 +88,8 @@ export default function SiteListFilters({
           <div className="flex items-end mb-2 md:mb-0">
             <button
               onClick={onResetFilters}
-              className="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:cursor-pointer"
+              className="hover:bg-red-700 bg-red-500 text-white py-2 px-4 rounded-md 
+              hover:cursor-pointer transition-all duration-300"
               data-cy="reset_filters"
             >
               Filters wissen

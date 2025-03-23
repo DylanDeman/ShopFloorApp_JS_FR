@@ -1,16 +1,12 @@
-// SiteList.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AsyncData from '../../AsyncData';
 import SiteTable from './SiteTable';
 import { Pagination } from '../../genericComponents/Pagination';
-import useSWR from 'swr';
-import { getAll } from '../../../api';
 import useSiteData from '../../../hooks/useSiteData';
 import SiteListHeader from './SiteListHeader';
 import SiteListFilters from './SiteListFilters';
 
-export default function SiteList() {
+export default function SiteList({data}) {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -28,9 +24,6 @@ export default function SiteList() {
     direction: 'asc',
   });
 
-  // Fetch data
-  const { data, loading, error } = useSWR('sites', getAll);
-  
   // Process data with custom hook
   const { 
     filteredSites,
@@ -139,25 +132,23 @@ export default function SiteList() {
           onResetFilters={handleResetFilters}
         />
 
-        <AsyncData error={error} loading={loading}>
-          <SiteTable
-            sites={paginatedSites}
-            onShow={handleShow}
-            onSort={handleSort}
-            sortConfig={sortConfig}
-            onShowGrondplan={handleShowGrondplan}
-            onEdit={handleEditSite}
-          />
+        <SiteTable
+          sites={paginatedSites}
+          onShow={handleShow}
+          onSort={handleSort}
+          sortConfig={sortConfig}
+          onShowGrondplan={handleShowGrondplan}
+          onEdit={handleEditSite}
+        />
           
-          <div className="mt-6">
-            <Pagination 
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              data={data}
-              totalPages={filteredSites.length === 0 ? 1 : Math.ceil(filteredSites.length / limit)}
-            />
-          </div>
-        </AsyncData>
+        <div className="mt-6">
+          <Pagination 
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            data={data}
+            totalPages={filteredSites.length === 0 ? 1 : Math.ceil(filteredSites.length / limit)}
+          />
+        </div>
       </div>
     </div>
   );

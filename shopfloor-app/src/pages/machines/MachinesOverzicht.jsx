@@ -7,7 +7,6 @@ import PageHeader from '../../components/genericComponents/PageHeader';
 import MachineList from '../onderhouden_machines/MachineList';
 
 const MachinesOverzicht = () => {
-
   const {
     data: machines = [],
     isLoading,
@@ -17,6 +16,7 @@ const MachinesOverzicht = () => {
   return (
     <>
       <PageHeader title="Overzicht machines" />
+
       <Information
         info={
           'Hieronder vindt u een overzicht van machines.\
@@ -24,8 +24,9 @@ const MachinesOverzicht = () => {
         }
         icon={IoInformationCircleOutline}
       />
+      
       <AsyncData loading={isLoading} error={error}>
-        <MachineList machinesData={machines}/>
+        <MachineList data={machines}/>
       </AsyncData>
     </>
   );

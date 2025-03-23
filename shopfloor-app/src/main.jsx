@@ -8,7 +8,7 @@ import Dashboard from './pages/Dashboard.jsx';
 import SitesOverzicht from './pages/sites/SitesOverzicht.jsx';
 import MachinesOverzicht from './pages/machines/MachinesOverzicht.jsx';
 import MachineDetail from './pages/machines/MachineDetail.jsx';
-import Notificaties from './pages/Notificaties/Notificaties.jsx';
+import NotificatiesOverzicht from './pages/Notificaties/NotificatiesOverzicht.jsx';
 import Login from './pages/Login.jsx';
 import SiteDetail from './pages/sites/SiteDetail.jsx';
 import SiteGrondplan from './pages/sites/SiteGrondplan.jsx';
@@ -66,14 +66,12 @@ const router = createBrowserRouter([
             element: <AddOrEditSite/>,
           },
           {
-            path:':id/machines/new',
-            element: <MachineForm/>,
-
+            path: 'new',
+            element: <AddOrEditSite/>,
           },
           {
-            path: 'create',
-            element: <AddOrEditSite/>,
-
+            path:':id/machines/new',
+            element: <MachineForm/>,
           },
         ],
       },
@@ -115,7 +113,7 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Notificaties />,
+            element: <NotificatiesOverzicht />,
           },
         ],
       },

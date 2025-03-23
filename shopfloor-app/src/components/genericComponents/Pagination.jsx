@@ -19,7 +19,7 @@ export function Pagination({currentPage, setCurrentPage, totalPages, data}){
         className={`flex items-center select-none gap-2 px-4 py-2 rounded-md transition-all duration-300
           ${isPreviousDisabled 
       ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-      : 'bg-red-500 hover:bg-red-600 hover:cursor-pointer text-white hover:shadow-lg hover:-translate-x-1'
+      : 'bg-red-500 hover:cursor-pointer text-white hover:shadow-lg hover:bg-red-700'
     }`}
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={isPreviousDisabled}
@@ -34,10 +34,10 @@ export function Pagination({currentPage, setCurrentPage, totalPages, data}){
       
       {/* Volgende button */}
       <button 
-        className={`flex items-center select-none gap-2 px-4 py-2 rounded-md transition-all duration-300
+        className={`flex items-center select-none gap-2 px-4 py-2 rounded-md duration-300 transition-all
           ${isNextDisabled 
       ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-      : 'bg-red-500 hover:bg-red-600 hover:cursor-pointer text-white hover:shadow-lg hover:translate-x-1'
+      : 'bg-red-500 hover:cursor-pointer text-white hover:shadow-lg hover:bg-red-700'
     }`}
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={isNextDisabled}

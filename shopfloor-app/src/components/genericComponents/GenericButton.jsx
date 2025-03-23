@@ -1,12 +1,13 @@
-const GenericButton = ({ onClick, text, icon: Icon }) => {
+const GenericButton = ({ onClick, text, icon: Icon, otherProps }) => {
   return (
     <button 
-      className="bg-red-500 hover:cursor-pointer hover:bg-red-700 
+      className="bg-red-500 hover:cursor-pointer hover:bg-red-700 transition-all duration-300
           text-white font-bold py-2 px-4 
           rounded flex items-center gap-x-2 mb-6 mt-10"
       onClick={onClick}
+      {...otherProps}
     >
-      <Icon />
+      {Icon && <Icon />}
       {text}
     </button>
   );

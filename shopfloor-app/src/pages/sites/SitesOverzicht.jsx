@@ -5,12 +5,21 @@ import { IoInformationCircleOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router';
 import PageHeader from '../../components/genericComponents/PageHeader';
 import GenericButton from '../../components/genericComponents/GenericButton';
+import AsyncData from '../../components/AsyncData';
+import useSWR from 'swr';
+import { getAll } from '../../api/index';
 
 const SitesOverzicht = () => {
   const navigate = useNavigate();
   const handleAddSite = () => {
-    navigate('/sites/create');
+    navigate('/sites/new');
   };
+
+  const {
+    data: sites = [],
+    isLoading,
+    error,
+  } = useSWR('sites', getAll);
   
   return (
     <>
@@ -26,7 +35,9 @@ const SitesOverzicht = () => {
       />
       
       {/* Lijst met alle sites*/}
-      <SiteList />
+      <AsyncData loading={isLoading} error={error}>
+        <SiteList data={sites} />
+      </AsyncData>
     </>
   );
 };

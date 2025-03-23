@@ -3,7 +3,7 @@ import AsyncData from '../../components/AsyncData';
 import useSWR from 'swr';
 import NotificatieList from './NotificatieList';
 
-const Notificaties = () => {
+const NotificatiesOverzicht = () => {
   const {
     data: notificaties,
     loading,
@@ -17,4 +17,4 @@ const Notificaties = () => {
   );
 };
 
-export default Notificaties;
+export default NotificatiesOverzicht;

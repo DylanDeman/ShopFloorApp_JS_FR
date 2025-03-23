@@ -7,7 +7,7 @@ import PageHeader from '../../components/genericComponents/PageHeader';
 import SuccessMessage from '../../components/sites/SuccesMessage';
 
 export default function MachineForm() {
-  const { id, machineId } = useParams();  // `id` is the site ID, `machineId` is the machine ID
+  const { id, machineId } = useParams();
   const navigate = useNavigate();
   const isNewMachine = !machineId || machineId === 'new';
 

@@ -9,12 +9,12 @@ import { StatusDisplay } from '../../components/machines/StatusDisplay';
 import { convertStatus } from '../../components/machines/StatusConverter';
 import { Link } from 'react-router-dom';
 
-export default function MachineList({machinesData}) {
+export default function MachineList({data}) {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [zoekterm, setZoekterm] = useState('');
-  const rawDataMachines = machinesData || { items: [] };
+  const rawDataMachines = data || { items: [] };
   
   const rawMachines = rawDataMachines.items.map((machine) => ({
     id: machine.id,

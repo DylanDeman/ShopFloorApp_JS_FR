@@ -135,7 +135,7 @@ export default function AddOrEditSite() {
           title={isNewSite ? pageTitle : `Site | ${pageTitle}`}
           onBackClick={handleOnClickBack}
         />
-        
+
         {successMessage && <SuccessMessage message={successMessage} />}
         
         <div className="bg-white p-3 md:p-6 border rounded">

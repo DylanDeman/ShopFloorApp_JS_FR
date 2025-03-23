@@ -39,7 +39,7 @@ const SiteDetails = () => {
     <>
       <AsyncData error={siteError} loading={siteLoading}>
         <div data-cy="site-details" className="flex justify-between items-center">
-          <PageHeader title={`Site | ${site.naam}`} onBackClick={handleOnClickBack} />
+          <PageHeader title={`Site | ${site.naam}`} onBackClick={handleOnClickBack}/>
           <div className="flex gap-4 items-center">
             <GenericButton icon={FaMapMarkedAlt} onClick={handleShowGrondplan} text="Bekijk grondplan"/>
             <GenericButton icon={IoMdAddCircleOutline} onClick={handleAddMachine} text="Machine toevoegen"/>
@@ -47,9 +47,7 @@ const SiteDetails = () => {
         </div>
 
         <Information 
-          info="Hieronder vindt u een overzicht van alle sites. 
-            Klik op een site om een site te raadplegen 
-            en zijn machines te bekijken."
+          info="Hieronder vindt u de gegevens van deze site en zijn machines. Klik op een machine voor meer informatie."
           icon={IoInformationCircleOutline}
         />
 
@@ -59,9 +57,7 @@ const SiteDetails = () => {
         />
       
         {/* Lijst met alle machines*/}
-        <MachineList
-          machinesData={site.machines}
-        />
+        <MachineList machinesData={site.machines}/>
       </AsyncData>
     </>
   );
