@@ -23,11 +23,13 @@ const SitesOverzicht = () => {
   
   return (
     <>
+      {/* Pagina titel en knop om een site toe te voegen */}
       <div className="flex justify-between items-center">
         <PageHeader title="Sites" />
         <GenericButton icon={IoMdAddCircleOutline} onClick={handleAddSite} text="Site toevoegen"/>
       </div>
 
+      {/* Informatie over de sites */}
       <Information 
         info="Hieronder vindt u een overzicht van alle sites. 
         Klik op een site om de details van de site te bekijken!"

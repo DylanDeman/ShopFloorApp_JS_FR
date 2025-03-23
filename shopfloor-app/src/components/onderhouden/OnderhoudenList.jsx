@@ -3,7 +3,6 @@ import OnderhoudTable from './OnderhoudTable';
 import { useState } from 'react';
 import { Pagination } from '../genericComponents/Pagination';
 import Search from '../genericComponents/Search';
-import PageHeader from '../genericComponents/PageHeader';
 
 export default function OnderhoudenList({machine}) {
   const navigate = useNavigate();
@@ -69,10 +68,6 @@ export default function OnderhoudenList({machine}) {
     }));
   };
 
-  const handleOnClickBack = () => {
-    navigate(-1);
-  };
-
   const handleShow = (id) => {
     navigate(`../../onderhouden/${id}`);
   };
@@ -108,7 +103,7 @@ export default function OnderhoudenList({machine}) {
   return (
     <div className="flex-col md:flex-row flex justify-between">
       <div className="w-full">
-        <PageHeader title={`Onderhoudshistoriek | ${machine.code}`} onBackClick={handleOnClickBack}/>
+        
         <div className="mb-4 flex flex-wrap items-center justify-between">
           {/* Search input */}
           <Search 

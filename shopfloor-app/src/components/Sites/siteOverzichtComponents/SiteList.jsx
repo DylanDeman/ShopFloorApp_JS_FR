@@ -23,7 +23,6 @@ export default function SiteList({data}) {
     field: 'id',
     direction: 'asc',
   });
-  console.log(data);
   
   // Process data with custom hook
   const { 
@@ -141,7 +140,7 @@ export default function SiteList({data}) {
           onShowGrondplan={handleShowGrondplan}
           onEdit={handleEditSite}
         />
-          
+        
         <div className="mt-6">
           <Pagination 
             currentPage={currentPage}
