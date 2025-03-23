@@ -1,7 +1,5 @@
 import { FaTrash } from 'react-icons/fa';
 import {
-  LineChart,
-  Line,
   BarChart,
   Bar,
   XAxis,
@@ -51,20 +49,6 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
 
   const renderGraph = () => {
     switch (graphType) {
-      case 'LINE': {
-        return (
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold mb-2">Site {formattedData?.site_id}</h3>
-            <LineChart data={formattedData} width={500} height={300}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="value" stroke="#6366F1" strokeWidth={2} />
-            </LineChart>
-          </div>
-        );
-      }
       case 'BARHOOGLAAG':
         return (
           <BarChart data={[...formattedData].sort((a, b) => b.value - a.value)}>
@@ -151,7 +135,7 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
                   {selectedSiteData.length === 0 ? '' : ' ' + selectedSiteData[0].site_id}
                 </h3>
                 <p className="text-8xl font-bold text-blue-500">
-                  {selectedSiteData.length === 0 ? '' : `${(selectedSiteData[0].value * 100).toFixed(0)}%`}
+                  {selectedSiteData.length === 0 ? '' : `${(parseFloat(selectedSiteData[0].value)).toFixed(0)}%`}
                 </p>
               </Suspense>
             </div>
@@ -176,7 +160,7 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
           : 'N/A';
 
         const percentage = lastValue !== 'N/A'
-          ? `${(parseFloat(lastValue) * 100).toFixed(0)}%`
+          ? `${(parseFloat(lastValue)).toFixed(0)}%`
           : 'N/A';
 
         return (
@@ -192,26 +176,32 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
         }
 
         const machineList = machines.items;
-        const filteredMachines = machineList.filter((machine) => machine.technieker?.id === user_id
-          || machine.site.verantwoordelijke.id === user_id);
+        const filteredMachines = machineList.filter(
+          (machine) => machine.technieker?.id === user_id || machine.site.verantwoordelijke.id === user_id,
+        );
 
         return (
-          <div className="space-y-4">
+          <div className="overflow-x-auto">
             {filteredMachines.length > 0 ? (
-              filteredMachines.map((machine) => (
-                <div key={machine.id} className="border rounded-lg p-4 bg-gray-50 shadow cursor-pointer"
-                  onClick={() => navigate(`/machines/${machine.id}`)}>
-                  <h3 className="text-lg font-semibold text-blue-600">
-                    Machine {machine.id}
-                  </h3>
-                  <p className="text-gray-700">
-                    <strong>Code:</strong> {machine.code} <br />
-                    <strong>Locatie:</strong> {machine.locatie} <br />
-                    <strong>Status:</strong> {machine.status} <br />
-                    <strong>Product info:</strong> {machine.product.naam} <br />
-                  </p>
-                </div>
-              ))
+              <div className="flex space-x-4 p-2">
+                {filteredMachines.map((machine) => (
+                  <div
+                    key={machine.id}
+                    className="border rounded-lg p-4 bg-gray-50 shadow cursor-pointer min-w-[250px]"
+                    onClick={() => navigate(`/machines/${machine.id}`)}
+                  >
+                    <h3 className="text-lg font-semibold text-blue-600">
+                      Machine {machine.id}
+                    </h3>
+                    <p className="text-gray-700">
+                      <strong>Code:</strong> {machine.code} <br />
+                      <strong>Locatie:</strong> {machine.locatie} <br />
+                      <strong>Status:</strong> {machine.status} <br />
+                      <strong>Product info:</strong> {machine.product.naam} <br />
+                    </p>
+                  </div>
+                ))}
+              </div>
             ) : (
               <p className="text-gray-500">Geen relevante machines gevonden.</p>
             )}
@@ -238,22 +228,27 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
         );
 
         return (
-          <div className="space-y-4">
+          <div className="overflow-x-auto">
             {filteredMachines.length > 0 ? (
-              filteredMachines.map((machine) => (
-                <div key={machine.id} className="border rounded-lg p-4 bg-gray-50 shadow cursor-pointer"
-                  onClick={() => navigate(`/machines/${machine.id}`)}>
-                  <h3 className="text-lg font-semibold text-blue-600">
-                    Machine {machine.id}
-                  </h3>
-                  <p className="text-gray-700">
-                    <strong>Code:</strong> {machine.code} <br />
-                    <strong>Locatie:</strong> {machine.locatie} <br />
-                    <strong>Status:</strong> {machine.status} <br />
-                    <strong>Product:</strong> {machine.product.naam} <br />
-                  </p>
-                </div>
-              ))
+              <div className="flex space-x-4 p-2">
+                {filteredMachines.map((machine) => (
+                  <div
+                    key={machine.id}
+                    className="border rounded-lg p-4 bg-gray-50 shadow cursor-pointer min-w-[250px]"
+                    onClick={() => navigate(`/machines/${machine.id}`)}
+                  >
+                    <h3 className="text-lg font-semibold text-blue-600">
+                      Machine {machine.id}
+                    </h3>
+                    <p className="text-gray-700">
+                      <strong>Code:</strong> {machine.code} <br />
+                      <strong>Locatie:</strong> {machine.locatie} <br />
+                      <strong>Status:</strong> {machine.status} <br />
+                      <strong>Product:</strong> {machine.product.naam} <br />
+                    </p>
+                  </div>
+                ))}
+              </div>
             ) : (
               <p className="text-gray-500">Geen relevante machines gevonden.</p>
             )}
@@ -273,24 +268,26 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
         ).slice(0, 5);
 
         return (
-          <div className="space-y-4">
+          <div className="overflow-x-auto">
             {filteredOnderhouden.length > 0 ? (
-              filteredOnderhouden.map((onderhoud) => (
-                <div key={onderhoud.id} className="border rounded-lg p-4 bg-gray-50 shadow cursor-pointer"
-                  onClick={() => navigate(`/machines_onderhouden/${onderhoud.machine_id}`)}
-                >
-                  <h3 className="text-lg font-semibold text-blue-600">
-                    Onderhoud {onderhoud.id}
-                  </h3>
-                  <p className="text-gray-700">
-                    <strong>Starttijd:</strong> {new Date(onderhoud.starttijdstip).toLocaleDateString()} <br />
-                    <strong>Eindtijd:</strong> {new Date(onderhoud.eindtijdstip).toLocaleDateString()} <br />
-                    <strong>Status:</strong> {onderhoud.status} <br />
-                    <strong>Reden:</strong> {onderhoud.reden} <br />
-                    <strong>Opmerkingen:</strong> {onderhoud.opmerkingen} <br />
-                  </p>
-                </div>
-              ))
+              <div className="flex space-x-4">
+                {filteredOnderhouden.map((onderhoud) => (
+                  <div key={onderhoud.id} className="min-w-max border rounded-lg p-4 bg-gray-50 shadow cursor-pointer"
+                    onClick={() => navigate(`/machines_onderhouden/${onderhoud.machine_id}`)}
+                  >
+                    <h3 className="text-lg font-semibold text-blue-600">
+                      Onderhoud {onderhoud.id}
+                    </h3>
+                    <p className="text-gray-700">
+                      <strong>Starttijd:</strong> {new Date(onderhoud.starttijdstip).toLocaleDateString()} <br />
+                      <strong>Eindtijd:</strong> {new Date(onderhoud.eindtijdstip).toLocaleDateString()} <br />
+                      <strong>Status:</strong> {onderhoud.status} <br />
+                      <strong>Reden:</strong> {onderhoud.reden} <br />
+                      <strong>Opmerkingen:</strong> {onderhoud.opmerkingen} <br />
+                    </p>
+                  </div>
+                ))}
+              </div>
             ) : (
               <p className="text-gray-500">Geen onderhouden gevonden.</p>
             )}
@@ -304,39 +301,48 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
         const onderhoudList = onderhouden.items;
 
         const gefilterdeOnderhouden = onderhoudList.filter(
-          (onderhoud) => kpiIds.includes(onderhoud.id) && onderhoud.technieker.id === user_id);
+          (onderhoud) => kpiIds.includes(onderhoud.id) && onderhoud.technieker.id === user_id,
+        );
 
         return (
-          <div className='space-y-4'>
+          <div className="overflow-x-auto">
             {gefilterdeOnderhouden.length > 0 ? (
-              gefilterdeOnderhouden.map((onderhoud) => (
-                <div key={onderhoud.id} className="border rounded-lg p-4 bg-gray-50 shadow cursor-pointer"
-                  onClick={() => navigate(`/machines_onderhouden/${onderhoud.machine_id}`)}>
-                  <h3 className="text-lg font-semibold text-blue-600">
-                    Onderhoud {onderhoud.id}
-                  </h3>
-                  <p className="text-gray-700">
-                    <strong>Starttijd:</strong> {new Date(onderhoud.starttijdstip).toLocaleDateString()} <br />
-                    <strong>Eindtijd:</strong> {new Date(onderhoud.eindtijdstip).toLocaleDateString()} <br />
-                    <strong>Status:</strong> {onderhoud.status} <br />
-                    <strong>Reden:</strong> {onderhoud.reden} <br />
-                    <strong>Opmerkingen:</strong> {onderhoud.opmerkingen} <br />
-                  </p>
-                </div>
-              ))
+              <div className="flex space-x-4">
+                {gefilterdeOnderhouden.map((onderhoud) => (
+                  <div
+                    key={onderhoud.id}
+                    className="min-w-max border rounded-lg p-4 bg-gray-50 shadow cursor-pointer"
+                    onClick={() => navigate(`/machines_onderhouden/${onderhoud.machine_id}`)}
+                  >
+                    <h3 className="text-lg font-semibold text-blue-600">
+                      Onderhoud {onderhoud.id}
+                    </h3>
+                    <p className="text-gray-700">
+                      <strong>Starttijd:</strong> {new Date(onderhoud.starttijdstip).toLocaleDateString()} <br />
+                      <strong>Eindtijd:</strong> {new Date(onderhoud.eindtijdstip).toLocaleDateString()} <br />
+                      <strong>Status:</strong> {onderhoud.status} <br />
+                      <strong>Reden:</strong> {onderhoud.reden} <br />
+                      <strong>Opmerkingen:</strong> {onderhoud.opmerkingen} <br />
+                    </p>
+                  </div>
+                ))}
+              </div>
             ) : (
               <p className="text-gray-500">Geen onderhouden gevonden.</p>
             )}
           </div>
         );
       }
+
       default:
         return <p className="text-gray-500">Geen grafiek beschikbaar.</p>;
     }
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 m-4 max-w-sm w-full flex flex-col">
+    <div
+      className={'bg-white shadow-lg rounded-lg p-6 m-4 flex flex-col w-full'}
+    >
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">{title}</h2>
         <button
