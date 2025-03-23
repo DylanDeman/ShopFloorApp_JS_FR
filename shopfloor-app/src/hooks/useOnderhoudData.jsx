@@ -1,48 +1,48 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { StatusDisplay } from '../components/genericComponents/StatusDisplay';
 import { convertStatus } from '../components/genericComponents/StatusConverter';
+import { useState } from 'react';
 
 export default function useOnderhoudData({
-  onderhouden,
+  rawData,
   zoekterm,
   statusFilter,
   technikerFilter,
-  redenFilter,
   sortConfig,
   currentPage,
   limit,
 }) {
-  // Process data using useMemo (NO useState)
-  const processedOnderhouden = useMemo(() => {
-    if (!onderhouden || onderhouden.length === 0) return [];
-    
-    return onderhouden.map((onderhoud) => ({
-      id: onderhoud.id,
-      technieker: onderhoud.technieker,
-      datum: onderhoud.datum,
-      starttijdstip: onderhoud.starttijdstip,
-      eindtijdstip: onderhoud.eindtijdstip,
-      reden: onderhoud.reden,
-      rawStatus: onderhoud.status,
-      opmerkingen: onderhoud.opmerkingen,
-    }));
-  }, [onderhouden]);
+  const [processedOnderhouden, setProcessedOnderhouden] = useState([]);
+  const [uniqueStatuses, setUniqueStatuses] = useState([]);
+  const [uniqueTechniekers, setUniqueTechniekers] = useState([]);
+  
+  useEffect(() => {
+    if(rawData && rawData.length > 0) {
+      const processed = rawData.map((onderhoud) => ({
+        id: onderhoud.id,
+        technieker: `${onderhoud.technieker.naam} ${onderhoud.technieker.voornaam}`,
+        datum: onderhoud.datum,
+        starttijdstip: onderhoud.starttijdstip,
+        eindtijdstip: onderhoud.eindtijdstip,
+        reden: onderhoud.reden,
+        rawStatus: onderhoud.status,
+        opmerkingen: onderhoud.opmerkingen,
+        onderhoudsrapport: '',
+      }));
+      
+      setProcessedOnderhouden(processed);
 
-  // Extract unique values for dropdowns
-  const uniqueStatuses = useMemo(() => {
-    return [...new Set(processedOnderhouden.map((onderhoud) => {
-      const status = convertStatus(onderhoud.rawStatus);
-      return status?.text || '';
-    }))].filter(Boolean).sort();
-  }, [processedOnderhouden]);
+      const statuses = [...new Set(processed.map((onderhoud) => {
+        const status = convertStatus(onderhoud.rawStatus);
+        return status?.text || '';
+      }))].filter(Boolean).sort();
+      setUniqueStatuses(statuses);
 
-  const uniqueTechniekers = useMemo(() => {
-    return [...new Set(processedOnderhouden.map((onderhoud) => onderhoud.technieker))].filter(Boolean).sort();
-  }, [processedOnderhouden]);
+      const techniekers = [...new Set(processed.map((onderhoud) => onderhoud.technieker))].filter(Boolean).sort();
+      setUniqueTechniekers(techniekers);
 
-  const uniqueRedenen = useMemo(() => {
-    return [...new Set(processedOnderhouden.map((onderhoud) => onderhoud.reden))].filter(Boolean).sort();
-  }, [processedOnderhouden]);
+    }
+  }, [rawData]);
 
   // Apply filters
   const filteredOnderhouden = useMemo(() => {
@@ -58,11 +58,10 @@ export default function useOnderhoudData({
 
       const matchesStatus = !statusFilter || statusText === statusFilter;
       const matchesTechnieker = !technikerFilter || onderhoud.technieker === technikerFilter;
-      const matchesReden = !redenFilter || onderhoud.reden === redenFilter;
 
-      return matchesSearch && matchesStatus && matchesTechnieker && matchesReden;
+      return matchesSearch && matchesStatus && matchesTechnieker;
     });
-  }, [processedOnderhouden, zoekterm, statusFilter, technikerFilter, redenFilter]);
+  }, [processedOnderhouden, zoekterm, statusFilter, technikerFilter]);
 
   // Sorting
   const sortedOnderhouden = useMemo(() => {
@@ -92,7 +91,6 @@ export default function useOnderhoudData({
     paginatedOnderhouden: formattedPaginatedOnderhouden,
     uniqueStatuses,
     uniqueTechniekers,
-    uniqueRedenen,
   };
 }
 

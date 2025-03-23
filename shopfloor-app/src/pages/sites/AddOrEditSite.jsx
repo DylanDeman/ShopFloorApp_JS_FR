@@ -6,7 +6,7 @@ import { createSite, getAll, getById, updateSite } from '../../api';
 import AsyncData from '../../components/AsyncData';
 import PageHeader from '../../components/genericComponents/PageHeader';
 import SiteInfoForm from '../../components/sites/siteEditOrAddComponents/SiteInfoForm';
-import SuccessMessage from '../../components/sites/SuccesMessage';
+import SuccessMessage from '../../components/genericComponents/SuccesMessage';
 
 export default function AddOrEditSite() {
   const { id } = useParams();
@@ -43,13 +43,18 @@ export default function AddOrEditSite() {
   };
 
   // Fetch users data with useSWR
-  const { data: usersData, error: usersError, loading: usersLoading } = useSWR('/users', getAll);
+  const { 
+    data: usersData, 
+    error: usersError, 
+    loading: usersLoading, 
+  } = useSWR('/users', getAll);
   
   // Fetch site data if editing an existing site
-  const { data: siteData, error: siteError, loading: siteLoading } = useSWR(
-    !isNewSite ? `/sites/${id}` : null, 
-    () => getById(`/sites/${id}`),
-  );
+  const { 
+    data: siteData, 
+    error: siteError, 
+    loading: siteLoading, 
+  } = useSWR( !isNewSite ? `/sites/${id}` : null, getById);
 
   // Process users data to filter verantwoordelijken
   const verantwoordelijken = usersData ? filterVerantwoordelijken(usersData.items) : [];
@@ -80,10 +85,6 @@ export default function AddOrEditSite() {
         await updateSite(id, formData);
         setSuccessMessage('Site succesvol bijgewerkt!');
       }
-      
-      setTimeout(() => {
-        navigate('/sites');
-      }, 2000);
     } catch (err) {
       console.error(`${isNewSite ? 'Creation' : 'Update'} failed:`, err);
       setError(`Er is een fout opgetreden bij het ${isNewSite ? 'toevoegen' : 'bijwerken'} van de site.`);

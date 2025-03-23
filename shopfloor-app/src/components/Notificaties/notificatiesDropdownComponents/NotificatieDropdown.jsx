@@ -1,5 +1,5 @@
 import useSWRMutation from 'swr/mutation';
-import { save } from '../../api';
+import { save } from '../../../api';
 
 export default function NotificatieDropdown({id, bericht, tijdstip}){
 

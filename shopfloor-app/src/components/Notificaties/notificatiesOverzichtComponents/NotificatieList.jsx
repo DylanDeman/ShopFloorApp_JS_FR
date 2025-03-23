@@ -1,4 +1,4 @@
-import NotificatieBlock from '../NotificatieBlock';
+import NotificatieBlock from './NotificatieBlock';
 
 export default function NotificatieList({notificaties}){
   if(!notificaties){

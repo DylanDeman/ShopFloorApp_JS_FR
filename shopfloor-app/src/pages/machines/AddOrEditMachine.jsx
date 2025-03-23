@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import AsyncData from '../../components/AsyncData';
 import PageHeader from '../../components/genericComponents/PageHeader';
-import SuccessMessage from '../../components/sites/SuccesMessage';
+import SuccessMessage from '../../components/genericComponents/SuccesMessage';
 import { getAll, getById, updateMachine, createMachine } from '../../api';
 
 export default function AddOrEditMachine() {

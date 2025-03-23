@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Pagination } from '../../genericComponents/Pagination';
-import MachineListHeader from '../../machines/machineOverzichtComponents/MachineListHeader';
 import MachineListFilters from './MachineListFilters';
 import useMachineData from '../../../hooks/useSiteMachineData';
 import GenericTable from '../../genericComponents/GenericTable';
+import GenericListHeader from '../../genericComponents/GenericListHeader';
 
 export default function MachineList({machinesData}) {
   const navigate = useNavigate();
@@ -106,11 +106,13 @@ export default function MachineList({machinesData}) {
   return (
     <div className="flex-col md:flex-row flex justify-between py-6">
       <div className="w-full">
-        <MachineListHeader
+        <GenericListHeader
           zoekterm={zoekterm}
           onSearch={handleSearch}
           limit={limit}
           onLimitChange={handleLimitChange}
+          searchPlaceholder="Zoek op locatie, status, productiestatus, ..."
+          listPageSizeSelectorPlaceholder={'Aantal machines per pagina'}
         />
 
         <MachineListFilters 

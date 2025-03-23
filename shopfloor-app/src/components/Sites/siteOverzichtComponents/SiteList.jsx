@@ -54,13 +54,13 @@ export default function SiteList({data}) {
   };
   
   const handleSearch = (e) => {
-    setCurrentPage(1);
     setZoekterm(e.target.value);
+    setCurrentPage(1); // Reset to first page when searching
   };
   
   const handleLimitChange = (e) => {
     setLimit(Number(e.target.value));
-    setCurrentPage(1); 
+    setCurrentPage(1); // Reset to first page when changing limit
   };
 
   const handleResetFilters = () => {
@@ -115,7 +115,7 @@ export default function SiteList({data}) {
           onSearch={handleSearch}
           limit={limit}
           onLimitChange={handleLimitChange}
-          searhcPlaceholder="Zoek naar site, verantwoordelijke, ..."
+          searchPlaceholder="Zoek naar site, verantwoordelijke, ..."
           listPageSizeSelectorPlaceholder="Aantal sites per pagina"
         />
 

@@ -106,12 +106,12 @@ export default function MachineList({data}) {
     <div className="flex-col md:flex-row flex justify-between py-6">
       <div className="w-full">
         <GenericListHeader
-          searchPlaceholder="Zoek machines..."
-          listPageSizeSelectorPlaceholder="Aantal machines per pagina"
           zoekterm={zoekterm}
           onSearch={handleSearch}
           limit={limit}
           onLimitChange={handleLimitChange}
+          searchPlaceholder="Zoek machines..."
+          listPageSizeSelectorPlaceholder="Aantal machines per pagina"
         />
 
         <MachineListFilters 

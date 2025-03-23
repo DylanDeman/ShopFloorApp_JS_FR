@@ -2,7 +2,7 @@ import Search from './Search';
 import ListPageSizeSelector from './ListPageCountSelector';
 
 export default function GenericListHeader({ 
-  searhcPlaceholder, 
+  searchPlaceholder, 
   zoekterm, 
   onSearch, 
   limit, 
@@ -15,7 +15,7 @@ export default function GenericListHeader({
       <Search 
         value={zoekterm} 
         onChange={onSearch} 
-        placeholder={searhcPlaceholder}
+        placeholder={searchPlaceholder}
       />
 
       {/* Page size selector */}

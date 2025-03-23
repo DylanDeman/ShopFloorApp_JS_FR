@@ -1,10 +1,8 @@
 export default function OnderhoudListFilters({
   statusFilter,
   techniekerFilter,
-  redenFilter,
   uniqueStatuses,
   uniqueTechniekers,
-  uniqueRedenen,
   onFilterChange,
   onResetFilters,
 }) {
@@ -23,7 +21,7 @@ export default function OnderhoudListFilters({
               value={statusFilter}
               onChange={onFilterChange.status}
               className="border border-gray-300 rounded-md px-3 py-2 w-full md:w-auto"
-              data-cy="onderhoud_status_filter"
+              data-cy="status_filter"
             >
               <option value="">Alle statussen</option>
               {uniqueStatuses.map((status) => (
@@ -50,27 +48,6 @@ export default function OnderhoudListFilters({
               {uniqueTechniekers.map((technieker) => (
                 <option key={technieker} value={technieker}>
                   {technieker}
-                </option>
-              ))}
-            </select>
-          </div>
-          
-          {/* Reden filter */}
-          <div className="mb-2 md:mb-0">
-            <label htmlFor="reden-filter" className="block text-sm text-gray-600 mb-1">
-              Reden
-            </label>
-            <select
-              id="reden-filter"
-              value={redenFilter}
-              onChange={onFilterChange.reden}
-              className="border border-gray-300 rounded-md px-3 py-2 w-full md:w-auto"
-              data-cy="onderhoud_reden_filter"
-            >
-              <option value="">Alle redenen</option>
-              {uniqueRedenen.map((reden) => (
-                <option key={reden} value={reden}>
-                  {reden}
                 </option>
               ))}
             </select>

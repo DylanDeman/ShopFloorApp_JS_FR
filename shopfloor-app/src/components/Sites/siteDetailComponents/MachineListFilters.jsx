@@ -14,7 +14,6 @@ const MachineListFilters = ({
     <div className="mb-6 p-4 rounded-md border border-gray-200">
       <div className="flex flex-wrap items-center">
         <h3 className="text-gray-700 font-medium mb-3 w-full">Filters</h3>
-          
         <div className="flex flex-wrap gap-4">
           {/* Locatie filter */}
           <div className="mb-2 md:mb-0">
