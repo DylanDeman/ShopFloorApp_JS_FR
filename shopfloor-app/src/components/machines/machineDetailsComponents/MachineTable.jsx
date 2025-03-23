@@ -4,7 +4,7 @@ const MachineTable = ({
   machines, 
   onShow, 
   onSort, 
-  sortConfig, 
+  sortConfig,
   onEdit,
 }) => {
   if (machines.length === 0) {

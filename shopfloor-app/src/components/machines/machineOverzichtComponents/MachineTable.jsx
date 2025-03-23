@@ -2,7 +2,7 @@ import TableRow from '../../genericComponents/TableRow';
 
 const MachineTable = ({ 
   machines, 
-  showOnderhouden, 
+  showOnderhouden,
   onShow,
   onSort, 
   sortConfig, 

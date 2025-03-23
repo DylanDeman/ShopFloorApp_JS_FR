@@ -24,9 +24,7 @@ export default function OnderhoudenMachineOverzicht (){
 
   return (
     <>
-      <div className="flex justify-between items-center">
-        <PageHeader title={`Onderhoudshistoriek | ${machine?.code}`} onBackClick={handleBackClick}/>
-      </div>
+      <PageHeader title={`Onderhoudshistoriek | ${machine?.code}`} onBackClick={handleBackClick}/>
 
       <Information 
         info="Hieronder vindt u een overzicht van de onderhouden van deze machine.

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import SiteTable from './SiteTable';
 import { Pagination } from '../../genericComponents/Pagination';
 import useSiteData from '../../../hooks/useSiteData';
 import SiteListHeader from './SiteListHeader';
 import SiteListFilters from './SiteListFilters';
+import GenericTable from '../../genericComponents/GenericTable';
 
 export default function SiteList({data}) {
   const navigate = useNavigate();
@@ -76,10 +76,6 @@ export default function SiteList({data}) {
   const handleShow = (id) => {
     navigate(`/sites/${id}`);
   };
-  
-  const handleShowGrondplan = (id) => {
-    navigate(`/sites/${id}/grondplan`);
-  };
 
   const handleEditSite = (id) => {
     navigate(`/sites/${id}/edit`);
@@ -132,23 +128,29 @@ export default function SiteList({data}) {
           onResetFilters={handleResetFilters}
         />
 
-        <SiteTable
-          sites={paginatedSites}
-          onShow={handleShow}
+        <GenericTable
+          data={paginatedSites}
+          columns={{
+            'Nr.': 'id',
+            'Naam': 'naam',
+            'Verantwoordelijke': 'verantwoordelijke',
+            'Status': 'status',
+            'Aantal machines': 'aantal_machines',
+          }}
           onSort={handleSort}
-          sortConfig={sortConfig}
-          onShowGrondplan={handleShowGrondplan}
+          onShow={handleShow}
           onEdit={handleEditSite}
+          sortConfig={sortConfig}
+          emptyMessage="Er zijn geen machines beschikbaar."
+          dataCyPrefix="machine"
         />
-        
-        <div className="mt-6">
-          <Pagination 
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            data={data}
-            totalPages={filteredSites.length === 0 ? 1 : Math.ceil(filteredSites.length / limit)}
-          />
-        </div>
+
+        <Pagination 
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          data={data}
+          totalPages={filteredSites.length === 0 ? 1 : Math.ceil(filteredSites.length / limit)}
+        />
       </div>
     </div>
   );

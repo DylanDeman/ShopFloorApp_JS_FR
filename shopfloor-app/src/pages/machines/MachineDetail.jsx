@@ -42,7 +42,7 @@ const MachineDetail = () => {
     const slechteProducten = machine.aantal_slechte_producten || 0;
     const totaalProducten = goedeProducten + slechteProducten;
     if (totaalProducten === 0) return '0.0%';
-    return `${((goedeProducten / totaalProducten) * 100).toFixed(1)}%`;
+    return `${((goedeProducten / totaalProducten) * 100).toFixed(2)}%`;
   };
 
   const handleOnClickBack = () => {

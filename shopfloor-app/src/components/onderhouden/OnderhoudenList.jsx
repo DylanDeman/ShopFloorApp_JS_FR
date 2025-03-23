@@ -140,14 +140,12 @@ export default function OnderhoudenList({machine}) {
           show={handleShow}
         />
         
-        <div className="mt-6">
-          <Pagination 
-            currentPage={currentPage} 
-            setCurrentPage={setCurrentPage} 
-            data={processedOnderhouden} 
-            totalPages={sortedOnderhouden.length === 0 ? 1 : Math.ceil(sortedOnderhouden.length / limit)} 
-          />
-        </div>
+        <Pagination 
+          currentPage={currentPage} 
+          setCurrentPage={setCurrentPage} 
+          data={processedOnderhouden} 
+          totalPages={sortedOnderhouden.length === 0 ? 1 : Math.ceil(sortedOnderhouden.length / limit)} 
+        />
       </div>
     </div>
   );

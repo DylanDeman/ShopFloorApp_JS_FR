@@ -134,14 +134,12 @@ export default function MachineList({machinesData}) {
           sortConfig={sortConfig}
         />
         
-        <div className="mt-6">
-          <Pagination
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            data={machinesData}
-            totalPages={filteredMachines.length === 0 ? 1 : Math.ceil(filteredMachines.length / limit)}
-          />
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          data={machinesData}
+          totalPages={filteredMachines.length === 0 ? 1 : Math.ceil(filteredMachines.length / limit)}
+        />
       </div>
     </div>
   );

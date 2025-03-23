@@ -13,7 +13,7 @@ export function Pagination({currentPage, setCurrentPage, totalPages, data}){
   const isNextDisabled = !data || currentPage >= totalPages;
 
   return (
-    <div className="flex justify-between items-center w-full my-4">
+    <div className="flex justify-between items-center w-full my-4 mt-6">
       {/* Vorige button */}
       <button 
         className={`flex items-center select-none gap-2 px-4 py-2 rounded-md transition-all duration-300
