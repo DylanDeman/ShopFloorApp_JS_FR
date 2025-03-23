@@ -2,7 +2,7 @@ import { useParams } from 'react-router';
 import AsyncData from '../../components/AsyncData';
 import { getById } from '../../api';
 import useSWR from 'swr';
-import OnderhoudenList from '../../components/onderhouden/OnderhoudenList';
+import OnderhoudList from '../../components/onderhouden/OnderhoudOverzichtComponents/OnderhoudList';
 import PageHeader from '../../components/genericComponents/PageHeader';
 import { useNavigate } from 'react-router-dom';
 import Information from '../../components/Information';
@@ -33,7 +33,7 @@ export default function OnderhoudenMachineOverzicht (){
       />
 
       <AsyncData loading={isLoading} error={error}>
-        <OnderhoudenList machine={machine}/>
+        <OnderhoudList machine={machine}/>
       </AsyncData>
     </>
   );

@@ -9,6 +9,7 @@ const GenericTable = ({
   sortConfig = { field: '', direction: 'asc' },
   emptyMessage = 'Er zijn geen gegevens beschikbaar.',
   dataCyPrefix = 'item',
+  actionsConfig = {},
 }) => {
   if (!data || data.length === 0) {
     return (
@@ -24,7 +25,6 @@ const GenericTable = ({
   // Default column config
   const defaultColumnConfig = columnKeys.reduce((config, displayKey) => {
     const dataField = columns[displayKey];
-    
     config[displayKey] = {
       label: displayKey.charAt(0).toUpperCase() + displayKey.slice(1).replace(/_/g, ' '),
       field: dataField,
@@ -97,6 +97,7 @@ const GenericTable = ({
               columns={columnFields}
               onEdit={onEdit}
               onShow={onShow}
+              actionsConfig={actionsConfig}
               cellProps={(column, rowData) => cellProps(column, rowData)}
             />
           ))}

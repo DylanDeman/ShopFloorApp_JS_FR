@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import MachineTable from './MachineTable';
 import { Pagination } from '../../genericComponents/Pagination';
 import useMachineData from '../../../hooks/useMachineData';
-import MachineListHeader from './MachineListHeader';
 import MachineListFilters from './MachineListFilters';
+import GenericTable from '../../genericComponents/GenericTable';
+import GenericListHeader from '../../genericComponents/GenericListHeader';
 
 export default function MachineList({data}) {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ export default function MachineList({data}) {
     field: 'id',
     direction: 'asc',
   });
-  console.log('machinesData:', data);
+  
   // Process data with custom hook
   const { 
     filteredMachines,
@@ -105,7 +105,9 @@ export default function MachineList({data}) {
   return (
     <div className="flex-col md:flex-row flex justify-between py-6">
       <div className="w-full">
-        <MachineListHeader
+        <GenericListHeader
+          searchPlaceholder="Zoek machines..."
+          listPageSizeSelectorPlaceholder="Aantal machines per pagina"
           zoekterm={zoekterm}
           onSearch={handleSearch}
           limit={limit}
@@ -125,13 +127,23 @@ export default function MachineList({data}) {
           onResetFilters={handleResetFilters}
         />
 
-        <MachineTable
-          machines={paginatedMachines}
-          onShow={handleShow}
+        <GenericTable
+          data={paginatedMachines}
+          columns={{
+            'Nr.': 'id',
+            'Locatie': 'locatie',
+            'Status': 'status',
+            'ProductieStatus': 'productie_status',
+            'Technieker': 'technieker',
+            'Aantal Onderhoudsbeurten': 'aantal_onderhoudsbeurten',
+          }}
           onSort={handleSort}
+          onShow={handleShow}
           sortConfig={sortConfig}
+          emptyMessage="Er zijn geen machines beschikbaar."
+          dataCyPrefix="machine"
         />
-        
+
         <Pagination
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}

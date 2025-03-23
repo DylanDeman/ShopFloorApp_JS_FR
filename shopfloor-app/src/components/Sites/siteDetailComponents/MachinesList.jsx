@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import MachineTable from '../../machines/machineDetailsComponents/MachineTable';
 import { Pagination } from '../../genericComponents/Pagination';
 import MachineListHeader from '../../machines/machineOverzichtComponents/MachineListHeader';
 import MachineListFilters from './MachineListFilters';
 import useMachineData from '../../../hooks/useSiteMachineData';
+import GenericTable from '../../genericComponents/GenericTable';
 
 export default function MachineList({machinesData}) {
   const navigate = useNavigate();
@@ -126,12 +126,21 @@ export default function MachineList({machinesData}) {
           onResetFilters={handleResetFilters}
         />
 
-        <MachineTable
-          machines={paginatedMachines}
-          onShow={handleShow}
+        <GenericTable
+          data={paginatedMachines}
+          columns={{
+            'Nr.': 'id',
+            'Locatie': 'locatie',
+            'Status': 'status',
+            'ProductieStatus': 'productie_status',
+            'Technieker': 'technieker',
+          }}
           onSort={handleSort}
+          onShow={handleShow}
           onEdit={handleEditMachine}
           sortConfig={sortConfig}
+          emptyMessage="Er zijn geen machines beschikbaar."
+          dataCyPrefix="machine"
         />
         
         <Pagination

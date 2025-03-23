@@ -1,42 +1,18 @@
-const MachineListFilters = ({
-  locatieFilter,
+export default function OnderhoudListFilters({
   statusFilter,
-  productieStatusFilter,
   techniekerFilter,
-  uniqueLocaties = [],
-  uniqueStatuses = [],
-  uniqueProductieStatuses = [],
-  uniqueTechniekers = [],
+  redenFilter,
+  uniqueStatuses,
+  uniqueTechniekers,
+  uniqueRedenen,
   onFilterChange,
   onResetFilters,
-}) => {
+}) {
   return (
     <div className="mb-6 p-4 rounded-md border border-gray-200">
       <div className="flex flex-wrap items-center">
         <h3 className="text-gray-700 font-medium mb-3 w-full">Filters</h3>
-            
         <div className="flex flex-wrap gap-4">
-          {/* Locatie filter */}
-          <div className="mb-2 md:mb-0">
-            <label htmlFor="locatie-filter" className="block text-sm text-gray-600 mb-1">
-              Locatie
-            </label>
-            <select
-              id="locatie-filter"
-              value={locatieFilter}
-              onChange={onFilterChange.locatie}
-              className="border border-gray-300 rounded-md px-3 py-2 w-full md:w-auto"
-              data-cy="locatie_filter"
-            >
-              <option value="">Alle locaties</option>
-              {uniqueLocaties.map((locatie) => (
-                <option key={locatie} value={locatie}>
-                  {locatie}
-                </option>
-              ))}
-            </select>
-          </div>
-          
           {/* Status filter */}
           <div className="mb-2 md:mb-0">
             <label htmlFor="status-filter" className="block text-sm text-gray-600 mb-1">
@@ -47,7 +23,7 @@ const MachineListFilters = ({
               value={statusFilter}
               onChange={onFilterChange.status}
               className="border border-gray-300 rounded-md px-3 py-2 w-full md:w-auto"
-              data-cy="status_filter"
+              data-cy="onderhoud_status_filter"
             >
               <option value="">Alle statussen</option>
               {uniqueStatuses.map((status) => (
@@ -57,28 +33,7 @@ const MachineListFilters = ({
               ))}
             </select>
           </div>
-              
-          {/* Productie Status filter */}
-          <div className="mb-2 md:mb-0">
-            <label htmlFor="productie-status-filter" className="block text-sm text-gray-600 mb-1">
-              Productie Status
-            </label>
-            <select
-              id="productie-status-filter"
-              value={productieStatusFilter}
-              onChange={onFilterChange.productieStatus}
-              className="border border-gray-300 rounded-md px-3 py-2 w-full md:w-auto"
-              data-cy="productie_status_filter"
-            >
-              <option value="">Alle productie statussen</option>
-              {uniqueProductieStatuses.map((status) => (
-                <option key={status} value={status}>
-                  {status}
-                </option>
-              ))}
-            </select>
-          </div>
-              
+          
           {/* Technieker filter */}
           <div className="mb-2 md:mb-0">
             <label htmlFor="technieker-filter" className="block text-sm text-gray-600 mb-1">
@@ -89,7 +44,7 @@ const MachineListFilters = ({
               value={techniekerFilter}
               onChange={onFilterChange.technieker}
               className="border border-gray-300 rounded-md px-3 py-2 w-full md:w-auto"
-              data-cy="technieker_filter"
+              data-cy="onderhoud_technieker_filter"
             >
               <option value="">Alle techniekers</option>
               {uniqueTechniekers.map((technieker) => (
@@ -99,13 +54,34 @@ const MachineListFilters = ({
               ))}
             </select>
           </div>
-              
+          
+          {/* Reden filter */}
+          <div className="mb-2 md:mb-0">
+            <label htmlFor="reden-filter" className="block text-sm text-gray-600 mb-1">
+              Reden
+            </label>
+            <select
+              id="reden-filter"
+              value={redenFilter}
+              onChange={onFilterChange.reden}
+              className="border border-gray-300 rounded-md px-3 py-2 w-full md:w-auto"
+              data-cy="onderhoud_reden_filter"
+            >
+              <option value="">Alle redenen</option>
+              {uniqueRedenen.map((reden) => (
+                <option key={reden} value={reden}>
+                  {reden}
+                </option>
+              ))}
+            </select>
+          </div>
+          
           {/* Reset filters button */}
           <div className="flex items-end mb-2 md:mb-0">
             <button
               onClick={onResetFilters}
               className="hover:bg-red-700 bg-red-500 text-white py-2 px-4 rounded-md 
-                  hover:cursor-pointer transition-all duration-300"
+              hover:cursor-pointer transition-all duration-300"
               data-cy="reset_filters"
             >
               Filters wissen
@@ -115,6 +91,4 @@ const MachineListFilters = ({
       </div>
     </div>
   );
-};
-    
-export default MachineListFilters;
+}

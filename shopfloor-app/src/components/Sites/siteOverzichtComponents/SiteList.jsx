@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Pagination } from '../../genericComponents/Pagination';
 import useSiteData from '../../../hooks/useSiteData';
-import SiteListHeader from './SiteListHeader';
 import SiteListFilters from './SiteListFilters';
 import GenericTable from '../../genericComponents/GenericTable';
+import GenericListHeader from '../../genericComponents/GenericListHeader';
 
 export default function SiteList({data}) {
   const navigate = useNavigate();
@@ -110,11 +110,13 @@ export default function SiteList({data}) {
   return (
     <div className="flex-col md:flex-row flex justify-between py-6">
       <div className="w-full">
-        <SiteListHeader 
+        <GenericListHeader
           zoekterm={zoekterm}
           onSearch={handleSearch}
           limit={limit}
           onLimitChange={handleLimitChange}
+          searhcPlaceholder="Zoek naar site, verantwoordelijke, ..."
+          listPageSizeSelectorPlaceholder="Aantal sites per pagina"
         />
 
         <SiteListFilters 
@@ -141,8 +143,8 @@ export default function SiteList({data}) {
           onShow={handleShow}
           onEdit={handleEditSite}
           sortConfig={sortConfig}
-          emptyMessage="Er zijn geen machines beschikbaar."
-          dataCyPrefix="machine"
+          emptyMessage="Er zijn geen sites beschikbaar."
+          dataCyPrefix="site"
         />
 
         <Pagination 

@@ -17,9 +17,9 @@ export function convertStatus(status) {
     'INACTIEF': { text: 'INACTIEF', color: 'red' },
 
     // Statussen onderhoud
-    'GEPLAND': { text: 'GEPLAND', color: 'orange' },
+    'INGEPLAND': { text: 'INGEPLAND', color: 'red' },
     'IN_UITVOERING': { text: 'IN UITVOERING', color: 'orange' },
     'VOLTOOID': { text: 'VOLTOOID', color: 'green' },
   };
-  return statusMap[status] || { text: 'Ongekende status', color: 'black', bold: false };
+  return statusMap[status] || { text: status, color: 'black', bold: false };
 }
