@@ -2,73 +2,49 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MachineTable from './MachineTable';
 import { Pagination } from '../../genericComponents/Pagination';
-import Search from '../../genericComponents/Search';
-import { convertProductieStatus } from '../ProductieConverter';
-import { ProductieStatusDisplay } from '../ProductieStatusDisplay';
-import { StatusDisplay } from '../StatusDisplay';
-import { convertStatus } from '../StatusConverter';
-import { Link } from 'react-router-dom';
+import useMachineData from '../../../hooks/useMachineData';
+import MachineListHeader from './MachineListHeader';
+import MachineListFilters from './MachineListFilters';
 
 export default function MachineList({data}) {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [zoekterm, setZoekterm] = useState('');
-  const rawDataMachines = data || { items: [] };
+    
+  // Filter states
+  const [locatieFilter, setLocatieFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [productieStatusFilter, setProductieStatusFilter] = useState('');
+  const [techniekerFilter, setTechniekerFilter] = useState('');
   
-  const rawMachines = rawDataMachines.items.map((machine) => ({
-    id: machine.id,
-    locatie: machine.locatie,
-    aantal_onderhoudsbeurten: machine.onderhouden.length || 0,
-    rawStatus: machine.status,
-    rawProductieStatus: machine.productie_status,
-    technieker: `${machine.technieker.naam} ${machine.technieker.voornaam}`,
-  }));
-
+  // Sorting state
   const [sortConfig, setSortConfig] = useState({
     field: 'id',
     direction: 'asc',
   });
+  console.log('machinesData:', data);
+  // Process data with custom hook
+  const { 
+    filteredMachines,
+    paginatedMachines,
+    uniqueLocaties,
+    uniqueStatuses,
+    uniqueProductieStatuses,
+    uniqueTechniekers,
+  } = useMachineData({
+    rawData: data,
+    zoekterm,
+    locatieFilter,
+    statusFilter,
+    productieStatusFilter, 
+    techniekerFilter,
+    sortConfig,
+    currentPage,
+    limit,
+  });
   
-  const sortInteger = (a, b, field, direction) => {
-    return direction === 'asc' 
-      ? a[field] - b[field] 
-      : b[field] - a[field];
-  };
-  
-  const sortString = (a, b, field, direction) => {
-    const valueA = String(a[field]).toLowerCase();
-    const valueB = String(b[field]).toLowerCase();
-    
-    if (valueA < valueB) {
-      return direction === 'asc' ? -1 : 1;
-    }
-    if (valueA > valueB) {
-      return direction === 'asc' ? 1 : -1;
-    }
-    return 0;
-  };
-  
-  const sortMachines = (machines) => {
-    if (!sortConfig.field) return machines;
-    
-    const sortedMachines = [...machines]; 
-    
-    // Map special fields to their sortable values
-    const fieldMap = {
-      'status': 'rawStatus',
-      'productie_status': 'rawProductieStatus',
-    };
-    
-    const sortField = fieldMap[sortConfig.field] || sortConfig.field;
-    const integerFields = ['id'];
-    const sortFn = integerFields.includes(sortField) ? sortInteger : sortString;
-    
-    return sortedMachines.sort((a, b) => 
-      sortFn(a, b, sortField, sortConfig.direction),
-    );
-  };
-  
+  // Event handlers
   const handleSort = (field) => {
     setSortConfig((prevConfig) => ({
       field,
@@ -77,14 +53,6 @@ export default function MachineList({data}) {
           ? prevConfig.direction === 'asc' ? 'desc' : 'asc'
           : 'asc',
     }));
-  };
-  
-  //const handleShowOnderhouden = (id) => {
-  //  navigate(`./${id}`);
-  //};
-
-  const handleShow = (id) => {
-    navigate(`/machines/${id}`);
   };
 
   const handleSearch = (e) => {
@@ -95,67 +63,70 @@ export default function MachineList({data}) {
     setLimit(Number(e.target.value));
     setCurrentPage(1); 
   };
-
-  const filteredMachines = rawMachines.filter((machine) => {
-    const statusText = convertStatus(machine.rawStatus)?.text?.toLowerCase() || '';
-    const productieStatusText = convertProductieStatus(machine.rawProductieStatus)?.text?.toLowerCase() || '';
-    
-    return machine.locatie?.toLowerCase().includes(zoekterm.toLowerCase()) ||
-           statusText.includes(zoekterm.toLowerCase()) ||
-           productieStatusText.includes(zoekterm.toLowerCase());
-  });
-
-  const sortedMachines = sortMachines(filteredMachines);
   
-  const startIndex = (currentPage - 1) * limit;
-  const paginatedMachines = sortedMachines.slice(startIndex, startIndex + limit);
+  const handleResetFilters = () => {
+    setLocatieFilter('');
+    setStatusFilter('');
+    setProductieStatusFilter('');
+    setTechniekerFilter('');
+    setZoekterm('');
+    setCurrentPage(1);
+  };
+
+  // Navigation handlers
+  const handleShow = (id) => {
+    navigate(`/machines/${id}`);
+  };
   
-  const processedPaginatedMachines = paginatedMachines.map((machine) => ({
-    id: machine.id,
-    locatie: machine.locatie,
-    status: <StatusDisplay status={machine.rawStatus} />,
-    productie_status: <ProductieStatusDisplay status={machine.rawProductieStatus} />,
-    technieker: machine.technieker,
-    aantal_onderhoudsbeurten: machine.aantal_onderhoudsbeurten !== 0 ? (
-      <Link to={`./${machine.id}/onderhouden`} className='underline'>{machine.aantal_onderhoudsbeurten}</Link>
-    ) : machine.aantal_onderhoudsbeurten,
-  }));
+  //const handleShowOnderhouden = (id) => {
+  //  navigate(`./${id}`);
+  //};
+
+  // Filter change handlers
+  const handleFilterChange = {
+    locatie: (e) => {
+      setLocatieFilter(e.target.value);
+      setCurrentPage(1);
+    },
+    status: (e) => {
+      setStatusFilter(e.target.value);
+      setCurrentPage(1);
+    },
+    productieStatus: (e) => {
+      setProductieStatusFilter(e.target.value);
+      setCurrentPage(1);
+    },
+    technieker: (e) => {
+      setTechniekerFilter(e.target.value);
+      setCurrentPage(1);
+    },
+  };
   
   return (
     <div className="flex-col md:flex-row flex justify-between py-6">
       <div className="w-full">
-        <div className="mb-4 flex flex-wrap items-center justify-between">
+        <MachineListHeader
+          zoekterm={zoekterm}
+          onSearch={handleSearch}
+          limit={limit}
+          onLimitChange={handleLimitChange}
+        />
 
-          {/* Search input */}
-          <Search 
-            value={zoekterm} 
-            onChange={handleSearch} 
-            placeholder="Zoeken naar locatie, status, productie status, ..."
-          />
-          
-          {/* Page size selector - niet zichtbaar op small screens */}
-          <div className="hidden md:flex items-center mt-3 md:mt-0">
-            <label htmlFor="page-size" className="mr-2 text-gray-700">
-              Aantal machines per pagina:
-            </label>
-            <select
-              id="page-size"
-              value={limit}
-              onChange={handleLimitChange}
-              className="border border-gray-300 rounded-md px-3 py-2"
-              data-cy="machines_page_size"
-            >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
-            </select>
-          </div>
-        </div>
+        <MachineListFilters 
+          locatieFilter={locatieFilter}
+          statusFilter={statusFilter}
+          productieStatusFilter={productieStatusFilter}
+          techniekerFilter={techniekerFilter}
+          uniqueLocaties={uniqueLocaties}
+          uniqueStatuses={uniqueStatuses}
+          uniqueProductieStatuses={uniqueProductieStatuses}
+          uniqueTechniekers={uniqueTechniekers}
+          onFilterChange={handleFilterChange}
+          onResetFilters={handleResetFilters}
+        />
 
         <MachineTable
-          machines={processedPaginatedMachines}
-          //showOnderhouden={handleShowOnderhouden}
+          machines={paginatedMachines}
           onShow={handleShow}
           onSort={handleSort}
           sortConfig={sortConfig}
@@ -165,8 +136,8 @@ export default function MachineList({data}) {
           <Pagination
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-            data={rawMachines}
-            totalPages={sortedMachines.length === 0 ? 1 : Math.ceil(sortedMachines.length / limit)}
+            data={data}
+            totalPages={filteredMachines.length === 0 ? 1 : Math.ceil(filteredMachines.length / limit)}
           />
         </div>
       </div>

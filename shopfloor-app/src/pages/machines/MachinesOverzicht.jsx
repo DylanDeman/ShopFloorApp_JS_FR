@@ -26,7 +26,7 @@ const MachinesOverzicht = () => {
       />
       
       <AsyncData loading={isLoading} error={error}>
-        <MachineList data={machines}/>
+        <MachineList data={machines.items}/>
       </AsyncData>
     </>
   );
