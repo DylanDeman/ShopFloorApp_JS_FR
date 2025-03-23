@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MachineTable from '../../machines/machineOverzichtComponents/MachineTable';
 import { Pagination } from '../../genericComponents/Pagination';
@@ -7,6 +7,7 @@ import { ProductieStatusDisplay } from '../../machines/ProductieStatusDisplay';
 import { StatusDisplay } from '../../machines/StatusDisplay';
 import { convertStatus } from '../../machines/StatusConverter';
 import MachineListHeader from '../../machines/machineOverzichtComponents/MachineListHeader';
+import MachineListFilters from './MachineListFilters';
 
 export default function MachineList({machinesData}) {
   const navigate = useNavigate();
@@ -15,6 +16,12 @@ export default function MachineList({machinesData}) {
   const [zoekterm, setZoekterm] = useState('');
   const rawDataMachines = machinesData || {};
   
+  // Filter states
+  const [locatieFilter, setLocatieFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [productieStatusFilter, setProductieStatusFilter] = useState('');
+  const [techniekerFilter, setTechniekerFilter] = useState('');
+
   const rawMachines = rawDataMachines.map((site) => ({
     id: site.id,
     locatie: site.locatie,
@@ -23,6 +30,34 @@ export default function MachineList({machinesData}) {
     technieker: `${site.technieker.naam} ${site.technieker.voornaam}`,
   }));
 
+  // Get unique values for filters
+  const uniqueLocaties = useMemo(() => {
+    const locaties = [...new Set(rawMachines.map((machine) => machine.locatie))];
+    return locaties.sort();
+  }, [rawMachines]);
+
+  const uniqueStatuses = useMemo(() => {
+    const statuses = [...new Set(rawMachines.map((machine) => {
+      const status = convertStatus(machine.rawStatus);
+      return status?.text || '';
+    }))];
+    return statuses.filter((status) => status !== '').sort();
+  }, [rawMachines]);
+
+  const uniqueProductieStatuses = useMemo(() => {
+    const statuses = [...new Set(rawMachines.map((machine) => {
+      const status = convertProductieStatus(machine.rawProductieStatus);
+      return status?.text || '';
+    }))];
+    return statuses.filter((status) => status !== '').sort();
+  }, [rawMachines]);
+
+  const uniqueTechniekers = useMemo(() => {
+    const techniekers = [...new Set(rawMachines.map((machine) => machine.technieker))];
+    return techniekers.sort();
+  }, [rawMachines]);
+
+  // Sorting state
   const [sortConfig, setSortConfig] = useState({
     field: 'id',
     direction: 'asc',
@@ -80,8 +115,10 @@ export default function MachineList({machinesData}) {
   const handleEditMachine = (id) => {
     navigate(`/machines/${id}/edit`);
   };  
+  
   const handleSearch = (e) => {
     setZoekterm(e.target.value);
+    setCurrentPage(1);
   };
 
   const handleShow = (id) => {
@@ -93,13 +130,53 @@ export default function MachineList({machinesData}) {
     setCurrentPage(1); 
   };
 
+  const handleResetFilters = () => {
+    setLocatieFilter('');
+    setStatusFilter('');
+    setProductieStatusFilter('');
+    setTechniekerFilter('');
+    setZoekterm('');
+    setCurrentPage(1);
+  };
+
+  // Filter change handlers
+  const handleFilterChange = {
+    locatie: (e) => {
+      setLocatieFilter(e.target.value);
+      setCurrentPage(1);
+    },
+    status: (e) => {
+      setStatusFilter(e.target.value);
+      setCurrentPage(1);
+    },
+    productieStatus: (e) => {
+      setProductieStatusFilter(e.target.value);
+      setCurrentPage(1);
+    },
+    technieker: (e) => {
+      setTechniekerFilter(e.target.value);
+      setCurrentPage(1);
+    },
+  };
+
   const filteredMachines = rawMachines.filter((machine) => {
-    const statusText = convertStatus(machine.rawStatus)?.text?.toLowerCase() || '';
-    const productieStatusText = convertProductieStatus(machine.rawProductieStatus)?.text?.toLowerCase() || '';
+    const statusText = convertStatus(machine.rawStatus)?.text || '';
+    const productieStatusText = convertProductieStatus(machine.rawProductieStatus)?.text || '';
     
-    return machine.locatie?.toLowerCase().includes(zoekterm.toLowerCase()) ||
-           statusText.includes(zoekterm.toLowerCase()) ||
-           productieStatusText.includes(zoekterm.toLowerCase());
+    // Text search filter
+    const matchesSearch = zoekterm === '' || 
+      machine.locatie?.toLowerCase().includes(zoekterm.toLowerCase()) ||
+      statusText.toLowerCase().includes(zoekterm.toLowerCase()) ||
+      productieStatusText.toLowerCase().includes(zoekterm.toLowerCase()) ||
+      machine.technieker.toLowerCase().includes(zoekterm.toLowerCase());
+    
+    // Dropdown filters
+    const matchesLocatie = locatieFilter === '' || machine.locatie === locatieFilter;
+    const matchesStatus = statusFilter === '' || statusText === statusFilter;
+    const matchesProductieStatus = productieStatusFilter === '' || productieStatusText === productieStatusFilter;
+    const matchesTechnieker = techniekerFilter === '' || machine.technieker === techniekerFilter;
+    
+    return matchesSearch && matchesLocatie && matchesStatus && matchesProductieStatus && matchesTechnieker;
   });
 
   const sortedMachines = sortMachines(filteredMachines);
@@ -123,6 +200,19 @@ export default function MachineList({machinesData}) {
           onSearch={handleSearch}
           limit={limit}
           onLimitChange={handleLimitChange}
+        />
+
+        <MachineListFilters 
+          locatieFilter={locatieFilter}
+          statusFilter={statusFilter}
+          productieStatusFilter={productieStatusFilter}
+          techniekerFilter={techniekerFilter}
+          uniqueLocaties={uniqueLocaties}
+          uniqueStatuses={uniqueStatuses}
+          uniqueProductieStatuses={uniqueProductieStatuses}
+          uniqueTechniekers={uniqueTechniekers}
+          onFilterChange={handleFilterChange}
+          onResetFilters={handleResetFilters}
         />
 
         <MachineTable

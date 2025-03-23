@@ -12,6 +12,8 @@ import PageHeader from '../../components/genericComponents/PageHeader';
 import GenericButton from '../../components/genericComponents/GenericButton';
 
 const SiteDetails = () => {
+  const { id } = useParams();
+  const idAsNumber = Number(id);
   const navigate = useNavigate();
   
   const handleShowGrondplan = () => {
@@ -25,9 +27,6 @@ const SiteDetails = () => {
   const handleAddMachine = () => {
     navigate(`/sites/${id}/machines/new`);
   };
-
-  const { id } = useParams();
-  const idAsNumber = Number(id);
     
   const {
     data: site = [],

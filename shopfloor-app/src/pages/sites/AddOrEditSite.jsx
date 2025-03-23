@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAll, createSite, updateSite } from '../../api';
-import AsyncData from '../../components/AsyncData';
 import { useParams } from 'react-router-dom';
+import useSWR from 'swr';
+import { createSite, getAll, getById, updateSite } from '../../api';
+import AsyncData from '../../components/AsyncData';
 import PageHeader from '../../components/genericComponents/PageHeader';
 import SiteInfoForm from '../../components/sites/SiteInfoForm';
 import SuccessMessage from '../../components/sites/SuccesMessage';
@@ -12,67 +13,15 @@ export default function AddOrEditSite() {
   const navigate = useNavigate();
   const isNewSite = !id || id === 'new';
   
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     naam: '',
     verantwoordelijke_id: '',
     status: 'ACTIEF',
-    machines_ids: [],
   });
-  const [verantwoordelijken, setVerantwoordelijken] = useState([]);
-  const [selectedMachines, setSelectedMachines] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
+  const [isFormDataInitialized, setIsFormDataInitialized] = useState(false);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const [verantwoordelijkenData, machinesResponse] = await Promise.all([
-          getAll('users'),
-          getAll('machines'),
-        ]);
-
-        const filteredVerantwoordelijken = filterVerantwoordelijken(verantwoordelijkenData.items);
-        setVerantwoordelijken(filteredVerantwoordelijken);
-        
-        const machinesData = Array.isArray(machinesResponse.items) 
-          ? machinesResponse.items 
-          : (Array.isArray(machinesResponse) ? machinesResponse : []);
-        
-        if (!isNewSite) {
-          const siteData = await getAll(`sites/${id}`);
-          
-          setFormData({
-            naam: siteData.naam || '',
-            verantwoordelijke_id: siteData.verantwoordelijke?.id || '',
-            status: siteData.status || 'ACTIEF',
-            machines_ids: siteData.machines?.map((m) => m.id) || [],
-          });
-
-          if (siteData && siteData.machines) {
-            const siteIds = Array.isArray(siteData.machines) 
-              ? siteData.machines.map((m) => m.id) 
-              : [];
-              
-            const selected = machinesData.filter((machine) => siteIds.includes(machine.id));
-            setSelectedMachines(selected);
-          } else {
-            setSelectedMachines([]);
-          }
-        } else {
-          setSelectedMachines([]);
-        }
-      } catch (err) {
-        console.error('Error in fetchData:', err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    }
-  
-    fetchData();
-  }, [id, isNewSite]);
-  
   const filterVerantwoordelijken = (users) => {
     return Array.isArray(users)
       ? users.filter((user) => {
@@ -80,7 +29,7 @@ export default function AddOrEditSite() {
           if (typeof user.rol === 'string') {
             const cleanedRol = user.rol.replace(/\\/g, '');
             const parsedRol = cleanedRol.startsWith('"') && cleanedRol.endsWith('"')
-              ? cleanedRol.slice(1, -1) // Remove outer quotes
+              ? cleanedRol.slice(1, -1)
               : cleanedRol;
             return parsedRol === 'VERANTWOORDELIJKE';
           }
@@ -93,6 +42,30 @@ export default function AddOrEditSite() {
       : [];
   };
 
+  // Fetch users data with useSWR
+  const { data: usersData, error: usersError, loading: usersLoading } = useSWR('/users', getAll);
+  
+  // Fetch site data if editing an existing site
+  const { data: siteData, error: siteError, loading: siteLoading } = useSWR(
+    !isNewSite ? `/sites/${id}` : null, 
+    () => getById(`/sites/${id}`),
+  );
+
+  // Process users data to filter verantwoordelijken
+  const verantwoordelijken = usersData ? filterVerantwoordelijken(usersData.items) : [];
+  
+  // Set form data when site data is loaded - ONLY ONCE
+  useEffect(() => {
+    if (siteData && !isFormDataInitialized) {
+      setFormData({
+        naam: siteData.naam || '',
+        verantwoordelijke_id: siteData.verantwoordelijke?.id || '',
+        status: siteData.status || 'ACTIEF',
+      });
+      setIsFormDataInitialized(true);
+    }
+  }, [siteData, isFormDataInitialized]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -100,16 +73,11 @@ export default function AddOrEditSite() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const siteData = {
-        ...formData,
-        machines_ids: selectedMachines.map((m) => m.id),
-      };
-
       if (isNewSite) {
-        await createSite(siteData);
+        await createSite(formData);
         setSuccessMessage('Site succesvol toegevoegd!');
       } else {
-        await updateSite(id, siteData);
+        await updateSite(id, formData);
         setSuccessMessage('Site succesvol bijgewerkt!');
       }
       
@@ -127,9 +95,13 @@ export default function AddOrEditSite() {
   };
   
   const pageTitle = isNewSite ? 'Nieuwe site toevoegen' : `${formData.naam} wijzigen`;
+  
+  const isLoading = (!isNewSite && !siteData && !siteError) 
+  || (!usersData && !usersError) || siteLoading || usersLoading;
+  const fetchError = usersError || siteError || error;
 
   return (
-    <AsyncData loading={loading} error={error}>
+    <AsyncData loading={isLoading} error={fetchError}>
       <div className="p-2 md:p-4">
         <PageHeader 
           title={isNewSite ? pageTitle : `Site | ${pageTitle}`}
@@ -152,7 +124,6 @@ export default function AddOrEditSite() {
               <button 
                 type="submit" 
                 className="w-full bg-[rgb(171,155,203)] hover:bg-[rgb(151,135,183)] text-white px-4 py-2 rounded"
-            
                 data-cy="submit-button"
               >
                 Opslaan

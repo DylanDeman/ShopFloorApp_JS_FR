@@ -11,6 +11,7 @@ export default function Onderhouden (){
     isLoading,
     error,
   } = useSWR(`machines/${id}`, getById);
+  
   return (
     <>
       <AsyncData loading={isLoading} error={error}>
