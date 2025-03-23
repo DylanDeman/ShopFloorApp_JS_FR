@@ -1,7 +1,7 @@
 import { getAll } from '../../api';
 import AsyncData from '../../components/AsyncData';
 import useSWR from 'swr';
-import NotificatieList from './NotificatieList';
+import NotificatieList from '../../components/notificaties/notificatiesOverzichtComponents/NotificatieList';
 
 const NotificatiesOverzicht = () => {
   const {

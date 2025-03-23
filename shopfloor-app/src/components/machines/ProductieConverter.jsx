@@ -1,7 +1,7 @@
 export function convertProductieStatus(status) {
   const ProductieStatusMap = {
-    'GEZOND': { text: 'FALEND', color: 'red' },
-    'FALEND': { text: 'GEZOND', color: 'green' },
+    'FALEND': { text: 'FALEND', color: 'red' },
+    'GEZOND': { text: 'GEZOND', color: 'green' },
     'NOOD_ONDERHOUD': { text: 'NOOD AAN ONDERHOUD', color: 'orange' },
   };
   

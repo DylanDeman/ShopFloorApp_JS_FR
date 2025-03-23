@@ -162,7 +162,7 @@ const MachineDetail = () => {
                 <div className="flex flex-col">
                   <span className="text-lg font-medium mb-1">Onderhoud</span>
                   <button 
-                    onClick={() => navigate(`/machines_onderhouden/${machine.id}`)}
+                    onClick={() => navigate('./onderhouden')}
                     className={`text-lg pl-5 pr-3 py-1 rounded text-left transition-colors ${
                       machine?.onderhouden?.length === 0 
                         ? 'bg-gray-400 text-gray-200 cursor-not-allowed' 

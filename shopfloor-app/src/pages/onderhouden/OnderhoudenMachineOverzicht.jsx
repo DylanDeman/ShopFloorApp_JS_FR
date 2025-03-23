@@ -4,7 +4,7 @@ import { getById } from '../../api';
 import useSWR from 'swr';
 import OnderhoudenList from '../../components/onderhouden/OnderhoudenList';
 
-export default function Onderhouden (){
+export default function OnderhoudenMachineOverzicht (){
   const {id} = useParams();
   const {
     data: machine,

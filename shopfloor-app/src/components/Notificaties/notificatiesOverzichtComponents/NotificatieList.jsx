@@ -1,5 +1,5 @@
 import { FaArrowLeftLong } from 'react-icons/fa6';
-import NotificatieBlock from '../../components/notificaties/NotificatieBlock';
+import NotificatieBlock from '../NotificatieBlock';
 import { useNavigate } from 'react-router';
 
 export default function NotificatieList({notificaties}){

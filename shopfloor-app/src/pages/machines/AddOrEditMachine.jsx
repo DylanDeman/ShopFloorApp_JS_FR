@@ -1,17 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import AsyncData from '../../components/AsyncData';
 import PageHeader from '../../components/genericComponents/PageHeader';
 import SuccessMessage from '../../components/sites/SuccesMessage';
-import { getAll, getById, updateMachine } from '../../api';
+import { getAll, getById, updateMachine, createMachine } from '../../api';
 
-export default function EditMachineForm() {
-  const { id } = useParams(); 
+export default function AddOrEditMachine() {
+  const { id } = useParams();
+  const machineId = id;
   const navigate = useNavigate();
+  const isNewMachine = !machineId || machineId === 'new';
 
   const [successMessage, setSuccessMessage] = useState('');
   const [error, setError] = useState(null);
+  const [isFormDataInitialized, setIsFormDataInitialized] = useState(false);
   
   const [formData, setFormData] = useState({
     code: '',
@@ -26,43 +29,66 @@ export default function EditMachineForm() {
     limiet_voor_onderhoud: 100,
   });
 
-  // Fetch machine data using SWR
+  // Fetch machine data if editing an existing machine
   const { data: machineData, error: machineError } = useSWR(
-    `/machines/${id}`,
-    () => getById(`/machines/${id}`),
-    {
-      onSuccess: (data) => {
-        setFormData({
-          code: data.code || '',
-          locatie: data.locatie || '',
-          status: data.status || 'DRAAIT',
-          productie_status: data.productie_status || 'GEZOND',
-          technieker_id: data.technieker?.id || '',
-          site_id: data.site?.id || '',
-          product_id: data.product?.id || '',
-          product_naam: data.product?.naam || '',
-          product_informatie: data.product?.product_informatie || '',
-          limiet_voor_onderhoud: data.limiet_voor_onderhoud || 150,
-        });
-      },
-    },
+    !isNewMachine ? `/machines/${machineId}` : null,
+    () => getById(`/machines/${machineId}`),
   );
 
   // Fetch techniekers using SWR
-  const { data: techniekersData, error: techniekersError } = useSWR('/users', () => getAll('/users'));
+  const { data: techniekersData, error: techniekersError } = useSWR('/users', getAll);
   const techniekers = techniekersData?.items.filter((user) => user.rol === 'TECHNIEKER') || [];
 
   // Fetch sites using SWR
-  const { data: sitesData, error: sitesError } = useSWR('/sites', () => getAll('/sites'));
+  const { data: sitesData, error: sitesError } = useSWR('/sites', getAll);
   const sites = sitesData?.items || [];
 
+  // Fetch products using SWR
+  const { data: productsData, error: productsError } = useSWR('/producten', getAll);
+  const products = productsData?.items || [];
+
+  // Set form data when machine data is loaded - ONLY ONCE
+  useEffect(() => {
+    if (machineData && !isFormDataInitialized) {
+      setFormData({
+        code: machineData.code || '',
+        locatie: machineData.locatie || '',
+        status: machineData.status || 'DRAAIT',
+        productie_status: machineData.productie_status || 'GEZOND',
+        technieker_id: machineData.technieker?.id || '',
+        site_id: machineData.site?.id || '',
+        product_id: machineData.product?.id || '',
+        product_naam: machineData.product?.naam || '',
+        product_informatie: machineData.product?.product_informatie || '',
+        limiet_voor_onderhoud: machineData.limiet_voor_onderhoud || 150,
+      });
+      setIsFormDataInitialized(true);
+    }
+  }, [machineData, isFormDataInitialized]);
+
   // Determine loading and error states
-  const isLoading = !machineData || !techniekersData  || !sitesData;
-  const fetchError = machineError || techniekersError || sitesError;
+  const isLoading = (!isNewMachine && !machineData && !machineError) || 
+                   (!techniekersData && !techniekersError) || 
+                   (!sitesData && !sitesError) ||
+                   (!productsData && !productsError);
+  const fetchError = machineError || techniekersError || sitesError || productsError || error;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    // If product is selected from dropdown, update product name and info
+    if (name === 'product_id' && value) {
+      const selectedProduct = products.find((product) => product.id === value);
+      if (selectedProduct) {
+        setFormData((prev) => ({
+          ...prev,
+          product_id: value,
+          product_naam: selectedProduct.naam || '',
+          product_informatie: selectedProduct.product_informatie || '',
+        }));
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -76,20 +102,25 @@ export default function EditMachineForm() {
         locatie: formData.locatie,
         limiet_voor_onderhoud: formData.limiet_voor_onderhoud,
         technieker_id: formData.technieker_id,
-        site_id: formData.site_id, 
+        site_id: formData.site_id,
         product: {
-          id: formData.product_id, 
+          id: formData.product_id,
           naam: formData.product_naam,
           product_informatie: formData.product_informatie,
         },
       };
       
-      await updateMachine(id, machineUpdateData);
-      setSuccessMessage('Machine succesvol bijgewerkt!');
+      if (isNewMachine) {
+        await createMachine(machineUpdateData);
+        setSuccessMessage('Machine succesvol toegevoegd!');
+      } else {
+        await updateMachine(machineId, machineUpdateData);
+        setSuccessMessage('Machine succesvol bijgewerkt!');
+      }
       
     } catch (err) {
-      console.error('Update failed:', err);
-      setError('Er is een fout opgetreden bij het bijwerken van de machine.');
+      console.error(`${isNewMachine ? 'Creation' : 'Update'} failed:`, err);
+      setError(`Er is een fout opgetreden bij het ${isNewMachine ? 'toevoegen' : 'bijwerken'} van de machine.`);
     }
   };
   
@@ -97,10 +128,12 @@ export default function EditMachineForm() {
     navigate(-1);
   };
 
+  const pageTitle = isNewMachine ? 'Nieuwe machine toevoegen' : `Machine "${formData.code}" wijzigen`;
+
   return (
-    <AsyncData loading={isLoading} error={fetchError || error}>
+    <AsyncData loading={isLoading} error={fetchError}>
       <div className="p-2 md:p-4">
-        <PageHeader title="Machine wijzigen" onBackClick={handleOnClickBack} />
+        <PageHeader title={pageTitle} onBackClick={handleOnClickBack} />
         
         {successMessage && <SuccessMessage message={successMessage} />}
         
@@ -181,8 +214,9 @@ export default function EditMachineForm() {
             </div>
             
             <div className="mb-4">
-              <label htmlFor="product_informatie" 
-                className="block text-sm font-medium text-gray-700">Product Informatie</label>
+              <label htmlFor="product_informatie" className="block text-sm font-medium text-gray-700">
+                Product Informatie
+              </label>
               <textarea 
                 name="product_informatie" 
                 value={formData.product_informatie} 

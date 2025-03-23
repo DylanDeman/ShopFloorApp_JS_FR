@@ -1,4 +1,3 @@
-// hooks/useSiteData.js
 import { useState, useEffect } from 'react';
 
 export default function useSiteData({

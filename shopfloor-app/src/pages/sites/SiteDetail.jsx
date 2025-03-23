@@ -25,7 +25,7 @@ const SiteDetails = () => {
   };
 
   const handleAddMachine = () => {
-    navigate(`/sites/${id}/machines/new`);
+    navigate('/machines/new');
   };
     
   const {

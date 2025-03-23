@@ -15,10 +15,9 @@ import SiteGrondplan from './pages/sites/SiteGrondplan.jsx';
 import { AuthProvider } from './contexts/Auth.context';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import Logout from './pages/Logout.jsx';
-import Onderhouden from './pages/onderhouden/Onderhouden.jsx';
-import MachineForm from './pages/machines/MachineForm.jsx';
-import EditMachineForm from './pages/machines/EditMachineForm.jsx';
 import AddOrEditSite from './pages/sites/AddOrEditSite.jsx';
+import AddOrEditMachine from './pages/machines/AddOrEditMachine.jsx';
+import OnderhoudenMachineOverzicht from './pages/onderhouden/OnderhoudenMachineOverzicht.jsx';
 
 const router = createBrowserRouter([
   {
@@ -34,7 +33,6 @@ const router = createBrowserRouter([
           },
         ],
       },
-      
       {
         path: '/dashboard',
         element: <PrivateRoute />,
@@ -69,24 +67,6 @@ const router = createBrowserRouter([
             path: 'new',
             element: <AddOrEditSite/>,
           },
-          {
-            path:':id/machines/new',
-            element: <MachineForm/>,
-          },
-        ],
-      },
-      {
-        path: '/machines_onderhouden',
-        element: <PrivateRoute/>,
-        children: [
-          {
-            index: true,
-            element: <MachinesOverzicht />,
-          },
-          {
-            path: ':id',
-            element: <Onderhouden />,
-          },
         ],
       },
       {
@@ -103,7 +83,15 @@ const router = createBrowserRouter([
           },
           {
             path: ':id/edit',
-            element: <EditMachineForm/>,
+            element: <AddOrEditMachine/>,
+          },
+          {
+            index: ':id/onderhouden',
+            element: <OnderhoudenMachineOverzicht/>,
+          },
+          {
+            path: 'new',
+            element: <AddOrEditMachine/>,
           },
         ],
       },

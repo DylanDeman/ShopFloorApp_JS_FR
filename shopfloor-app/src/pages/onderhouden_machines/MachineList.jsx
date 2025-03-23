@@ -117,7 +117,7 @@ export default function MachineList({data}) {
     productie_status: <ProductieStatusDisplay status={machine.rawProductieStatus} />,
     technieker: machine.technieker,
     aantal_onderhoudsbeurten: machine.aantal_onderhoudsbeurten !== 0 ? (
-      <Link to={`/machines_onderhouden/${machine.id}`} className='underline'>{machine.aantal_onderhoudsbeurten}</Link>
+      <Link to={`./${machine.id}/onderhouden`} className='underline'>{machine.aantal_onderhoudsbeurten}</Link>
     ) : machine.aantal_onderhoudsbeurten,
   }));
   
