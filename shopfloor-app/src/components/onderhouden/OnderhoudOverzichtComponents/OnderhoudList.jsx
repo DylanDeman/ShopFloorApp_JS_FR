@@ -1,13 +1,14 @@
-import { useNavigate } from 'react-router';
-import OnderhoudTable from '../OnderhoudTable';
 import { useState } from 'react';
 import { Pagination } from '../../genericComponents/Pagination';
 import Search from '../../genericComponents/Search';
 import OnderhoudenFilter from './OnderhoudListFilters';
 import useOnderhoudData from '../../../hooks/useOnderhoudData';
+import GenericTable from '../../genericComponents/GenericTable';
+import { pdf } from '@react-pdf/renderer';
+import { saveAs } from 'file-saver';
+import PdfDocument from '../PdfDocument';
 
 export default function OnderhoudList({machine}) {
-  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [zoekterm, setZoekterm] = useState('');
@@ -60,10 +61,6 @@ export default function OnderhoudList({machine}) {
     }));
   };
 
-  const handleShow = (id) => {
-    navigate(`../../onderhouden/${id}`);
-  };
-
   const handleSearch = (e) => {
     setZoekterm(e.target.value);
     setCurrentPage(1); // Reset to first page when searching
@@ -72,6 +69,30 @@ export default function OnderhoudList({machine}) {
   const handleLimitChange = (e) => {
     setLimit(Number(e.target.value));
     setCurrentPage(1); // Reset to first page when changing limit
+  };
+
+  const fetchBase64Logo = async () => {
+    try {
+      const response = await fetch('/base64DelawareLogo.txt'); // Ensure the file is in the public directory
+      const logoData = await response.text();
+      return logoData; // Return the base64 string
+    } catch (error) {
+      console.error('Error loading base64 logo:', error);
+      return ''; // Return an empty string or handle it as needed
+    }
+  };
+  
+  const handleRapport = async (machine, rowData) =>{
+    rowData.machine = machine;
+    const base64Logo = await fetchBase64Logo();
+    const date = new Date(rowData.datum).toLocaleDateString();
+    const blob = await pdf(<PdfDocument data={rowData} base64Logo={base64Logo} />).toBlob();
+    saveAs(blob, `${rowData.id}-onderhoud-${date}_machine-${machine.code}.pdf`);
+  };
+
+  const handleGenerateRapport = async (rowData) => {
+    console.log('Generating rapport for onderhoud:', rowData);
+    handleRapport(machine, rowData);
   };
   
   const toggleFilters = () => {
@@ -152,14 +173,27 @@ export default function OnderhoudList({machine}) {
           />
         )}
 
-        <OnderhoudTable 
-          machine={machine} 
-          onderhouden={paginatedOnderhouden} 
-          onSort={handleSort} 
-          sortConfig={sortConfig} 
-          show={handleShow}
-        />
-        
+        <GenericTable
+          data={paginatedOnderhouden}
+          columns={{
+            'Nr.': 'id',
+            'Starttijdstip': 'starttijdstip',
+            'Eindtijdstip': 'eindtijdstip',
+            'Naam technieker': 'technieker',
+            'Reden': 'reden',
+            'Opmerkingen': 'opmerkingen',
+            'Onderhoudsrapport': 'onderhoudsrapport',
+            'Status': 'status',
+          }}
+          actionsConfig= {{
+            'onderhoudsrapport': handleGenerateRapport,
+          }}
+          onSort={handleSort}
+          sortConfig={sortConfig}
+          emptyMessage="Er zijn geen sites beschikbaar."
+          dataCyPrefix="onderhoud"
+        />        
+
         <div className="mt-4 text-sm text-gray-600">
           {filteredOnderhouden.length} onderhouden gevonden
         </div>
