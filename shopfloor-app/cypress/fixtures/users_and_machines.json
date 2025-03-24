@@ -10,7 +10,14 @@
         "wachtwoord": "hashedpassword123",
         "gsm": "+31612345678",
         "rol": "VERANTWOORDELIJKE",
-        "status": "ACTIEF"
+        "status": "ACTIEF",
+        "adres": {
+          "straat": "Kerkstraat",
+          "huisnummer": "1",
+          "postcode": "1000",
+          "gemeente": "Brussel",
+          "land": "België"
+        }
       },
       {
         "id": 2,
@@ -21,7 +28,14 @@
         "wachtwoord": "hashedpassword456",
         "gsm": "+31687654321",
         "rol": "VERANTWOORDELIJKE",
-        "status": "INACTIEF"
+        "status": "INACTIEF",
+        "adres": {
+          "straat": "Kerkstraat",
+          "huisnummer": "1",
+          "postcode": "1000",
+          "gemeente": "Brussel",
+          "land": "België"
+        }
       }
     ]
   },

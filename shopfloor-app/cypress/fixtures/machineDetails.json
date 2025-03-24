@@ -1,0 +1,51 @@
+{
+  "id": 1,
+  "code": "978-1-108-63256-0",
+  "status": "DRAAIT",
+  "status_sinds": "2024-12-08T17:35:53.947Z",
+  "aantal_goede_producten": 566,
+  "aantal_slechte_producten": 966,
+  "limiet_voor_onderhoud": 15271,
+  "locatie": "Alysson Road",
+  "productie_status": "FALEND",
+  "technieker": {
+      "id": 99,
+      "voornaam": "Kellen",
+      "naam": "Mueller"
+  },
+  "site": {
+      "id": 50,
+      "naam": "Hartmann, Champlin and D'Amore",
+      "verantwoordelijke": {
+          "id": 43,
+          "adres_id": 45,
+          "naam": "Schumm",
+          "voornaam": "Freddy",
+          "geboortedatum": "1944-06-19T13:40:42.000Z",
+          "email": "Freddy_Schumm98@gmail.com",
+          "wachtwoord": "$argon2id$v=19$m=131072,t=6,p=4$n5AOy5JXlxX+dQACFCPr0g$UwNsrqhUdMhlt5yK3XPInxVgvwkb7UY09qpqnN7XoFo",
+          "gsm": "396.754.0247 x132",
+          "rol": "VERANTWOORDELIJKE",
+          "status": "ACTIEF"
+      }
+  },
+  "product_naam": "Shirt",
+  "product_informatie": "Innovative Chair featuring frequent technology and Marble construction",
+  "onderhouden": [
+      {
+          "id": 95,
+          "machine_id": 1,
+          "datum": "2025-11-13T01:25:29.000Z",
+          "starttijdstip": "2024-06-21T19:00:11.000Z",
+          "eindtijdstip": "2025-11-14T13:10:34.000Z",
+          "reden": "Degero caritas vomica quidem cogo amplus conscendo.",
+          "status": "VOLTOOID",
+          "opmerkingen": "Itaque coepi unde cubo tergeo tametsi creator aureus. Attollo conicio adimpleo amplitudo agnosco ater. Blandior conitor illo virgo adaugeo ubi tamen vulgaris cernuus iusto.",
+          "technieker": {
+              "id": 33,
+              "voornaam": "Alessia",
+              "naam": "Gerlach"
+          }
+      }
+  ]
+}
