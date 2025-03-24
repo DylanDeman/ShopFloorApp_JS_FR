@@ -67,7 +67,6 @@ const MachineDetail = () => {
         technieker_id: machine.technieker.id, 
         site_id: machine.site.id,
         product_id: machine.product.id,
-        limiet_voor_onderhoud: machine.limiet_voor_onderhoud,
       },
     );
     // machine status gets refetched so the displayed status is up to date
