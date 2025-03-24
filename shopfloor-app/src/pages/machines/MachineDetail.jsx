@@ -66,7 +66,8 @@ const MachineDetail = () => {
         locatie: machine.locatie,
         technieker_id: machine.technieker.id, 
         site_id: machine.site.id,
-        product_id: machine.product.id,
+        product_naam: machine.product_naam,
+        product_informatie: machine.product_informatie,
       },
     );
     // machine status gets refetched so the displayed status is up to date
@@ -186,11 +187,11 @@ const MachineDetail = () => {
               <div className="flex flex-col col-span-1 sm:col-span-2 lg:col-span-4">
                 <span className="text-lg font-medium mb-1">Product naam</span>
                 <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded mb-4">
-                  {machine.product?.naam}
+                  {machine.product_naam}
                 </span>
                 <span className="text-lg font-medium mb-1">Product informatie</span>
                 <span className="text-lg bg-gray-200 pl-5 pr-3 py-2 min-h-19 rounded overflow-y-auto">
-                  {machine.product?.product_informatie}
+                  {machine.product_informatie}
                 </span>
               </div>
             </div>

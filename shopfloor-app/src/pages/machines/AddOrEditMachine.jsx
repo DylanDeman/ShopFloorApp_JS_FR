@@ -23,7 +23,6 @@ export default function AddOrEditMachine() {
     locatie: '',
     technieker_id: '',
     site_id: '',
-    product_id: '',
     product_naam: '',
     product_informatie: '',
     limiet_voor_onderhoud: 100,
@@ -43,10 +42,6 @@ export default function AddOrEditMachine() {
   const { data: sitesData, error: sitesError } = useSWR('/sites', getAll);
   const sites = sitesData?.items || [];
 
-  // Fetch products using SWR
-  const { data: productsData, error: productsError } = useSWR('/producten', getAll);
-  const products = productsData?.items || [];
-
   // Set form data when machine data is loaded - ONLY ONCE
   useEffect(() => {
     if (machineData && !isFormDataInitialized) {
@@ -57,9 +52,8 @@ export default function AddOrEditMachine() {
         productie_status: machineData.productie_status || 'GEZOND',
         technieker_id: machineData.technieker?.id || '',
         site_id: machineData.site?.id || '',
-        product_id: machineData.product?.id || '',
-        product_naam: machineData.product?.naam || '',
-        product_informatie: machineData.product?.product_informatie || '',
+        product_naam: machineData.product_naam || '',
+        product_informatie: machineData.product_informatie || '',
         limiet_voor_onderhoud: machineData.limiet_voor_onderhoud || 150,
       });
       setIsFormDataInitialized(true);
@@ -69,26 +63,24 @@ export default function AddOrEditMachine() {
   // Determine loading and error states
   const isLoading = (!isNewMachine && !machineData && !machineError) || 
                    (!techniekersData && !techniekersError) || 
-                   (!sitesData && !sitesError) ||
-                   (!productsData && !productsError);
-  const fetchError = machineError || techniekersError || sitesError || productsError || error;
+                   (!sitesData && !sitesError);
+  const fetchError = machineError || techniekersError || sitesError || error;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
     // If product is selected from dropdown, update product name and info
-    if (name === 'product_id' && value) {
-      const selectedProduct = products.find((product) => product.id === value);
-      if (selectedProduct) {
-        setFormData((prev) => ({
-          ...prev,
-          product_id: value,
-          product_naam: selectedProduct.naam || '',
-          product_informatie: selectedProduct.product_informatie || '',
-        }));
-      }
-    }
+    // if (name === 'product_id' && value) {
+    //   const selectedProduct = products.find((product) => product.id === value);
+    //   if (selectedProduct) {
+    //     setFormData((prev) => ({
+    //       ...prev,
+    //       product_naam: selectedProduct.naam || '',
+    //       product_informatie: selectedProduct.product_informatie || '',
+    //     }));
+    //   }
+    // }
   };
 
   const handleSubmit = async (e) => {
@@ -103,11 +95,8 @@ export default function AddOrEditMachine() {
         limiet_voor_onderhoud: formData.limiet_voor_onderhoud,
         technieker_id: formData.technieker_id,
         site_id: formData.site_id,
-        product: {
-          id: formData.product_id,
-          naam: formData.product_naam,
-          product_informatie: formData.product_informatie,
-        },
+        product_naam: formData.product_naam,
+        product_informatie: formData.product_informatie,
       };
       
       if (isNewMachine) {
