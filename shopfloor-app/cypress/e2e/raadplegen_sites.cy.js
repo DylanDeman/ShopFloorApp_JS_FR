@@ -23,19 +23,19 @@ describe('Sites Page', () => {
       cy.get('td').eq(1).should('contain', '1'); 
       cy.get('td').eq(2).should('contain', 'Site A'); 
       cy.get('td').eq(3).should('contain', 'Jan Janssen'); 
-      cy.get('td').eq(4).should('contain', '2'); 
+      cy.get('td').eq(5).should('contain', '2'); 
     });
     cy.get('tbody tr').eq(1).within(() => {
       cy.get('td').eq(1).should('contain', '2'); 
       cy.get('td').eq(2).should('contain', 'Site B'); 
       cy.get('td').eq(3).should('contain', 'Piet Peeters'); 
-      cy.get('td').eq(4).should('contain', '1'); 
+      cy.get('td').eq(5).should('contain', '1'); 
     });
     cy.get('tbody tr').eq(2).within(() => {
       cy.get('td').eq(1).should('contain', '3'); 
       cy.get('td').eq(2).should('contain', 'Site C'); 
       cy.get('td').eq(3).should('contain', 'Marie Dubois'); 
-      cy.get('td').eq(4).should('contain', '1'); 
+      cy.get('td').eq(5).should('contain', '1'); 
     });
   });
 
@@ -53,13 +53,13 @@ describe('Sites Page', () => {
     cy.get('th').contains('Aantal machines').click();
 
     cy.get('tbody tr').first().within(() => {
-      cy.get('td').eq(4).should('contain', '1'); 
+      cy.get('td').eq(5).should('contain', '1'); 
     });
 
     cy.get('th').contains('Aantal machines').click(); 
 
     cy.get('tbody tr').first().within(() => {
-      cy.get('td').eq(4).should('contain', '2'); 
+      cy.get('td').eq(5).should('contain', '2'); 
     });
   });
 
