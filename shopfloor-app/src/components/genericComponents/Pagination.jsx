@@ -16,6 +16,7 @@ export function Pagination({currentPage, setCurrentPage, totalPages, data}){
     <div className="flex justify-between items-center w-full my-4 mt-6">
       {/* Vorige button */}
       <button 
+        data-cy="previous_page"
         className={`flex items-center select-none gap-2 px-4 py-2 rounded-md transition-all duration-300
           ${isPreviousDisabled 
       ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
@@ -34,6 +35,7 @@ export function Pagination({currentPage, setCurrentPage, totalPages, data}){
       
       {/* Volgende button */}
       <button 
+        data-cy="next_page"
         className={`flex items-center select-none gap-2 px-4 py-2 rounded-md duration-300 transition-all
           ${isNextDisabled 
       ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 

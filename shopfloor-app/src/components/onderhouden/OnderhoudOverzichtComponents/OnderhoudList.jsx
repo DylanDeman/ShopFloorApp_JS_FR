@@ -26,7 +26,7 @@ export default function OnderhoudList({machine}) {
 
   // Filter states
   const [statusFilter, setStatusFilter] = useState('');
-  const [technikerFilter, setTechnikerFilter] = useState('');
+  const [techniekerFilter, setTechniekerFilter] = useState('');
   
   // Sorting state
   const [sortConfig, setSortConfig] = useState({
@@ -44,7 +44,7 @@ export default function OnderhoudList({machine}) {
     rawData: machine.onderhouden || [],
     zoekterm,
     statusFilter,
-    technikerFilter,
+    techniekerFilter,
     sortConfig,
     currentPage,
     limit,
@@ -73,7 +73,7 @@ export default function OnderhoudList({machine}) {
 
   const handleResetFilters = () => {
     setStatusFilter('');
-    setTechnikerFilter('');
+    setTechniekerFilter('');
     setCurrentPage(1); // Reset to first page when clearing filters
   };
 
@@ -92,7 +92,7 @@ export default function OnderhoudList({machine}) {
       setCurrentPage(1); // Reset to first page when changing filters
     },
     technieker: (e) => {
-      setTechnikerFilter(e.target.value);
+      setTechniekerFilter(e.target.value);
       setCurrentPage(1); // Reset to first page when changing filters
     },
   };
@@ -111,7 +111,7 @@ export default function OnderhoudList({machine}) {
         
         <OnderhoudenFilter
           statusFilter={statusFilter}
-          technikerFilter={technikerFilter}
+          techniekerFilter={techniekerFilter}
           uniqueStatuses={uniqueStatuses}
           uniqueTechniekers={uniqueTechniekers}
           onFilterChange={handleFilterChange}

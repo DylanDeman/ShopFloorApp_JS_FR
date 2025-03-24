@@ -10,7 +10,7 @@ const Search = ({ value, onChange, placeholder }) => {
         value={value}
         onChange={onChange}
         className="border border-gray-300 rounded-md pl-10 pr-4 py-2 w-full"
-        data-cy="sites_search"
+        data-cy="search"
       />
     </div>
   );

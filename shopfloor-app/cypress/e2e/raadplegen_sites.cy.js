@@ -78,16 +78,77 @@ describe('Sites Page', () => {
   // });
 
   it('should filter sites based on search query', () => {
-    cy.get('[data-cy=sites_search]').should('be.visible').clear().type('Site A');
+    cy.get('[data-cy=search]').should('be.visible').clear().type('Site A');
     cy.get('tbody tr').should('have.length', 1);
     cy.get('tbody tr td').eq(2).should('contain', 'Site A');
 
-    cy.get('[data-cy=sites_search]').clear().type('Jan Janssen');
+    cy.get('[data-cy=search]').clear().type('Jan Janssen');
     cy.get('tbody tr').should('have.length', 1);
     cy.get('tbody tr td').eq(3).should('contain', 'Jan Janssen');
 
-    cy.get('[data-cy=sites_search]').clear().type('Nonexistent Site');
+    cy.get('[data-cy=search]').clear().type('Nonexistent Site');
     cy.get('tbody tr').should('have.length', 0);
     cy.contains('Er zijn geen sites beschikbaar.').should('be.visible');
+  });
+
+  it('should filter sites based on status', () => {
+    cy.get('[data-cy=status_filter]').select('ACTIEF');
+    cy.get('tbody tr').should('have.length', 2);
+
+    cy.get('[data-cy=status_filter]').select('Alle statussen');
+    cy.get('tbody tr').should('have.length', 3);
+
+    cy.get('[data-cy=status_filter]').select('INACTIEF');
+    cy.get('tbody tr').should('have.length', 1);
+  },
+  );
+
+  it('should filter sites based on verantwoordelijke', () => {
+    cy.get('[data-cy=verantwoordelijke_filter]').select('Jan Janssen');
+    cy.get('tbody tr').should('have.length', 1);
+
+    cy.get('[data-cy=verantwoordelijke_filter]').select('Piet Peeters');
+    cy.get('tbody tr').should('have.length', 1);
+
+    cy.get('[data-cy=verantwoordelijke_filter]').select('Marie Dubois');
+    cy.get('tbody tr').should('have.length', 1);
+
+    cy.get('[data-cy=verantwoordelijke_filter]').select('Alle verantwoordelijken');
+    cy.get('tbody tr').should('have.length', 3);
+    
+  });
+  
+  it('should filter sites based on aantal machines', () => {
+    cy.get('[data-cy=machines_filter_min]').clear().type('1');
+    cy.get('tbody tr').should('have.length', 3);
+
+    cy.get('[data-cy=machines_filter_min]').clear().type('2');
+    cy.get('tbody tr').should('have.length', 1);
+
+    cy.get('[data-cy=machines_filter_min]').clear().type('3');
+    cy.get('tbody tr').should('have.length', 0);
+
+    cy.get('[data-cy=machines_filter_min]').clear();
+
+    cy.get('[data-cy=machines_filter_max]').clear().type('1');
+    cy.get('tbody tr').should('have.length', 2);
+    cy.get('[data-cy=machines_filter_max]').clear().type('2');
+    cy.get('tbody tr').should('have.length', 3);
+    cy.get('[data-cy=machines_filter_max]').clear().type('3');
+    cy.get('tbody tr').should('have.length', 3);
+  },
+  );
+
+  it('should update pagination and number of results per page', () => {
+  // Default should be 10 per page
+    cy.get('[data-cy=page_size]').should('have.value', '10');
+
+    // Change page size to 5
+    cy.get('[data-cy=page_size]').select('5');
+    cy.get('tbody tr').should('have.length.lte', 5);
+
+    // Navigate through pages if more than 5 machines
+    cy.get('[data-cy=next_page]').should('exist');
+    cy.get('[data-cy=previous_page]').should('exist');
   });
 });

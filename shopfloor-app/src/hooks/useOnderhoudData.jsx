@@ -7,7 +7,7 @@ export default function useOnderhoudData({
   rawData,
   zoekterm,
   statusFilter,
-  technikerFilter,
+  techniekerFilter,
   sortConfig,
   currentPage,
   limit,
@@ -57,11 +57,11 @@ export default function useOnderhoudData({
         onderhoud.opmerkingen?.toLowerCase().includes(zoekterm.toLowerCase());
 
       const matchesStatus = !statusFilter || statusText === statusFilter;
-      const matchesTechnieker = !technikerFilter || onderhoud.technieker === technikerFilter;
+      const matchesTechnieker = !techniekerFilter || onderhoud.technieker === techniekerFilter;
 
       return matchesSearch && matchesStatus && matchesTechnieker;
     });
-  }, [processedOnderhouden, zoekterm, statusFilter, technikerFilter]);
+  }, [processedOnderhouden, zoekterm, statusFilter, techniekerFilter]);
 
   // Sorting
   const sortedOnderhouden = useMemo(() => {
