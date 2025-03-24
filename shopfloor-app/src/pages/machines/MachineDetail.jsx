@@ -208,7 +208,7 @@ const MachineDetail = () => {
                     <div key={index} className="grid grid-cols-2 gap-4">
                       <div className="flex flex-col">
                         <span className="text-lg font-medium mb-1">{item.label}</span>
-                        <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
+                        <span data-cy='machine_productie_status' className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
                           {item.value}
                         </span>
                       </div>

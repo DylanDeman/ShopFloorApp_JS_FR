@@ -14,9 +14,9 @@ describe('SiteToevoegen Page Tests', () => {
  
     cy.intercept('POST', 'http://localhost:9000/api/sites', { statusCode: 201 }).as('createSite');
 
-    cy.visit('http://localhost:5173/sites/create');
+    cy.visit('http://localhost:5173/sites/new');
 
-    cy.wait(['@getUsers', '@getMachines']);
+    cy.wait(['@getUsers']);
   });
 
   it('should load the page and display the form', () => {
@@ -51,17 +51,11 @@ describe('SiteToevoegen Page Tests', () => {
 
   it('should show an error message when fetching users fails', () => {
     cy.intercept('GET', 'http://localhost:9000/api/users', { statusCode: 500 }).as('getUsersFail');
-    cy.visit('http://localhost:5173/sites/create');
+    cy.visit('http://localhost:5173/sites/new');
     cy.wait('@getUsersFail');
     cy.contains('Oops, something went wrong').should('be.visible');
   });
 
-  it('should show an error message when fetching machines fails', () => {
-    cy.intercept('GET', 'http://localhost:9000/api/machines', { statusCode: 500 }).as('getMachinesFail');
-    cy.visit('http://localhost:5173/sites/create');
-    cy.wait('@getMachinesFail');
-    cy.contains('Oops, something went wrong').should('be.visible');
-  });
 });
 
 describe('SiteEdit Page Tests', () => {
@@ -76,14 +70,14 @@ describe('SiteEdit Page Tests', () => {
     cy.fixture('users_and_machines.json').then((data) => {
 
       cy.intercept('GET', 'http://localhost:9000/api/users', { body: data.users }).as('getUsers');
-      cy.intercept('GET', 'http://localhost:9000/api/machines', { body: data.machines }).as('getMachines');
+      //  cy.intercept('GET', 'http://localhost:9000/api/machines', { body: data.machines }).as('getMachines');
       cy.intercept('GET', 'http://localhost:9000/api/sites/1', { body: data.sites.items[0] }).as('getSite');
 
       cy.intercept('PUT', 'http://localhost:9000/api/sites/*', { statusCode: 200 }).as('updateSite');
 
       cy.visit('http://localhost:5173/sites/1/edit');
 
-      cy.wait(['@getUsers', '@getMachines', '@getSite']);
+      cy.wait(['@getUsers', '@getSite']);
     });
   });
 

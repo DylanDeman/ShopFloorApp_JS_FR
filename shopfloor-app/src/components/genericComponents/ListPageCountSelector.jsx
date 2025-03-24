@@ -9,7 +9,7 @@ const ListPageCountSelector = ({ title, limit, onLimitChange }) => {
         value={limit}
         onChange={onLimitChange}
         className="border border-gray-300 rounded-md px-3 py-2"
-        data-cy="sites_page_size"
+        data-cy="page_size"
       >
         <option value={5}>5</option>
         <option value={10}>10</option>
