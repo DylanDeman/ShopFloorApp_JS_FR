@@ -10,7 +10,6 @@ describe('SiteToevoegen Page Tests', () => {
     cy.fixture('users_and_machines.json').then((data) => {
       cy.intercept('GET', 'http://localhost:9000/api/users', { body: data.users }).as('getUsers');
       cy.intercept('GET', 'http://localhost:9000/api/machines', { body: data.machines }).as('getMachines');
-      cy.intercept('GET', 'http://localhost:9000/api/sites', { statusCode: 201 }).as('getSites');
     });
  
     cy.intercept('POST', 'http://localhost:9000/api/sites', { statusCode: 201 }).as('createSite');
