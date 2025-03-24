@@ -10,13 +10,14 @@ describe('SiteToevoegen Page Tests', () => {
     cy.fixture('users_and_machines.json').then((data) => {
       cy.intercept('GET', 'http://localhost:9000/api/users', { body: data.users }).as('getUsers');
       cy.intercept('GET', 'http://localhost:9000/api/machines', { body: data.machines }).as('getMachines');
+      cy.intercept('GET', 'http://localhost:9000/api/sites', { statusCode: 201 }).as('getSites');
     });
  
     cy.intercept('POST', 'http://localhost:9000/api/sites', { statusCode: 201 }).as('createSite');
 
-    cy.visit('http://localhost:5173/sites/create');
+    cy.visit('http://localhost:5173/sites/');
 
-    cy.wait(['@getUsers', '@getMachines']);
+    cy.wait(['@getUsers', '@getSites']);
   });
 
   it('should load the page and display the form', () => {
@@ -76,14 +77,14 @@ describe('SiteEdit Page Tests', () => {
     cy.fixture('users_and_machines.json').then((data) => {
 
       cy.intercept('GET', 'http://localhost:9000/api/users', { body: data.users }).as('getUsers');
-      cy.intercept('GET', 'http://localhost:9000/api/machines', { body: data.machines }).as('getMachines');
+      //  cy.intercept('GET', 'http://localhost:9000/api/machines', { body: data.machines }).as('getMachines');
       cy.intercept('GET', 'http://localhost:9000/api/sites/1', { body: data.sites.items[0] }).as('getSite');
 
       cy.intercept('PUT', 'http://localhost:9000/api/sites/*', { statusCode: 200 }).as('updateSite');
 
       cy.visit('http://localhost:5173/sites/1/edit');
 
-      cy.wait(['@getUsers', '@getMachines', '@getSite']);
+      cy.wait(['@getUsers', '@getSite']);
     });
   });
 

@@ -73,8 +73,8 @@ describe('Machine Details Page', () => {
     cy.get('[data-cy=machine_status]').should('be.visible');
     cy.get('[data-cy=machine_productie_status]').should('be.visible');
     cy.get('[data-cy=machine_details]').should('contain', 'Machine informatie');
-    cy.get('[data-cy=machine_status]').should('contain', 'Status: DRAAIT');
-    cy.get('[data-cy=machine_productie_status]').should('contain', 'Productiestatus: GEZOND');
+    cy.get('[data-cy=machine_status]').should('contain', 'Status: STARTBAAR');
+    cy.get('[data-cy=machine_productie_status]').should('contain', 'Productiestatus: FALEND');
   });
 
   // Negative test cases
