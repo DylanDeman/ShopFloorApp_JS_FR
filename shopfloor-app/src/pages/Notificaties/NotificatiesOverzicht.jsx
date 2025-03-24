@@ -1,7 +1,7 @@
 import { getAll } from '../../api';
 import AsyncData from '../../components/AsyncData';
 import useSWR from 'swr';
-import NotificatieList from '../../components/notificaties/notificatiesOverzichtComponents/NotificatieList';
+import NotificatieList from '../../components/Notificaties/notificatiesOverzichtComponents/NotificatieList';
 import PageHeader from '../../components/genericComponents/PageHeader';
 import { useNavigate } from 'react-router-dom';
 

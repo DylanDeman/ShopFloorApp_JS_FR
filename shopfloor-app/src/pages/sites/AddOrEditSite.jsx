@@ -5,7 +5,7 @@ import useSWR from 'swr';
 import { createSite, getAll, getById, updateSite } from '../../api';
 import AsyncData from '../../components/AsyncData';
 import PageHeader from '../../components/genericComponents/PageHeader';
-import SiteInfoForm from '../../components/sites/siteEditOrAddComponents/SiteInfoForm';
+import SiteInfoForm from '../../components/Sites/siteEditOrAddComponents/SiteInfoForm';
 import SuccessMessage from '../../components/genericComponents/SuccesMessage';
 
 export default function AddOrEditSite() {
