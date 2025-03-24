@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import { getById } from '../../api';
 import AsyncData from '../../components/AsyncData';
 import { useParams } from 'react-router-dom';
-import Grondplan from '../../components/machines/Grondplan';
+import Grondplan from '../../components/machines/grondplanMachinesComponents/Grondplan';
 import PageHeader from '../../components/genericComponents/PageHeader';
 import { useNavigate } from 'react-router-dom';
 

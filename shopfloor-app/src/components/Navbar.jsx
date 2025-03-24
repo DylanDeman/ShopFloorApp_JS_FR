@@ -20,7 +20,7 @@ const Navbar = () => {
   const navbarItems = [
     { name: 'Dashboard', path: '/dashboard' },
     { name: 'Sites', path: '/sites' },
-    { name: 'Machines', path: '/machines_onderhouden' },
+    { name: 'Machines', path: '/machines' },
   ];
 
   return (

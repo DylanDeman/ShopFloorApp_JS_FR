@@ -14,7 +14,8 @@ export default function LabelInputLogin({ label, name, type, validationRules, ..
         id={name}
         type={type}
         disabled={isSubmitting}
-        className={`w-full p-2 border ${errors[name] ? 'border-red-500' : 'border-gray-300'} rounded mt-1 focus:outline-none focus:ring-2 focus:ring-red-400`}
+        className={`w-full p-2 border ${errors[name] ? 'border-red-500' : 'border-gray-300'} 
+          rounded mt-1 focus:outline-none focus:ring-2 focus:ring-red-400`}
         {...rest}
       />
       {errors[name] && (

@@ -1,5 +1,5 @@
 import Dropdown from '../components/genericComponents/Dropdown';
-import TileList from '../components/KPI Tiles/TileList';
+import TileList from '../components/kpiTiles/TileList';
 import useSWR from 'swr';
 import { getDashboardByUserID, deleteById, post, getAll, getById } from '../api';
 import AsyncData from '../components/AsyncData';

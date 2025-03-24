@@ -1,5 +1,5 @@
 import { FiBell } from 'react-icons/fi';
-import NotificatieListDropdown from './NotificatieListDropdown';
+import NotificatieListDropdown from './notificatiesDropdownComponents/NotificatieListDropdown';
 import { useState, useEffect, useRef } from 'react';
 
 export default function NotificatieNavbar({ notificaties }) {

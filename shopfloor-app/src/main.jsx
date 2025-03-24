@@ -1,24 +1,23 @@
+import './index.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
-import './index.css';
 import NotFound from './pages/NotFound.jsx';
 import Layout from './pages/Layout.jsx';
 import Dashboard from './pages/Dashboard.jsx';
-import Sites from './pages/sites/Sites';
-import Machines from './pages/Machines.jsx';
+import SitesOverzicht from './pages/sites/SitesOverzicht.jsx';
+import MachinesOverzicht from './pages/machines/MachinesOverzicht.jsx';
 import MachineDetail from './pages/machines/MachineDetail.jsx';
-import Notificaties from './pages/Notificaties/Notificaties.jsx';
+import NotificatiesOverzicht from './pages/Notificaties/NotificatiesOverzicht.jsx';
 import Login from './pages/Login.jsx';
 import SiteDetail from './pages/sites/SiteDetail.jsx';
 import SiteGrondplan from './pages/sites/SiteGrondplan.jsx';
 import { AuthProvider } from './contexts/Auth.context';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import Logout from './pages/Logout.jsx';
-import SiteForm from './pages/sites/SiteForm.jsx';
-import Onderhouden from './pages/onderhouden/Onderhouden.jsx';
-import MachineForm from './pages/machines/MachineForm.jsx';
-import EditMachineForm from './pages/machines/EditMachineForm.jsx';
+import AddOrEditSite from './pages/sites/AddOrEditSite.jsx';
+import AddOrEditMachine from './pages/machines/AddOrEditMachine.jsx';
+import OnderhoudenMachineOverzicht from './pages/onderhouden/OnderhoudenMachineOverzicht.jsx';
 
 const router = createBrowserRouter([
   {
@@ -34,7 +33,6 @@ const router = createBrowserRouter([
           },
         ],
       },
-      
       {
         path: '/dashboard',
         element: <PrivateRoute />,
@@ -51,7 +49,7 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Sites/>,
+            element: <SitesOverzicht/>,
           },
           {
             path: ':id',
@@ -63,31 +61,11 @@ const router = createBrowserRouter([
           },
           {
             path: ':id/edit',
-            element: <SiteForm/>,
+            element: <AddOrEditSite/>,
           },
           {
-            path:':id/machines/new',
-            element: <MachineForm/>,
-
-          },
-          {
-            path: 'create',
-            element: <SiteForm/>,
-
-          },
-        ],
-      },
-      {
-        path: '/machines_onderhouden',
-        element: <PrivateRoute/>,
-        children: [
-          {
-            index: true,
-            element: <Machines />,
-          },
-          {
-            path: ':id',
-            element: <Onderhouden />,
+            path: 'new',
+            element: <AddOrEditSite/>,
           },
         ],
       },
@@ -97,7 +75,7 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Machines />,
+            element: <MachinesOverzicht />,
           },
           {
             path: ':id',
@@ -105,7 +83,15 @@ const router = createBrowserRouter([
           },
           {
             path: ':id/edit',
-            element: <EditMachineForm/>,
+            element: <AddOrEditMachine/>,
+          },
+          {
+            path: ':id/onderhouden',
+            element: <OnderhoudenMachineOverzicht/>,
+          },
+          {
+            path: 'new',
+            element: <AddOrEditMachine/>,
           },
         ],
       },
@@ -115,7 +101,7 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Notificaties />,
+            element: <NotificatiesOverzicht />,
           },
         ],
       },

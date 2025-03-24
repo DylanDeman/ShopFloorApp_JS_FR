@@ -130,7 +130,7 @@ const PdfDocument = ({ data, base64Logo }) => {
                 { color: data.status === 'DRAAIT' ? 'green' : 'red' },
               ]}
             >
-              {data.status}
+              {data.rawStatus}
             </Text>
           </View>
 
