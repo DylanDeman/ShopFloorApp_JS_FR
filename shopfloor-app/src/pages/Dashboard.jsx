@@ -49,9 +49,6 @@ const Dashboard = () => {
     if (!user_id) return;
 
     try {
-      console.log(`User_id: ${user_id}`);
-      console.log(`KPI_id: ${kpi_id}`);
-
       await addKPIToDashboard({ user_id, kpi_id });
       window.location.reload();
     } catch (error) {

@@ -15,6 +15,7 @@ import { Suspense, useState } from 'react';
 import { useAuth } from '../../contexts/auth';
 import Loader from '../Loader';
 import { useNavigate } from 'react-router-dom';
+import { StatusDisplay } from '../../components/genericComponents/StatusDisplay';
 
 const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }) => {
   const { data: kpiWaarden = [], loading, error } = useSWR(`kpi/${id}/kpiwaarden`, getById);
@@ -272,8 +273,9 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
             {filteredOnderhouden.length > 0 ? (
               <div className="flex space-x-4">
                 {filteredOnderhouden.map((onderhoud) => (
-                  <div key={onderhoud.id} className="min-w-max border rounded-lg p-4 bg-gray-50 shadow cursor-pointer"
-                    onClick={() => navigate(`/machines_onderhouden/${onderhoud.machine_id}`)}
+
+                  < div key={onderhoud.id} className="min-w-max border rounded-lg p-4 bg-gray-50 shadow cursor-pointer"
+                    onClick={() => navigate(`/machines/${onderhoud.machine_id}/onderhouden`)}
                   >
                     <h3 className="text-lg font-semibold text-blue-600">
                       Onderhoud {onderhoud.id}
@@ -281,7 +283,7 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
                     <p className="text-gray-700">
                       <strong>Starttijd:</strong> {new Date(onderhoud.starttijdstip).toLocaleDateString()} <br />
                       <strong>Eindtijd:</strong> {new Date(onderhoud.eindtijdstip).toLocaleDateString()} <br />
-                      <strong>Status:</strong> {onderhoud.status} <br />
+                      <strong>Status:</strong> <StatusDisplay status={onderhoud.status} /> <br />
                       <strong>Reden:</strong> {onderhoud.reden} <br />
                       <strong>Opmerkingen:</strong> {onderhoud.opmerkingen} <br />
                     </p>
@@ -290,8 +292,9 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
               </div>
             ) : (
               <p className="text-gray-500">Geen onderhouden gevonden.</p>
-            )}
-          </div>
+            )
+            }
+          </div >
         );
       }
 
