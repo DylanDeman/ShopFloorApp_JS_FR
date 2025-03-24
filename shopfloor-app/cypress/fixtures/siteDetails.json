@@ -2,7 +2,7 @@
   "site": {
     "id": 1,
     "naam": "Test Site",
-    "status": "ACTIEF",  
+    "status": "ACTIEF",
     "verantwoordelijke": {
       "id": 1,
       "naam": "Janssen",
@@ -13,7 +13,7 @@
   "machines": [
     {
       "id": 1,
-      "site": { 
+      "site": {
         "id": 1,
         "naam": "Test Site",
         "verantwoordelijke": {
@@ -23,7 +23,7 @@
         }
       },
       "product_id": 1,
-      "technieker": { 
+      "technieker": {
         "id": 1,
         "naam": "Janssen",
         "voornaam": "Jan",
@@ -32,12 +32,29 @@
       "code": "MACHINE_A",
       "locatie": "Warehouse",
       "product_informatie": "Machine A is een machine die ...",
-      "status": "DRAAIT",  
-      "productie_status": "GEZOND"
+      "status": "DRAAIT",
+      "productie_status": "GEZOND",
+      "aantal_goede_producten": 0,
+      "aantal_slechte_producten": 0,
+      "limiet_voor_onderhoud": 0,
+      "status_sinds": "2025-03-24T00:00:00.000Z",
+      "onderhouden": [
+        {
+          "id": 1,
+          "machine_id": 1,
+          "technieker_id": 1,
+          "datum": "2025-03-24T00:00:00.000Z",
+          "starttijdstip": "2025-03-24T08:00:00.000Z",
+          "eindtijdstip": "2025-03-24T10:00:00.000Z",
+          "reden": "Routine check",
+          "status": "VOLTOOID",
+          "opmerkingen": "No issues found, machine is running smoothly."
+        }
+      ]
     },
     {
       "id": 2,
-      "site": { 
+      "site": {
         "id": 1,
         "naam": "Test Site",
         "verantwoordelijke": {
@@ -47,7 +64,7 @@
         }
       },
       "product_id": 2,
-      "technieker": { 
+      "technieker": {
         "id": 2,
         "naam": "Peeters",
         "voornaam": "Piet",
@@ -57,7 +74,24 @@
       "locatie": "Factory Floor",
       "product_informatie": "Machine B is een machine die ...",
       "status": "MANUEEL_GESTOPT",
-      "productie_status": "FALEND"
+      "productie_status": "FALEND",
+      "aantal_goede_producten": 0,
+      "aantal_slechte_producten": 0,
+      "limiet_voor_onderhoud": 0,
+      "status_sinds": "2025-03-24T00:00:00.000Z",
+      "onderhouden": [
+        {
+          "id": 2,
+          "machine_id": 2,
+          "technieker_id": 2,
+          "datum": "2025-03-23T00:00:00.000Z",
+          "starttijdstip": "2025-03-23T10:00:00.000Z",
+          "eindtijdstip": "2025-03-23T12:00:00.000Z",
+          "reden": "Failure diagnosis",
+          "status": "IN_UITVOERING",
+          "opmerkingen": "Machine needs parts replacement, waiting for delivery."
+        }
+      ]
     }
   ]
 }
