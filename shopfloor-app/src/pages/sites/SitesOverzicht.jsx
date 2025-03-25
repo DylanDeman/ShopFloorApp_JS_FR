@@ -30,7 +30,8 @@ const SitesOverzicht = () => {
       <div className="flex justify-between items-center">
         <PageHeader title="Sites" />
         {role === 'MANAGER' && 
-          <GenericButton icon={IoMdAddCircleOutline} onClick={handleAddSite} text="Site toevoegen"/>
+            <GenericButton icon={IoMdAddCircleOutline} onClick={handleAddSite} 
+              text="Site toevoegen" dataCy="add-site-button" />
         }
       </div>
 

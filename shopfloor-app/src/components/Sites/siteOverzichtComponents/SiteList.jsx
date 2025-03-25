@@ -19,7 +19,6 @@ export default function SiteList({data}) {
   const [verantwoordelijkeFilter, setVerantwoordelijkeFilter] = useState('');
   const [aantalMachinesMin, setAantalMachinesMin] = useState('');
   const [aantalMachinesMax, setAantalMachinesMax] = useState('');
-  console.log(role);
   
   // Sorting state
   const [sortConfig, setSortConfig] = useState({

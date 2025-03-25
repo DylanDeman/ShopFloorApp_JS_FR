@@ -38,18 +38,26 @@ Cypress.Commands.add('login', (email, password) => {
 
   cy.get('[data-cy=loginSubmitButton]').click();
 
-  // Wait for the correct login request to complete
   cy.wait('@loginRequest').then((interception) => {
     expect(interception.response.statusCode).to.eq(200);
 
-    // Store auth token if needed
     const token = interception.response.body.token;
     if (token) {
       cy.setCookie('auth_token', token);
       localStorage.setItem('auth_token', token);
     }
   });
+});
 
-  // Ensure the user is redirected after login
+Cypress.Commands.add('loginAsManager', () => {
+  cy.login('robert.devree@hotmail.com', '123456789');
+});
+
+Cypress.Commands.add('loginAsVerantwoordelijke', () => {
+  cy.login('robert.devree@hotmail.com', '123456789');
+});
+
+Cypress.Commands.add('loginAsTechnieker', () => {
+  cy.login('robert.devree@hotmail.com', '123456789');
 });
 
