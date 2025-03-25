@@ -56,7 +56,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 mr-5">
             <div className="text-right">
               <p className="text-black font-semibold">{volledigeNaam}</p>
               <p className="text-red-500 text-sm">{functie}</p>
@@ -94,7 +94,7 @@ const Navbar = () => {
           </div>
         )}
 
-        <div className="hidden md:block relative">
+        <div className="hidden md:block relative mr-3">
           <AsyncData loading={notificatiesLoading} error={notificatiesError}>
             <NotificatieNavbar notificaties={notificaties} />
           </AsyncData>
