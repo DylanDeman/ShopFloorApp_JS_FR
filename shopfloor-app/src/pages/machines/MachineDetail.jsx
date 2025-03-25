@@ -9,8 +9,10 @@ import useSWRMutation from 'swr/mutation';
 import { save } from '../../api/index';
 import PageHeader from '../../components/genericComponents/PageHeader';
 import {StatusDisplay} from '../../components/genericComponents/StatusDisplay';
+import { useAuth } from '../../contexts/auth';
 
 const MachineDetail = () => {
+  const { role } = useAuth();
   const navigate = useNavigate();
   const { id } = useParams();
   const idAsNumber = Number(id);
@@ -68,6 +70,7 @@ const MachineDetail = () => {
         site_id: machine.site.id,
         product_naam: machine.product_naam,
         product_informatie: machine.product_informatie,
+        limiet_voor_onderhoud: machine.limiet_voor_onderhoud,
       },
     );
     // machine status gets refetched so the displayed status is up to date
@@ -157,7 +160,7 @@ const MachineDetail = () => {
               </div>
 
               {/* Onderhoudstabel en Volgend geplande onderhoud */}
-              <div className="col-span-1 sm:col-span-2 lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="col-span-1 sm:col-span-2 lg:col-span-4 sm:grid-cols-2 gap-4">
                 {/* Onderhoudstabel */}
                 <div className="flex flex-col">
                   <span className="text-lg font-medium mb-1">Onderhoud</span>
@@ -172,14 +175,6 @@ const MachineDetail = () => {
                   >
                     {machine?.onderhouden?.length === 0 ? 'Geen onderhoud gehad' : 'Bekijk onderhouds historiek'}
                   </button>
-                </div>
-
-                {/* Volgend geplande onderhoud */}
-                <div className="flex flex-col">
-                  <span className="text-lg font-medium mb-1">Volgend geplande onderhoud</span>
-                  <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
-                    [WIP]
-                  </span>
                 </div>
               </div>
 
@@ -232,7 +227,8 @@ const MachineDetail = () => {
                 );
               })}
             </div>
-
+            
+            { role !== 'MANAGER' &&
             <div className="mt-8">
               <button
                 data-cy='start-stop-button'
@@ -255,6 +251,7 @@ const MachineDetail = () => {
                 Verantwoordelijke wordt verwittigd
               </span>
             </div>
+            }
           </div>
         </div>
       </AsyncData>

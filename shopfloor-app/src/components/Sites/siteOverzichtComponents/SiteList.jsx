@@ -5,9 +5,11 @@ import useSiteData from '../../../hooks/useSiteData';
 import SiteListFilters from './SiteListFilters';
 import GenericTable from '../../genericComponents/GenericTable';
 import GenericListHeader from '../../genericComponents/GenericListHeader';
+import { useAuth } from '../../../contexts/auth';
 
 export default function SiteList({data}) {
   const navigate = useNavigate();
+  const { role } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [zoekterm, setZoekterm] = useState('');
@@ -17,6 +19,7 @@ export default function SiteList({data}) {
   const [verantwoordelijkeFilter, setVerantwoordelijkeFilter] = useState('');
   const [aantalMachinesMin, setAantalMachinesMin] = useState('');
   const [aantalMachinesMax, setAantalMachinesMax] = useState('');
+  console.log(role);
   
   // Sorting state
   const [sortConfig, setSortConfig] = useState({
@@ -141,7 +144,7 @@ export default function SiteList({data}) {
           }}
           onSort={handleSort}
           onShow={handleShow}
-          onEdit={handleEditSite}
+          onEdit={role === 'MANAGER' ? handleEditSite : undefined}
           sortConfig={sortConfig}
           emptyMessage="Er zijn geen sites beschikbaar."
           dataCyPrefix="site"

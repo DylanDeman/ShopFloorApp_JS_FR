@@ -7,12 +7,18 @@ import AsyncData from '../../components/AsyncData';
 import PageHeader from '../../components/genericComponents/PageHeader';
 import SiteInfoForm from '../../components/Sites/siteEditOrAddComponents/SiteInfoForm';
 import SuccessMessage from '../../components/genericComponents/SuccesMessage';
+import { useAuth } from '../../contexts/auth';
 
 export default function AddOrEditSite() {
+  const { role } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
   const isNewSite = !id || id === 'new';
   
+  if (!role !== 'MANAGER') {
+    navigate('/not-found');
+  }
+
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     naam: '',

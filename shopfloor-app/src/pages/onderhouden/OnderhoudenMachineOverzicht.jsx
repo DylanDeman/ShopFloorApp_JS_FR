@@ -7,9 +7,12 @@ import PageHeader from '../../components/genericComponents/PageHeader';
 import { useNavigate } from 'react-router-dom';
 import Information from '../../components/Information';
 import { IoInformationCircleOutline } from 'react-icons/io5';
+import { useAuth } from '../../contexts/auth';
 
-export default function OnderhoudenMachineOverzicht (){
+export default function OnderhoudenMachineOverzicht () {
+  const { role } = useAuth();
   const navigate = useNavigate();
+
   const {id} = useParams();
   const {
     data: machine,

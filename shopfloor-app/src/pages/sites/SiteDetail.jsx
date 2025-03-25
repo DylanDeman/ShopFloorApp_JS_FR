@@ -10,12 +10,14 @@ import AsyncData from '../../components/AsyncData';
 import { IoMdAddCircleOutline } from 'react-icons/io';
 import PageHeader from '../../components/genericComponents/PageHeader';
 import GenericButton from '../../components/genericComponents/GenericButton';
+import { useAuth } from '../../contexts/auth';
 
 const SiteDetails = () => {
+  const { role } = useAuth();
   const { id } = useParams();
   const idAsNumber = Number(id);
   const navigate = useNavigate();
-  
+
   const handleShowGrondplan = () => {
     navigate(`/sites/${id}/grondplan`);
   };
@@ -41,7 +43,9 @@ const SiteDetails = () => {
           <PageHeader title={`Site | ${site.naam}`} onBackClick={handleOnClickBack}/>
           <div className="flex gap-4 items-center">
             <GenericButton icon={FaMapMarkedAlt} onClick={handleShowGrondplan} text="Bekijk grondplan"/>
-            <GenericButton icon={IoMdAddCircleOutline} onClick={handleAddMachine} text="Machine toevoegen"/>
+            {role === 'VERANTWOORDELIJKE' &&
+              <GenericButton icon={IoMdAddCircleOutline} onClick={handleAddMachine} text="Machine toevoegen"/>
+            }
           </div>
         </div>
 
