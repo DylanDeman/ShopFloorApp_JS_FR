@@ -15,9 +15,11 @@ export default function AddOrEditSite() {
   const navigate = useNavigate();
   const isNewSite = !id || id === 'new';
   
-  if (!role !== 'MANAGER') {
-    navigate('/not-found');
-  }
+  useEffect(() => {
+    if (role !== 'MANAGER') {
+      navigate('/not-found');
+    }
+  }, [role, navigate]);
 
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({

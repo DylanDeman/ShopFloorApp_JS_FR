@@ -10,9 +10,11 @@ import { useAuth } from '../../contexts/auth';
 export default function AddOrEditMachine() {
   const { role } = useAuth();
   const navigate = useNavigate();
-  if(role !== 'VERANTWOORDELIJKE') {
-    navigate('/not-found');
-  }
+  useEffect(() => {
+    if (role !== 'VERANTWOORDELIJKE') {
+      navigate('/not-found');
+    }
+  }, [role, navigate]);
   
   const { id } = useParams();
   const machineId = id;
