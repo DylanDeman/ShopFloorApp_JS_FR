@@ -13,7 +13,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem(JWT_TOKEN_KEY));
-
+  
   const {
     data: user, loading: userLoading, error: userError,
   } = useSWR(token ? 'users/me' : null, api.getById);
@@ -88,6 +88,7 @@ export const AuthProvider = ({ children }) => {
       loading: loginLoading || userLoading || registerLoading,
       isAuthed: Boolean(token),
       ready: !userLoading,
+      role: user?.rol,
       login,
       logout,
       register,

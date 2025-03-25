@@ -5,13 +5,21 @@ import AsyncData from '../../components/AsyncData';
 import PageHeader from '../../components/genericComponents/PageHeader';
 import SuccessMessage from '../../components/genericComponents/SuccesMessage';
 import { getAll, getById, updateMachine, createMachine } from '../../api';
+import { useAuth } from '../../contexts/auth';
 
 export default function AddOrEditMachine() {
+  const { role } = useAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (role !== 'VERANTWOORDELIJKE') {
+      navigate('/not-found');
+    }
+  }, [role, navigate]);
+  
   const { id } = useParams();
   const machineId = id;
-  const navigate = useNavigate();
   const isNewMachine = !machineId || machineId === 'new';
-
+  
   const [successMessage, setSuccessMessage] = useState('');
   const [error, setError] = useState(null);
   const [isFormDataInitialized, setIsFormDataInitialized] = useState(false);
@@ -69,18 +77,6 @@ export default function AddOrEditMachine() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
-    // If product is selected from dropdown, update product name and info
-    // if (name === 'product_id' && value) {
-    //   const selectedProduct = products.find((product) => product.id === value);
-    //   if (selectedProduct) {
-    //     setFormData((prev) => ({
-    //       ...prev,
-    //       product_naam: selectedProduct.naam || '',
-    //       product_informatie: selectedProduct.product_informatie || '',
-    //     }));
-    //   }
-    // }
   };
 
   const handleSubmit = async (e) => {

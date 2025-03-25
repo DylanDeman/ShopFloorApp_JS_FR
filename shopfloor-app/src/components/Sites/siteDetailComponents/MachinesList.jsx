@@ -5,8 +5,10 @@ import MachineListFilters from './MachineListFilters';
 import useMachineData from '../../../hooks/useSiteMachineData';
 import GenericTable from '../../genericComponents/GenericTable';
 import GenericListHeader from '../../genericComponents/GenericListHeader';
+import { useAuth } from '../../../contexts/auth';
 
 export default function MachineList({machinesData}) {
+  const { role } = useAuth();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -139,7 +141,7 @@ export default function MachineList({machinesData}) {
           }}
           onSort={handleSort}
           onShow={handleShow}
-          onEdit={handleEditMachine}
+          onEdit={role === 'VERANTWOORDELIJKE' ? handleEditMachine : undefined}
           sortConfig={sortConfig}
           emptyMessage="Er zijn geen machines beschikbaar."
           dataCyPrefix="machine"

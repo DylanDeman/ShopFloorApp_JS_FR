@@ -5,7 +5,8 @@ const NotFound = () => {
       <p className="text-lg text-gray-600 mb-6">Oeps! De pagina die je zoekt bestaat niet.</p>
       <a
         href="/"
-        className="px-5 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition"
+        className="px-5 py-3 bg-red-500 text-white rounded-lg 
+        shadow-md hover:bg-red-700 transition transform duration-300"
       >
         Ga terug naar home
       </a>

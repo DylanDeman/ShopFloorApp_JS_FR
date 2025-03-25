@@ -19,7 +19,7 @@ const fetchBase64Logo = async () => {
   }
 };
 
-export default function OnderhoudList({machine}) {
+export default function OnderhoudList({machine = []}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [zoekterm, setZoekterm] = useState('');

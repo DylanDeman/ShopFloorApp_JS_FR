@@ -8,8 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import Information from '../../components/Information';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 
-export default function OnderhoudenMachineOverzicht (){
+export default function OnderhoudenMachineOverzicht () {
   const navigate = useNavigate();
+
   const {id} = useParams();
   const {
     data: machine,
@@ -23,15 +24,15 @@ export default function OnderhoudenMachineOverzicht (){
 
   return (
     <>
-      <AsyncData loading={isLoading} error={error}>
-        <PageHeader title={`Onderhoudshistoriek | ${machine?.code}`} onBackClick={handleBackClick}/>
+      <PageHeader title={`Onderhoudshistoriek | ${machine?.code}`} onBackClick={handleBackClick}/>
 
-        <Information 
-          info="Hieronder vindt u een overzicht van de onderhouden van deze machine.
-        U kunt een rapport genereren door op de knop 'Genereer rapport' te klikken."
-          icon={IoInformationCircleOutline}
-        />
+      <Information 
+        info="Hieronder vindt u een overzicht van de onderhouden van deze machine.
+          U kunt een rapport genereren door op de knop 'Genereer rapport' te klikken."
+        icon={IoInformationCircleOutline}
+      />
      
+      <AsyncData loading={isLoading} error={error}>
         <OnderhoudList machine={machine}/>
       </AsyncData>
     </>

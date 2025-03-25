@@ -8,9 +8,12 @@ import GenericButton from '../../components/genericComponents/GenericButton';
 import AsyncData from '../../components/AsyncData';
 import useSWR from 'swr';
 import { getAll } from '../../api/index';
+import { useAuth } from '../../contexts/auth';
 
 const SitesOverzicht = () => {
+  const { role } = useAuth();
   const navigate = useNavigate();
+
   const handleAddSite = () => {
     navigate('/sites/new');
   };
@@ -26,7 +29,9 @@ const SitesOverzicht = () => {
       {/* Pagina titel en knop om een site toe te voegen */}
       <div className="flex justify-between items-center">
         <PageHeader title="Sites" />
-        <GenericButton icon={IoMdAddCircleOutline} onClick={handleAddSite} text="Site toevoegen"/>
+        {role === 'MANAGER' && 
+          <GenericButton icon={IoMdAddCircleOutline} onClick={handleAddSite} text="Site toevoegen"/>
+        }
       </div>
 
       {/* Informatie over de sites */}
