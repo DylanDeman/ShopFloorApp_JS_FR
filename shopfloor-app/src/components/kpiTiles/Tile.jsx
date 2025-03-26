@@ -49,6 +49,7 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
   datum.toISOString();
 
   const renderGraph = () => {
+
     switch (graphType) {
       case 'BARHOOGLAAG':
         return (

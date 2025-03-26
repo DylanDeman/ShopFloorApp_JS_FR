@@ -38,7 +38,7 @@ const TableRow = ({ data, columns, onShow, onEdit, onShowGrondplan, cellProps = 
         <td className="border border-gray-300 px-1 py-1 text-center" data-cy={`table-actions-${data.id}`}>
           <div className="inline-flex gap-2">
             {onShow && (
-              <td className="border-gray-300 px-1 py-1 text-center">
+              <div className="border-gray-300 px-1 py-1 text-center">
                 <div
                   className="inline-flex gap-2"
                   onClick={() => onShow(data.id)}
@@ -48,7 +48,7 @@ const TableRow = ({ data, columns, onShow, onEdit, onShowGrondplan, cellProps = 
                     Details
                   </span>
                 </div>
-              </td>
+              </div>
             )}
           </div>
         </td>
