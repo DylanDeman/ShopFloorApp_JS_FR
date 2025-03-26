@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
 } from '@react-pdf/renderer';
+import { convertStatus } from '../genericComponents/StatusConverter';
 
 const styles = StyleSheet.create({
   image: {
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
   statusValue: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: 'green',
+    color: 'black',
   },
   section: {
     marginBottom: 20,
@@ -113,6 +114,9 @@ const formatDateTime = (datetime) => {
 };
 
 const PdfDocument = ({ data, base64Logo }) => {
+
+  const convertedStatus = convertStatus(data.rawStatus);
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -127,10 +131,10 @@ const PdfDocument = ({ data, base64Logo }) => {
             <Text
               style={[
                 styles.statusValue,
-                { color: data.status === 'DRAAIT' ? 'green' : 'red' },
+                { color: convertedStatus.color },
               ]}
             >
-              {data.rawStatus}
+              {String(convertedStatus.text)}
             </Text>
           </View>
 
