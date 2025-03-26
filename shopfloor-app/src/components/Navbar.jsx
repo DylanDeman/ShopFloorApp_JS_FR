@@ -87,7 +87,7 @@ const Navbar = () => {
 
             <Link
               to="/notificaties"
-              className="text-black hover:text-gray-600"
+              className="text-black hover:text-gray-600 font-semibold"
             >
               Notificaties
             </Link>
