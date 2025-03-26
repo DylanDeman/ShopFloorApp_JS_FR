@@ -34,7 +34,7 @@ const Dashboard = () => {
     data: kpis = [],
     loading: loadingkpi,
     error: errorkpi,
-  } = useSWR(`kpi/rol/${role}`, getById);
+  } = useSWR(role ? `kpi/rol/${role}` : null, getById);
 
   const {
     trigger: deleteKPI, error: deleteError,
