@@ -21,7 +21,7 @@ describe('Sites Page', () => {
     it('should show edit option in table', () => {
       cy.get('[data-cy=edit-button]').first().should('be.visible');
     });
-  });
+  }); 
   
   describe('As VERANTWOORDELIJKE', () => {
     beforeEach(() => {
@@ -38,10 +38,11 @@ describe('Sites Page', () => {
       cy.get('tbody tr').should('have.length', 3);
 
       cy.get('tbody tr').eq(0).within(() => {
-        cy.get('td').eq(1).should('contain', '1');
-        cy.get('td').eq(2).should('contain', 'Site A');
-        cy.get('td').eq(3).should('contain', 'Jan Janssen');
-        cy.get('td').eq(5).should('contain', '2');
+        cy.get('td').eq(0).should('contain', '1');
+        cy.get('td').eq(1).should('contain', 'Site A');
+        cy.get('td').eq(2).should('contain', 'Jan Janssen');
+        cy.get('td').eq(3).should('contain', 'ACTIEF');
+        cy.get('td').eq(4).should('contain', '2');
       });
     });
 
@@ -118,11 +119,11 @@ describe('Sites Page', () => {
     it('should filter sites based on search query', () => {
       cy.get('[data-cy=search]').should('be.visible').clear().type('Site A');
       cy.get('tbody tr').should('have.length', 1);
-      cy.get('tbody tr td').eq(2).should('contain', 'Site A');
+      cy.get('tbody tr td').eq(1).should('contain', 'Site A');
   
       cy.get('[data-cy=search]').clear().type('Jan Janssen');
       cy.get('tbody tr').should('have.length', 1);
-      cy.get('tbody tr td').eq(3).should('contain', 'Jan Janssen');
+      cy.get('tbody tr td').eq(2).should('contain', 'Jan Janssen');
   
       cy.get('[data-cy=search]').clear().type('Nonexistent Site');
       cy.get('tbody tr').should('have.length', 0);
@@ -145,13 +146,13 @@ describe('Sites Page', () => {
       cy.get('th').contains('Aantal machines').click();
   
       cy.get('tbody tr').first().within(() => {
-        cy.get('td').eq(5).should('contain', '1'); 
+        cy.get('td').eq(4).should('contain', '1'); 
       });
   
       cy.get('th').contains('Aantal machines').click(); 
   
       cy.get('tbody tr').first().within(() => {
-        cy.get('td').eq(5).should('contain', '2'); 
+        cy.get('td').eq(4).should('contain', '2'); 
       });
     });
 
@@ -159,13 +160,13 @@ describe('Sites Page', () => {
       cy.get('th').contains('Verantwoordelijke').click();
   
       cy.get('tbody tr').first().within(() => {
-        cy.get('td').eq(3).should('contain', 'Jan Janssen'); 
+        cy.get('td').eq(2).should('contain', 'Jan Janssen'); 
       });
   
       cy.get('th').contains('Verantwoordelijke').click(); 
   
       cy.get('tbody tr').first().within(() => {
-        cy.get('td').eq(3).should('contain', 'Piet Peeters'); 
+        cy.get('td').eq(2).should('contain', 'Piet Peeters'); 
       });
     });
 
@@ -173,13 +174,13 @@ describe('Sites Page', () => {
       cy.get('th').contains('Status').click();
   
       cy.get('tbody tr').first().within(() => {
-        cy.get('td').eq(4).should('contain', 'ACTIEF'); 
+        cy.get('td').eq(3).should('contain', 'ACTIEF'); 
       });
   
       cy.get('th').contains('Status').click(); 
   
       cy.get('tbody tr').first().within(() => {
-        cy.get('td').eq(4).should('contain', 'INACTIEF'); 
+        cy.get('td').eq(3).should('contain', 'INACTIEF'); 
       });
     });
   });

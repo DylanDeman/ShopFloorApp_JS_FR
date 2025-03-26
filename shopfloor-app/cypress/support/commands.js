@@ -54,10 +54,10 @@ Cypress.Commands.add('loginAsManager', () => {
 });
 
 Cypress.Commands.add('loginAsVerantwoordelijke', () => {
-  cy.login('robert.devree@hotmail.com', '123456789');
+  cy.login('charlie.verantwoordelijke@example.com', '123456789');
 });
 
 Cypress.Commands.add('loginAsTechnieker', () => {
-  cy.login('robert.devree@hotmail.com', '123456789');
+  cy.login('david.technieker@example.com', '123456789');
 });
 
