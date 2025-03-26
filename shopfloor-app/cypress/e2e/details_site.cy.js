@@ -1,15 +1,11 @@
 describe('Site Details Page', () => {
   beforeEach(() => {
-    cy.intercept('POST', 'http://localhost:9000/api/sessions').as('loginRequest');
-    cy.intercept('GET', 'http://localhost:9000/api/users/me').as('getUser');
-    cy.login('robert.devree@hotmail.com', '123456789');
-
-    // Ensure intercept is set up before visiting the page
-    cy.intercept('GET', 'http://localhost:9000/api/sites/1', { fixture: 'siteDetails.json' }).as('getSiteDetails');
-
+    cy.fixture('siteDetails.json').then((siteData) => {
+      cy.intercept('GET', 'http://localhost:9000/api/sites/1', { body: siteData }).as('getSiteDetails');
+    });
+    cy.loginAsVerantwoordelijke();
     cy.visit('http://localhost:5173/sites/1');
-
-    cy.wait('@getSiteDetails', { timeout: 10000 });
+    cy.wait('@getSiteDetails');
   });
 
   it('should display site details correctly', () => {
@@ -101,11 +97,7 @@ describe('Machine Start and Stop E2E Tests', () => {
   let machineData;
 
   beforeEach(() => {
-    cy.intercept('POST', 'http://localhost:9000/api/sessions').as('loginRequest');
-    cy.intercept('GET', 'http://localhost:9000/api/users/me').as('getUser');
-
-    cy.login('robert.devree@hotmail.com', '123456789');
-
+    cy.loginAsVerantwoordelijke();
     cy.intercept('GET', 'http://localhost:9000/api/machines/1', { fixture: 'machineDetails.json' }).as('getMachineDetails');
 
     cy.fixture('machineDetails.json').then((data) => {
@@ -216,8 +208,8 @@ describe('Machine Start and Stop E2E Tests', () => {
     cy.intercept('GET', 'http://localhost:9000/api/machines/2', {
       statusCode: 200,
       body: {
-        ...machineData.machines[1], // Keep all fields from fixture
-        status: 'DRAAIT',           // Updated status
+        ...machineData.machines[1], 
+        status: 'DRAAIT',          
       },
     }).as('getUpdatedMachine');
 
@@ -239,6 +231,6 @@ describe('Machine Start and Stop E2E Tests', () => {
     cy.visit('http://localhost:5173/machines/999');
     cy.wait('@getMachineNotFound');
 
-    cy.get('[data-cy="error-message"]').should('be.visible').and('contain.text', 'Oops, something went wrong');
+    cy.get('[data-cy="error-message"]').should('be.visible').and('contain.text', 'Oeps, er is iets mis gegaan...');
   });
 });

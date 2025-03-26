@@ -10,6 +10,7 @@ const TableRow = ({ data, columns, onShow, onEdit, onShowGrondplan, cellProps = 
             className="text-gray-600 hover:text-red-600 transition-colors p-1 rounded-full hover:bg-gray-200"
             onClick={() => onEdit(data.id)}
             title="Edit"
+            data-cy="edit-button"
           >
             <MdEdit size={20} />
           </button>
