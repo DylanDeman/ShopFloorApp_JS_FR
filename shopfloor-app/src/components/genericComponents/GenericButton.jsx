@@ -1,4 +1,4 @@
-const GenericButton = ({ onClick, text, icon: Icon, otherProps }) => {
+const GenericButton = ({ onClick, text, icon: Icon, otherProps, dataCy }) => {
   return (
     <button 
       className="bg-red-500 hover:cursor-pointer hover:bg-red-700 transition-all duration-300
@@ -8,7 +8,7 @@ const GenericButton = ({ onClick, text, icon: Icon, otherProps }) => {
       {...otherProps}
     >
       {Icon && <Icon />}
-      {text}
+      <span data-cy={dataCy}>{text}</span>
     </button>
   );
 };

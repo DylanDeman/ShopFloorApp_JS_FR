@@ -1,21 +1,9 @@
 describe('Machines Page', () => {
   beforeEach(() => {
-    cy.intercept('POST', 'http://localhost:9000/api/sessions').as('loginRequest');
-    cy.intercept('GET', 'http://localhost:9000/api/users/me').as('getUser');
-    
     cy.fixture('machines.json').then((machinesData) => {
-      cy.intercept('GET', 'http://localhost:9000/api/machines', { 
-        body: { 
-          items: machinesData.slice(0, 3),  // Use first 3 machines
-          total: 3, 
-        }, 
-      }).as('getMachines');
+      cy.intercept('GET', 'http://localhost:9000/api/machines', { body: machinesData }).as('getMachines');
     });
-
-    cy.login('robert.devree@hotmail.com', '123456789');
-    
-    cy.wait('@loginRequest');
-    cy.wait('@getUser');
+    cy.loginAsManager();
     cy.visit('http://localhost:5173/machines');
     cy.wait('@getMachines');
   });

@@ -18,17 +18,16 @@ describe('Login Page', () => {
     cy.contains('Wachtwoord is verplicht').should('be.visible');
   });
 
-  it('should login successfully with valid credentials', () => {
-    cy.intercept('POST', '/api/sessions', {
-      statusCode: 200,
-      body: { token: 'fake-jwt-token' },
-    }).as('loginRequest');
+  it('should login successfully as TECHNIEKER', () => {
+    cy.loginAsTechnieker();
+  });
 
-    cy.get('[data-cy=loginEmail]').clear().type('robert.devree@hotmail.com');
-    cy.get('[data-cy=loginWachtwoord]').clear().type('123456789');
-    cy.get('[data-cy=loginSubmitButton]').click();
+  it('should login successfully as VERANTWOORDELIJKE', () => {
+    cy.loginAsVerantwoordelijke();
+  });
 
-    cy.wait('@loginRequest');
+  it('should login successfully as MANAGER', () => {
+    cy.loginAsManager();
   });
 
 });
