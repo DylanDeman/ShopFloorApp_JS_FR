@@ -11,12 +11,7 @@ const Login = () => {
   const { error, loading, login } = useAuth();
   const navigate = useNavigate();
 
-  const methods = useForm({
-    defaultValues: {
-      email: 'robert.devree@hotmail.com', // Voorbeeld bestaat niet echt! TODO weghalen
-      password: '123456789',
-    },
-  });
+  const methods = useForm();
   const { handleSubmit } = methods;
 
   const handleLogin = useCallback(
@@ -54,7 +49,7 @@ const Login = () => {
                   label="Email:"
                   name="email"
                   type="email"
-                  placeholder="Example@delaware.com"
+                  placeholder="voorbeeld@delaware.com"
                   validationRules={{ required: 'Email is verplicht' }}
                   data-cy="loginEmail"
                 />
