@@ -53,7 +53,7 @@ const MachineDetail = () => {
 
   const toggleMachineStatus = async () => {
     let status;
-    if(machine.status === 'DRAAIT'){
+    if(machine.machinestatus === 'DRAAIT'){
       status = 'MANUEEL_GESTOPT';
     } else {
       status = 'DRAAIT';
@@ -63,13 +63,13 @@ const MachineDetail = () => {
       {
         id: machine.id,
         code: machine.code, 
-        status: status,
-        productie_status: machine.productie_status,
-        locatie: machine.locatie,
-        technieker_id: machine.technieker.id, 
+        machinestatus: status,
+        productionstatus: machine.productie_status,
+        location: machine.locatie,
+        technician_id: machine.technieker.id, 
         site_id: machine.site.id,
         product_naam: machine.product_naam,
-        product_informatie: machine.product_informatie,
+        productinfo: machine.product_informatie,
         limiet_voor_onderhoud: machine.limiet_voor_onderhoud,
       },
     );
@@ -82,7 +82,7 @@ const MachineDetail = () => {
   const productionData = [
     {
       label: 'Productie Status',
-      value: <StatusDisplay status={machine.productie_status} />,
+      value: <StatusDisplay status={machine.productionstatus} />,
     },
     {
       label: 'Productiegraad',
@@ -124,25 +124,25 @@ const MachineDetail = () => {
                 <div className="flex flex-col">
                   <span className="text-lg font-medium mb-1">Naam site</span>
                   <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
-                    {machine.site?.naam}
+                    {machine.site?.sitename}
                   </span>
                 </div>
                 <div className="flex flex-col">
                   <span className="text-lg font-medium mb-1">Verantwoordelijke site</span>
                   <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
-                    {`${machine.site?.verantwoordelijke?.naam} ${machine.site?.verantwoordelijke?.voornaam}`}
+                    {`${machine.site?.verantwoordelijke?.lastname} ${machine.site?.verantwoordelijke?.firstname}`}
                   </span>
                 </div>
                 <div className="flex flex-col">
                   <span className="text-lg font-medium mb-1">Locatie</span>
                   <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
-                    {machine.locatie}
+                    {machine.location}
                   </span>
                 </div>
                 <div className="flex flex-col">
                   <span className="text-lg font-medium mb-1">Technieker</span>
                   <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
-                    {`${machine.technieker?.naam} ${machine.technieker?.voornaam}`}
+                    {`${machine.technieker?.lastname} ${machine.technieker?.firstname}`}
                   </span>
                 </div>
               </div>
@@ -154,7 +154,7 @@ const MachineDetail = () => {
                     {machine.status === 'DRAAIT' ? 'Uptime' : 'Downtime'}
                   </span>
                   <span className="text-lg bg-gray-200 pl-5 pr-3 py-1 rounded">
-                    {formatTime(machine.status_sinds)}
+                    {formatTime(machine.lastmaintenance)}
                   </span>
                 </div>
               </div>
@@ -186,7 +186,7 @@ const MachineDetail = () => {
                 </span>
                 <span className="text-lg font-medium mb-1">Product informatie</span>
                 <span className="text-lg bg-gray-200 pl-5 pr-3 py-2 min-h-19 rounded overflow-y-auto">
-                  {machine.product_informatie}
+                  {machine.productinfo}
                 </span>
               </div>
             </div>
@@ -243,7 +243,7 @@ const MachineDetail = () => {
               >
                 {isMutating 
                   ? 'Even geduld...' 
-                  : machine.status === 'DRAAIT' 
+                  : machine.machinestatus === 'DRAAIT' 
                     ? 'STOP' 
                     : 'START'}
               </button>

@@ -32,7 +32,7 @@ export default function SiteInfoForm({ formData, verantwoordelijken, onChange })
             Selecteer verantwoordelijke</option>
           {verantwoordelijken.map((verantwoordelijke) => (
             <option key={verantwoordelijke.id} value={verantwoordelijke.id}>
-              {verantwoordelijke.naam || verantwoordelijke.name || `User ${verantwoordelijke.id}`}
+              {verantwoordelijke.lastname || verantwoordelijke.firstname || `User ${verantwoordelijke.id}`}
             </option>
           ))}
         </select>

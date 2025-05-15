@@ -1,4 +1,4 @@
-import MachineList from '../../components/Sites/siteDetailComponents/MachinesList';
+import MachineList from '../../components/sites/siteDetailComponents/MachinesList';
 import Information from '../../components/Information';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 import { FaMapMarkedAlt } from 'react-icons/fa';
@@ -40,7 +40,7 @@ const SiteDetails = () => {
     <>
       <AsyncData error={siteError} loading={siteLoading}>
         <div data-cy="site-details" className="flex justify-between items-center">
-          <PageHeader title={`Site | ${site.naam}`} onBackClick={handleOnClickBack}/>
+          <PageHeader title={`Site | ${site.sitename}`} onBackClick={handleOnClickBack}/>
           <div className="flex gap-4 items-center">
             <GenericButton icon={FaMapMarkedAlt} onClick={handleShowGrondplan} text="Bekijk grondplan"/>
             {role === 'VERANTWOORDELIJKE' &&
@@ -55,7 +55,7 @@ const SiteDetails = () => {
         />
 
         <Information 
-          info={'Verantwoordelijke: ' + site.verantwoordelijke?.naam + ' ' + site.verantwoordelijke?.voornaam}
+          info={'Verantwoordelijke: ' + site.verantwoordelijke?.lastname + ' ' + site.verantwoordelijke?.firstname}
           icon={FaPerson}
         />
       

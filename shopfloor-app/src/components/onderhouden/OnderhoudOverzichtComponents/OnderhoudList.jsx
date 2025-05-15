@@ -122,11 +122,11 @@ export default function OnderhoudList({machine = []}) {
           data={paginatedOnderhouden}
           columns={{
             'Nr.': 'id',
-            'Starttijdstip': 'starttijdstip',
-            'Eindtijdstip': 'eindtijdstip',
+            'Starttijdstip': 'startdate',
+            'Eindtijdstip': 'enddate',
             'Naam technieker': 'technieker',
-            'Reden': 'reden',
-            'Opmerkingen': 'opmerkingen',
+            'Reden': 'reason',
+            'Opmerkingen': 'comments',
             'Onderhoudsrapport': 'onderhoudsrapport',
             'Status': 'status',
           }}

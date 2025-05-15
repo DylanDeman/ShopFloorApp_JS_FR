@@ -197,9 +197,9 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
                     </h3>
                     <p className="text-gray-700">
                       <strong>Code:</strong> {machine.code} <br />
-                      <strong>Locatie:</strong> {machine.locatie} <br />
-                      <strong>Status:</strong> {machine.status} <br />
-                      <strong>Product info:</strong> {machine.product.naam} <br />
+                      <strong>Locatie:</strong> {machine.location} <br />
+                      <strong>Status:</strong> {machine.machinestatus} <br />
+                      <strong>Product info:</strong> {machine.productinfo} <br />
                     </p>
                   </div>
                 ))}
@@ -245,8 +245,8 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
                     <p className="text-gray-700">
                       <strong>Code:</strong> {machine.code} <br />
                       <strong>Locatie:</strong> {machine.locatie} <br />
-                      <strong>Status:</strong> {machine.status} <br />
-                      <strong>Product:</strong> {machine.product.naam} <br />
+                      <strong>Status:</strong> {machine.machinestatus} <br />
+                      <strong>Product:</strong> {machine.productinfo} <br />
                     </p>
                   </div>
                 ))}
@@ -282,11 +282,11 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
                       Onderhoud {onderhoud.id}
                     </h3>
                     <p className="text-gray-700">
-                      <strong>Starttijd:</strong> {new Date(onderhoud.starttijdstip).toLocaleDateString()} <br />
-                      <strong>Eindtijd:</strong> {new Date(onderhoud.eindtijdstip).toLocaleDateString()} <br />
+                      <strong>Starttijd:</strong> {new Date(onderhoud.startdate).toLocaleDateString()} <br />
+                      <strong>Eindtijd:</strong> {new Date(onderhoud.enddate).toLocaleDateString()} <br />
                       <strong>Status:</strong> <StatusDisplay status={onderhoud.status} /> <br />
-                      <strong>Reden:</strong> {onderhoud.reden} <br />
-                      <strong>Opmerkingen:</strong> {onderhoud.opmerkingen} <br />
+                      <strong>Reden:</strong> {onderhoud.reason} <br />
+                      <strong>Opmerkingen:</strong> {onderhoud.comments} <br />
                     </p>
                   </div>
                 ))}
@@ -322,11 +322,11 @@ const Tile = ({ id, title, content, onDelete, graphType, machines, onderhouden }
                       Onderhoud {onderhoud.id}
                     </h3>
                     <p className="text-gray-700">
-                      <strong>Starttijd:</strong> {new Date(onderhoud.starttijdstip).toLocaleDateString()} <br />
-                      <strong>Eindtijd:</strong> {new Date(onderhoud.eindtijdstip).toLocaleDateString()} <br />
+                      <strong>Starttijd:</strong> {new Date(onderhoud.startdate).toLocaleDateString()} <br />
+                      <strong>Eindtijd:</strong> {new Date(onderhoud.enddate).toLocaleDateString()} <br />
                       <strong>Status:</strong> {onderhoud.status} <br />
-                      <strong>Reden:</strong> {onderhoud.reden} <br />
-                      <strong>Opmerkingen:</strong> {onderhoud.opmerkingen} <br />
+                      <strong>Reden:</strong> {onderhoud.reason} <br />
+                      <strong>Opmerkingen:</strong> {onderhoud.comments} <br />
                     </p>
                   </div>
                 ))}

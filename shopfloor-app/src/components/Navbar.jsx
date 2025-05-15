@@ -9,8 +9,8 @@ import { useAuth } from '../contexts/auth';
 const Navbar = () => {
   const location = useLocation();
   const { user } = useAuth();
-  const volledigeNaam = user ? user.voornaam + ' ' + user.naam : null;
-  const functie = user ? user.rol.charAt(0).toUpperCase() + user.rol.slice(1).toLowerCase() : null;
+  const volledigeNaam = user ? user.firstname + ' ' + user.lastname : null;
+  const functie = user ? user.role.charAt(0).toUpperCase() + user.role.slice(1).toLowerCase() : null;
 
   const {
     data: notificaties,

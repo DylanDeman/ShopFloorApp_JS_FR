@@ -11,7 +11,7 @@ export default function NotificatieListDropdown({ notificaties, toggleDropdown }
   }
   
   const ongelezenNotificaties = notificaties.items.filter(
-    (notificatie) => !notificatie.gelezen);
+    (notificatie) => !notificatie.isread);
   
   return (
     <div className='bg-white shadow-md rounded'>

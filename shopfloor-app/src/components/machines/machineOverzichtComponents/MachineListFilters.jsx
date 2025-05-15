@@ -24,14 +24,14 @@ const MachineListFilters = ({
             <select
               id="locatie-filter"
               value={locatieFilter}
-              onChange={onFilterChange.locatie}
+              onChange={onFilterChange.location}
               className="border border-gray-300 rounded-md px-3 py-2 w-full md:w-auto"
               data-cy="locatie_filter"
             >
               <option value="">Alle locaties</option>
-              {uniqueLocaties.map((locatie) => (
-                <option key={locatie} value={locatie}>
-                  {locatie}
+              {uniqueLocaties.map((location) => (
+                <option key={location} value={location}>
+                  {location}
                 </option>
               ))}
             </select>
@@ -45,14 +45,14 @@ const MachineListFilters = ({
             <select
               id="status-filter"
               value={statusFilter}
-              onChange={onFilterChange.status}
+              onChange={onFilterChange.machinestatus}
               className="border border-gray-300 rounded-md px-3 py-2 w-full md:w-auto"
               data-cy="status_filter"
             >
               <option value="">Alle statussen</option>
-              {uniqueStatuses.map((status) => (
-                <option key={status} value={status}>
-                  {status}
+              {uniqueStatuses.map((machinestatus) => (
+                <option key={machinestatus} value={machinestatus}>
+                  {machinestatus}
                 </option>
               ))}
             </select>
@@ -66,14 +66,14 @@ const MachineListFilters = ({
             <select
               id="productie-status-filter"
               value={productieStatusFilter}
-              onChange={onFilterChange.productieStatus}
+              onChange={onFilterChange.productionstatus}
               className="border border-gray-300 rounded-md px-3 py-2 w-full md:w-auto"
               data-cy="productie_status_filter"
             >
               <option value="">Alle productie statussen</option>
-              {uniqueProductieStatuses.map((status) => (
-                <option key={status} value={status}>
-                  {status}
+              {uniqueProductieStatuses.map((machinestatus) => (
+                <option key={machinestatus} value={machinestatus}>
+                  {machinestatus}
                 </option>
               ))}
             </select>

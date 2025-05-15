@@ -24,16 +24,16 @@ export default function useMachineData({
     if (rawData && rawData.length > 0) {
       const processed = rawData.map((machine) => ({
         id: machine.id,
-        locatie: machine.locatie,
-        rawStatus: machine.status,
-        rawProductieStatus: machine.productie_status,
-        technieker: `${machine.technieker.naam} ${machine.technieker.voornaam}`,
+        location: machine.location,
+        rawStatus: machine.machinestatus,
+        rawProductieStatus: machine.productionstatus,
+        technieker: `${machine.technieker.lastname} ${machine.technieker.firstname}`,
       }));
       
       setProcessedMachines(processed);
       
       // Extract unique values for filters
-      const locaties = [...new Set(processed.map((machine) => machine.locatie))].filter(Boolean).sort();
+      const locaties = [...new Set(processed.map((machine) => machine.location))].filter(Boolean).sort();
       setUniqueLocaties(locaties);
       
       const statuses = [...new Set(processed.map((machine) => {
@@ -61,13 +61,13 @@ export default function useMachineData({
       
       // Text search filter
       const matchesSearch = !zoekterm || 
-        machine.locatie?.toLowerCase().includes(zoekterm.toLowerCase()) ||
+        machine.location?.toLowerCase().includes(zoekterm.toLowerCase()) ||
         statusText.toLowerCase().includes(zoekterm.toLowerCase()) ||
         productieStatusText.toLowerCase().includes(zoekterm.toLowerCase()) ||
         machine.technieker.toLowerCase().includes(zoekterm.toLowerCase());
       
       // Dropdown filters
-      const matchesLocatie = !locatieFilter || machine.locatie === locatieFilter;
+      const matchesLocatie = !locatieFilter || machine.location === locatieFilter;
       const matchesStatus = !statusFilter || statusText === statusFilter;
       const matchesProductieStatus = !productieStatusFilter || productieStatusText === productieStatusFilter;
       const matchesTechnieker = !techniekerFilter || machine.technieker === techniekerFilter;
@@ -97,9 +97,9 @@ export default function useMachineData({
   const formattedPaginatedMachines = useMemo(() => {
     return paginatedMachines.map((machine) => ({
       id: machine.id,
-      locatie: machine.locatie,
-      status: <StatusDisplay status={machine.rawStatus} />,
-      productie_status: <StatusDisplay status={machine.rawProductieStatus} />,
+      location: machine.location,
+      machinestatus: <StatusDisplay status={machine.rawStatus} />,
+      productionstatus: <StatusDisplay status={machine.rawProductieStatus} />,
       technieker: machine.technieker,
     }));
   }, [paginatedMachines]);
@@ -124,8 +124,8 @@ function sortMachines(machines, sortConfig) {
   
   // Map special fields to their sortable values
   const fieldMap = {
-    'status': 'rawStatus',
-    'productie_status': 'rawProductieStatus',
+    'machinestatus': 'rawStatus',
+    'productionstatus': 'rawProductieStatus',
   };
   
   const sortField = fieldMap[sortConfig.field] || sortConfig.field;

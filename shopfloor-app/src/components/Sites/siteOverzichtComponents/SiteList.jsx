@@ -136,7 +136,7 @@ export default function SiteList({data}) {
           data={paginatedSites}
           columns={{
             'Nr.': 'id',
-            'Naam': 'naam',
+            'Naam': 'sitename',
             'Verantwoordelijke': 'verantwoordelijke',
             'Status': 'status',
             'Aantal machines': 'aantal_machines',

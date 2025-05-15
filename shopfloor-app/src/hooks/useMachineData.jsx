@@ -14,6 +14,7 @@ export default function useMachineData({
   currentPage,
   limit,
 }) {
+
   const [processedMachines, setProcessedMachines] = useState([]);
   const [uniqueLocaties, setUniqueLocaties] = useState([]);
   const [uniqueStatuses, setUniqueStatuses] = useState([]);
@@ -25,17 +26,17 @@ export default function useMachineData({
     if (rawData && rawData.length > 0) {
       const processed = rawData.map((machine) => ({
         id: machine.id,
-        locatie: machine.locatie,
-        rawStatus: machine.status,
-        rawProductieStatus: machine.productie_status,
-        technieker: `${machine.technieker.naam} ${machine.technieker.voornaam}`,
+        location: machine.location,
+        rawStatus: machine.machinestatus,
+        rawProductieStatus: machine.productionstatus,
+        technieker: `${machine.technieker.lastname} ${machine.technieker.firstname}`,
         aantal_onderhoudsbeurten: machine.onderhouden.length || 0,
       }));
       
       setProcessedMachines(processed);
       
       // Extract unique values for filters
-      const locaties = [...new Set(processed.map((machine) => machine.locatie))].filter(Boolean).sort();
+      const locaties = [...new Set(processed.map((machine) => machine.location))].filter(Boolean).sort();
       setUniqueLocaties(locaties);
       
       const statuses = [...new Set(processed.map((machine) => {
@@ -57,23 +58,22 @@ export default function useMachineData({
 
   // Filter machines based on search term and filters
   const filteredMachines = useMemo(() => {
+
     return processedMachines.filter((machine) => {
       const statusText = convertStatus(machine.rawStatus)?.text || '';
       const productieStatusText = convertStatus(machine.rawProductieStatus)?.text || '';
-      
-      // Text search filter
-      const matchesSearch = !zoekterm || 
-        machine.locatie?.toLowerCase().includes(zoekterm.toLowerCase()) ||
+  
+      const matchesSearch = !zoekterm ||
+        machine.location?.toLowerCase().includes(zoekterm.toLowerCase()) ||
         statusText.toLowerCase().includes(zoekterm.toLowerCase()) ||
         productieStatusText.toLowerCase().includes(zoekterm.toLowerCase()) ||
         machine.technieker.toLowerCase().includes(zoekterm.toLowerCase());
-      
-      // Dropdown filters
-      const matchesLocatie = !locatieFilter || machine.locatie === locatieFilter;
+  
+      const matchesLocatie = !locatieFilter || machine.location === locatieFilter;
       const matchesStatus = !statusFilter || statusText === statusFilter;
       const matchesProductieStatus = !productieStatusFilter || productieStatusText === productieStatusFilter;
       const matchesTechnieker = !techniekerFilter || machine.technieker === techniekerFilter;
-      
+  
       return matchesSearch && matchesLocatie && matchesStatus && matchesProductieStatus && matchesTechnieker;
     });
   }, [
@@ -83,7 +83,7 @@ export default function useMachineData({
     statusFilter,
     productieStatusFilter,
     techniekerFilter,
-  ]);
+  ]);  
 
   // Sort machines
   const sortedMachines = useMemo(() => {
@@ -99,9 +99,9 @@ export default function useMachineData({
   const formattedPaginatedMachines = useMemo(() => {
     return paginatedMachines.map((machine) => ({
       id: machine.id,
-      locatie: machine.locatie,
-      status: <StatusDisplay status={machine.rawStatus} />,
-      productie_status: <StatusDisplay status={machine.rawProductieStatus} />,
+      location: machine.location,
+      machinestatus: <StatusDisplay status={machine.rawStatus} />,
+      productionstatus: <StatusDisplay status={machine.rawProductieStatus} />,
       technieker: machine.technieker,
       aantal_onderhoudsbeurten: machine.aantal_onderhoudsbeurten !== 0 ? (
         <Link to={`./${machine.id}/onderhouden`} className='underline'>{machine.aantal_onderhoudsbeurten}</Link>
@@ -129,8 +129,8 @@ function sortMachines(machines, sortConfig) {
   
   // Map special fields to their sortable values
   const fieldMap = {
-    'status': 'rawStatus',
-    'productie_status': 'rawProductieStatus',
+    'machinestatus': 'rawStatus',
+    'productionstatus': 'rawProductieStatus',
   };
   
   const sortField = fieldMap[sortConfig.field] || sortConfig.field;

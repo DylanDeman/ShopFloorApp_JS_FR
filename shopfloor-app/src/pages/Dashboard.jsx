@@ -10,7 +10,7 @@ const Dashboard = () => {
   const { user } = useAuth();
 
   const user_id = user ? user.id : null;
-  const role = user ? user.rol : null;
+  const role = user ? user.role : null;
 
   const {
     data: dashboards = [],

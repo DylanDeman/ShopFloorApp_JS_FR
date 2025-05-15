@@ -6,7 +6,7 @@ export default function SiteInfoForm({ formData, verantwoordelijken, onChange })
         <input
           type="text"
           name="naam"
-          value={formData.naam}
+          value={formData.sitename}
           onChange={onChange}
           className="w-full p-2 border rounded"
           placeholder="naam van de site"
@@ -27,12 +27,12 @@ export default function SiteInfoForm({ formData, verantwoordelijken, onChange })
         >
           <option 
             value={verantwoordelijken.filter(
-              (verantwoordelijke) => verantwoordelijke.id == formData.verantwoordelijke_id).naam
+              (verantwoordelijke) => verantwoordelijke.id == formData.verantwoordelijke_id).lastname
             }>
             Selecteer verantwoordelijke</option>
           {verantwoordelijken.map((verantwoordelijke) => (
             <option key={verantwoordelijke.id} value={verantwoordelijke.id}>
-              {verantwoordelijke.naam || verantwoordelijke.name || `User ${verantwoordelijke.id}`}
+              {verantwoordelijke.lastname || verantwoordelijke.firstname || `User ${verantwoordelijke.id}`}
             </option>
           ))}
         </select>

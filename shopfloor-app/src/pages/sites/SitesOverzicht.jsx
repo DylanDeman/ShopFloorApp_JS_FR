@@ -1,4 +1,4 @@
-import SiteList from '../../components/Sites/siteOverzichtComponents/SiteList';
+import SiteList from '../../components/sites/siteOverzichtComponents/SiteList';
 import Information from '../../components/Information';
 import { IoMdAddCircleOutline } from 'react-icons/io';
 import { IoInformationCircleOutline } from 'react-icons/io5';

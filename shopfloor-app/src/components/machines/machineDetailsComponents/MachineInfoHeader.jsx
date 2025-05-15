@@ -8,7 +8,7 @@ const MachineInfoHeader = ({ machine }) => {
       </div>
       <div className="flex flex-col">
         <h2 data-cy="machine_status" className="text-xl md:text-2xl font-semibold mb-2">
-          Status: <StatusDisplay status={machine.status} />
+          Status: <StatusDisplay status={machine.machinestatus} />
         </h2>
       </div>
     </div>

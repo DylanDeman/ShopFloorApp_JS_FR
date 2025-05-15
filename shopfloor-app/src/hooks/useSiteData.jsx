@@ -22,9 +22,9 @@ export default function useSiteData({
     if (rawData && rawData.length > 0) {
       const processed = rawData.map((site) => ({
         id: site.id,
-        naam: site.naam,
+        sitename: site.sitename,
         rawStatus: site.status,
-        verantwoordelijke: `${site.verantwoordelijke?.voornaam} ${site.verantwoordelijke?.naam}`,
+        verantwoordelijke: `${site.verantwoordelijke?.firstname} ${site.verantwoordelijke?.lastname}`,
         aantal_machines: site.machines ? site.machines?.length : 0,
       }));
       
@@ -86,7 +86,7 @@ export default function useSiteData({
   const formattedPaginatedSites = useMemo(() => {
     return paginatedSites.map((site) => ({
       id: site.id,
-      naam: site.naam,
+      sitename: site.sitename,
       status: <StatusDisplay status={site.rawStatus} />,
       verantwoordelijke: site.verantwoordelijke,
       aantal_machines: site.aantal_machines,

@@ -145,14 +145,14 @@ const PdfDocument = ({ data, base64Logo }) => {
             {/* Site Name */}
             <View style={styles.siteInfoRow}>
               <Text style={styles.label}>Naam</Text>
-              <Text style={styles.value}>{data.machine.site.naam}</Text>
+              <Text style={styles.value}>{data.machine.site.sitename}</Text>
             </View>
 
             {/* Responsible Person */}
             <View style={styles.siteInfoRow}>
               <Text style={styles.label}>Verantwoordelijke</Text>
               <Text style={styles.value}>
-                {`${data.machine.site.verantwoordelijke.voornaam} ${data.machine.site.verantwoordelijke.naam}`}
+                {`${data.machine.site.verantwoordelijke.firstname} ${data.machine.site.verantwoordelijke.lastname}`}
               </Text>
             </View>
 
@@ -176,12 +176,12 @@ const PdfDocument = ({ data, base64Logo }) => {
 
             <View style={styles.infoRow}>
               <Text style={styles.label}>Starttijdstip</Text>
-              <Text style={styles.value}>{formatDateTime(data.starttijdstip)}</Text>
+              <Text style={styles.value}>{formatDateTime(data.startdate)}</Text>
             </View>
 
             <View style={styles.infoRow}>
               <Text style={styles.label}>Eindtijdstip</Text>
-              <Text style={styles.value}>{formatDateTime(data.eindtijdstip)}</Text>
+              <Text style={styles.value}>{formatDateTime(data.enddate)}</Text>
             </View>
 
             <View style={styles.infoRow}>
@@ -191,11 +191,11 @@ const PdfDocument = ({ data, base64Logo }) => {
 
             <View style={styles.infoRow}>
               <Text style={styles.label}>Reden</Text>
-              <Text style={styles.value}>{data.reden}</Text>
+              <Text style={styles.value}>{data.reason}</Text>
             </View>
 
             <Text style={{ fontWeight: 'bold', marginBottom: 5 }}>Opmerkingen</Text>
-            <Text style={styles.opmerkingenBox}>{data.opmerkingen}</Text>
+            <Text style={styles.opmerkingenBox}>{data.comments}</Text>
           </View>
 
           <Image src={base64Logo} style={styles.image} />

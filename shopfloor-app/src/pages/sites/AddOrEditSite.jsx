@@ -5,7 +5,7 @@ import useSWR from 'swr';
 import { createSite, getAll, getById, updateSite } from '../../api';
 import AsyncData from '../../components/AsyncData';
 import PageHeader from '../../components/genericComponents/PageHeader';
-import SiteInfoForm from '../../components/Sites/siteEditOrAddComponents/SiteInfoForm';
+import SiteInfoForm from '../../components/sites/SiteInfoForm';
 import SuccessMessage from '../../components/genericComponents/SuccesMessage';
 import { useAuth } from '../../contexts/auth';
 
@@ -23,7 +23,7 @@ export default function AddOrEditSite() {
 
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
-    naam: '',
+    sitename: '',
     verantwoordelijke_id: '',
     status: 'ACTIEF',
   });
@@ -34,8 +34,8 @@ export default function AddOrEditSite() {
     return Array.isArray(users)
       ? users.filter((user) => {
         try {
-          if (typeof user.rol === 'string') {
-            const cleanedRol = user.rol.replace(/\\/g, '');
+          if (typeof user.role === 'string') {
+            const cleanedRol = user.role.replace(/\\/g, '');
             const parsedRol = cleanedRol.startsWith('"') && cleanedRol.endsWith('"')
               ? cleanedRol.slice(1, -1)
               : cleanedRol;
@@ -71,7 +71,7 @@ export default function AddOrEditSite() {
   useEffect(() => {
     if (siteData && !isFormDataInitialized) {
       setFormData({
-        naam: siteData.naam || '',
+        sitename: siteData.sitename || '',
         verantwoordelijke_id: siteData.verantwoordelijke?.id || '',
         status: siteData.status || 'ACTIEF',
       });

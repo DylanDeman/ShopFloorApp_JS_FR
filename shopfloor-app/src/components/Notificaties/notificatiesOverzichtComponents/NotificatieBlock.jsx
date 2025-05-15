@@ -34,8 +34,8 @@ export default function NotificatieBlock({notificaties, type}){
         {notifsOpen ? <div>
           {notificaties.map((notificatie) => 
             <Notificatie 
-              key={notificatie.id} id={notificatie.id} tijdstip={notificatie.tijdstip} bericht={notificatie.bericht} 
-              gelezen={notificatie.gelezen}
+              key={notificatie.id} id={notificatie.id} tijdstip={notificatie.time} bericht={notificatie.message} 
+              gelezen={notificatie.isread}
             />)}
         </div> : ''}
       </div>

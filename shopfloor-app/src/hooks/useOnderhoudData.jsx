@@ -20,13 +20,13 @@ export default function useOnderhoudData({
     if(rawData && rawData.length > 0) {
       const processed = rawData.map((onderhoud) => ({
         id: onderhoud.id,
-        technieker: `${onderhoud.technieker.naam} ${onderhoud.technieker.voornaam}`,
-        datum: onderhoud.datum,
-        starttijdstip: onderhoud.starttijdstip,
-        eindtijdstip: onderhoud.eindtijdstip,
-        reden: onderhoud.reden,
+        technieker: `${onderhoud.technieker.lastname} ${onderhoud.technieker.firstname}`,
+        executiondate: onderhoud.executiondate,
+        startdate: onderhoud.startdate,
+        enddate: onderhoud.enddate,
+        reason: onderhoud.reason,
         rawStatus: onderhoud.status,
-        opmerkingen: onderhoud.opmerkingen,
+        comments: onderhoud.comments,
         onderhoudsrapport: '',
       }));
       
@@ -51,10 +51,10 @@ export default function useOnderhoudData({
 
       const matchesSearch = !zoekterm ||
         onderhoud.technieker?.toLowerCase().includes(zoekterm.toLowerCase()) ||
-        onderhoud.datum?.toLowerCase().includes(zoekterm.toLowerCase()) ||
-        onderhoud.reden?.toLowerCase().includes(zoekterm.toLowerCase()) ||
+        onderhoud.executiondate?.toLowerCase().includes(zoekterm.toLowerCase()) ||
+        onderhoud.reason?.toLowerCase().includes(zoekterm.toLowerCase()) ||
         statusText.toLowerCase().includes(zoekterm.toLowerCase()) ||
-        onderhoud.opmerkingen?.toLowerCase().includes(zoekterm.toLowerCase());
+        onderhoud.comments?.toLowerCase().includes(zoekterm.toLowerCase());
 
       const matchesStatus = !statusFilter || statusText === statusFilter;
       const matchesTechnieker = !techniekerFilter || onderhoud.technieker === techniekerFilter;

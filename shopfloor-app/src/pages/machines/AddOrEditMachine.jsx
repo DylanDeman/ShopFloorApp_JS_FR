@@ -26,13 +26,13 @@ export default function AddOrEditMachine() {
   
   const [formData, setFormData] = useState({
     code: '',
-    status: 'DRAAIT',
-    productie_status: 'GEZOND',
-    locatie: '',
-    technieker_id: '',
+    machinestatus: 'DRAAIT',
+    productionstatus: 'GEZOND',
+    location: '',
+    technician_id: '',
     site_id: '',
     product_naam: '',
-    product_informatie: '',
+    productinfo: '',
     limiet_voor_onderhoud: 100,
   });
 
@@ -55,13 +55,13 @@ export default function AddOrEditMachine() {
     if (machineData && !isFormDataInitialized) {
       setFormData({
         code: machineData.code || '',
-        locatie: machineData.locatie || '',
-        status: machineData.status || 'DRAAIT',
-        productie_status: machineData.productie_status || 'GEZOND',
-        technieker_id: machineData.technieker?.id || '',
+        location: machineData.locatie || '',
+        machinestatus: machineData.status || 'DRAAIT',
+        productionstatus: machineData.productie_status || 'GEZOND',
+        technician_id: machineData.technieker?.id || '',
         site_id: machineData.site?.id || '',
         product_naam: machineData.product_naam || '',
-        product_informatie: machineData.product_informatie || '',
+        productinfo: machineData.product_informatie || '',
         limiet_voor_onderhoud: machineData.limiet_voor_onderhoud || 150,
       });
       setIsFormDataInitialized(true);
@@ -85,14 +85,14 @@ export default function AddOrEditMachine() {
     try {
       const machineUpdateData = {
         code: formData.code,
-        status: formData.status,
-        productie_status: formData.productie_status,
-        locatie: formData.locatie,
+        machinestatus: formData.machinestatus,
+        productionstatus: formData.productionstatus,
+        location: formData.location,
         limiet_voor_onderhoud: formData.limiet_voor_onderhoud,
-        technieker_id: formData.technieker_id,
+        technician_id: formData.technician_id,
         site_id: formData.site_id,
         product_naam: formData.product_naam,
-        product_informatie: formData.product_informatie,
+        productinfo: formData.productinfo,
       };
       
       if (isNewMachine) {
@@ -143,7 +143,7 @@ export default function AddOrEditMachine() {
               <input 
                 type="text" 
                 name="locatie" 
-                value={formData.locatie} 
+                value={formData.location} 
                 onChange={handleChange} 
                 className="mt-1 p-2 border rounded w-full" 
                 required
@@ -172,7 +172,7 @@ export default function AddOrEditMachine() {
               <label htmlFor="technieker_id" className="block text-sm font-medium text-gray-700">Technieker</label>
               <select 
                 name="technieker_id" 
-                value={formData.technieker_id} 
+                value={formData.technician_id} 
                 onChange={handleChange} 
                 className="mt-1 p-2 border rounded w-full" 
                 required
@@ -180,7 +180,7 @@ export default function AddOrEditMachine() {
                 <option value="">Selecteer een technieker</option>
                 {techniekers.map((tech) => (
                   <option key={tech.id} value={tech.id}>
-                    {tech.naam} {tech.voornaam}
+                    {tech.lastname} {tech.firstname}
                   </option>
                 ))}
               </select>
@@ -204,7 +204,7 @@ export default function AddOrEditMachine() {
               </label>
               <textarea 
                 name="product_informatie" 
-                value={formData.product_informatie} 
+                value={formData.productinfo} 
                 onChange={handleChange} 
                 className="mt-1 p-2 border rounded w-full" 
                 rows="3"

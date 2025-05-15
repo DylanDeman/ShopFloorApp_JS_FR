@@ -7,18 +7,18 @@ export default function NotificatieList({notificaties}){
     );
   }
 
-  const ongelezenNotificaties = notificaties.items.filter((notificatie) => !notificatie.gelezen);
+  const ongelezenNotificaties = notificaties.items.filter((notificatie) => !notificatie.isread);
   const loginTime = new Date(localStorage.getItem('loginTime'));
 
   const nieuweNotificaties = ongelezenNotificaties.filter(
-    (notificatie) => new Date(notificatie.tijdstip) >= loginTime);
+    (notificatie) => new Date(notificatie.time) >= loginTime);
 
   const overigeOngelezenNotificaties = ongelezenNotificaties.filter(
     (notificatie) =>
       !nieuweNotificaties.find((nieuw) => nieuw.id === notificatie.id),
   );
 
-  const gelezenNotificaties = notificaties.items.filter((notificatie) => notificatie.gelezen);
+  const gelezenNotificaties = notificaties.items.filter((notificatie) => notificatie.isread);
   return (
     <div className="w-full">
       <NotificatieBlock notificaties={nieuweNotificaties} type="Nieuwe"/>

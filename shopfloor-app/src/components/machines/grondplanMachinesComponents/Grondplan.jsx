@@ -88,9 +88,9 @@ const Grondplan = ({ machines }) => {
               onClick={() => setSelectedMachine(machine)}
               data-cy="machine-marker"
             >
-              <MdFactory className="rounded-lg" size={70} color={getIconColor(machine.status)} />
+              <MdFactory className="rounded-lg" size={70} color={getIconColor(machine.machinestatus)} />
               <div className="text-xs mt-1 w-[70px] text-center 
-              font-semibold  p-1 rounded-md text-white">{machine.locatie}</div> 
+              font-semibold  p-1 rounded-md text-white">{machine.location}</div> 
             </div>
           ))}
         </div>
@@ -100,9 +100,9 @@ const Grondplan = ({ machines }) => {
         <div className="mt-4 p-6 border border-gray-400 rounded-lg shadow-lg bg-gray-100" data-cy="machine-details">
           <h3 className="text-lg font-bold mb-2">{selectedMachine.name}</h3>
           <p><strong>ID:</strong> {selectedMachine.id}</p>
-          <p><strong>Locatie:</strong> {selectedMachine.locatie}</p>
-          <p><strong>Status:</strong> {selectedMachine.status}</p>
-          <p><strong>Productie Status:</strong> {selectedMachine.productieStatus}</p>
+          <p><strong>Locatie:</strong> {selectedMachine.location}</p>
+          <p><strong>Status:</strong> {selectedMachine.machinestatus}</p>
+          <p><strong>Productie Status:</strong> {selectedMachine.productionstatus}</p>
           <button 
             className="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-700 transition"
             onClick={() => setSelectedMachine(null)}

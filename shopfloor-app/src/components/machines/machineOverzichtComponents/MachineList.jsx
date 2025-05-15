@@ -84,15 +84,15 @@ export default function MachineList({data}) {
 
   // Filter change handlers
   const handleFilterChange = {
-    locatie: (e) => {
+    location: (e) => {
       setLocatieFilter(e.target.value);
       setCurrentPage(1);
     },
-    status: (e) => {
+    machinestatus: (e) => {
       setStatusFilter(e.target.value);
       setCurrentPage(1);
     },
-    productieStatus: (e) => {
+    productionstatus: (e) => {
       setProductieStatusFilter(e.target.value);
       setCurrentPage(1);
     },
@@ -131,9 +131,9 @@ export default function MachineList({data}) {
           data={paginatedMachines}
           columns={{
             'Nr.': 'id',
-            'Locatie': 'locatie',
-            'Status': 'status',
-            'ProductieStatus': 'productie_status',
+            'Locatie': 'location',
+            'Status': 'machinestatus',
+            'ProductieStatus': 'productionstatus',
             'Technieker': 'technieker',
             'Aantal Onderhoudsbeurten': 'aantal_onderhoudsbeurten',
           }}
