@@ -8,7 +8,7 @@ import GenericListHeader from '../../genericComponents/GenericListHeader';
 import { useAuth } from '../../../contexts/auth';
 
 export default function MachineList({machinesData}) {
-  const { role } = useAuth();
+  const { role, user } = useAuth();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -104,6 +104,9 @@ export default function MachineList({machinesData}) {
       setCurrentPage(1);
     },
   };
+  
+  const filteredPaginatedMachines = user.role === 'TECHNIEKER' ?
+    paginatedMachines?.filter((m) => m.technieker === `${user.lastname} ${user.firstname}`) : paginatedMachines;
 
   return (
     <div className="flex-col md:flex-row flex justify-between py-6">
@@ -131,7 +134,7 @@ export default function MachineList({machinesData}) {
         />
 
         <GenericTable
-          data={paginatedMachines}
+          data={filteredPaginatedMachines}
           columns={{
             'Nr.': 'id',
             'Locatie': 'location',
