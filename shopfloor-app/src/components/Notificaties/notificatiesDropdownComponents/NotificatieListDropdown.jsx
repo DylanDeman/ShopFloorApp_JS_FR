@@ -26,7 +26,7 @@ export default function NotificatieListDropdown({ notificaties, toggleDropdown }
             ongelezenNotificaties.map((notificatie) => (
               <NotificatieDropdown 
                 key={notificatie.id} id={notificatie.id} 
-                bericht={notificatie.bericht} time={notificatie.time} />
+                message={notificatie.message} time={notificatie.time} />
             ))
           )}
         </div>
