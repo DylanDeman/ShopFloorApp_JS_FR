@@ -52,24 +52,24 @@ const MachineDetail = () => {
   };
 
   const toggleMachineStatus = async () => {
-    let status;
+    let machinestatus;
     if(machine.machinestatus === 'DRAAIT'){
-      status = 'MANUEEL_GESTOPT';
+      machinestatus = 'MANUEEL_GESTOPT';
     } else {
-      status = 'DRAAIT';
+      machinestatus = 'DRAAIT';
     }
     
     await changeMachineStatus(
       {
         id: machine.id,
         code: machine.code, 
-        machinestatus: status,
-        productionstatus: machine.productie_status,
-        location: machine.locatie,
+        machinestatus: machinestatus,
+        productionstatus: machine.productionstatus,
+        location: machine.location,
         technician_id: machine.technieker.id, 
         site_id: machine.site.id,
         product_naam: machine.product_naam,
-        productinfo: machine.product_informatie,
+        productinfo: machine.productinfo,
         limiet_voor_onderhoud: machine.limiet_voor_onderhoud,
       },
     );
@@ -235,7 +235,7 @@ const MachineDetail = () => {
                 disabled={isMutating}
                 onClick={toggleMachineStatus}
                 className={`w-full 
-                ${machine.status === 'DRAAIT' ? 
+                ${machine.machinestatus === 'DRAAIT' ? 
       'bg-red-500 enabled:hover:bg-red-600' : 
       'bg-green-500 enabled:hover:bg-green-600'} 
                 font-bold py-3 md:py-4 text-xl md:text-3xl px-4 
