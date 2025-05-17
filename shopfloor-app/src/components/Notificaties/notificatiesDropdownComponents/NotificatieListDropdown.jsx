@@ -12,7 +12,7 @@ export default function NotificatieListDropdown({ notificaties, toggleDropdown }
   
   const ongelezenNotificaties = notificaties.items.filter(
     (notificatie) => !notificatie.isread);
-  
+
   return (
     <div className='bg-white shadow-md rounded'>
       <div className="w-128 max-h-80 overflow-y-auto p-2">
@@ -26,7 +26,7 @@ export default function NotificatieListDropdown({ notificaties, toggleDropdown }
             ongelezenNotificaties.map((notificatie) => (
               <NotificatieDropdown 
                 key={notificatie.id} id={notificatie.id} 
-                bericht={notificatie.bericht} tijdstip={notificatie.tijdstip} />
+                bericht={notificatie.bericht} time={notificatie.time} />
             ))
           )}
         </div>

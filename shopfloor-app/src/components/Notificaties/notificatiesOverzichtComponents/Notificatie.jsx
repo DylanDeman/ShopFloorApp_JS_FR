@@ -26,9 +26,6 @@ export default function Notificatie({id, time, message, isread}){
             onClick={handleMarkAsRead}>Markeer as gelezen</p>
         }
       </div>
-      <div className='flex items-center justify-end pl-4'>
-        <p className='hover:cursor-pointer font-semibold transition-all hover:scale-105'>Bekijk</p>
-      </div>
     </div>
   );
 }
